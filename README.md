@@ -1,2 +1,3 @@
-# SolidifyStudio
+# SolidifyLab
+
 Progetto Universitario
