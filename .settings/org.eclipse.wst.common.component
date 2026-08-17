@@ -2,7 +2,7 @@
     <wb-module deploy-name="SolidifyLab">
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <property name="context-root" value="SolidifyLab"/>
         <property name="java-output-path" value="/SolidifyLab/build/classes"/>
+        <property name="context-root" value="/SolidifyLab"/>
     </wb-module>
 </project-modules>
