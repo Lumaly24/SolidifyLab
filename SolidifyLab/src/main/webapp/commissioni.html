@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Commission | SolidifyLab</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head> 
+<header class="main-header">
+       <div class="logo">
+        <a href="index.html">
+            <strong>LOGO</strong> <!--placeholder-->
+        </a>
+    	</div>
+       <nav class="main-nav">
+       <!-- a quanto pare si chiama la scala cinese ottimo -->
+		    <ul>
+		        <li class="dropdown">
+		            <a href="catalogo.html">Catalogo <i class="fa-solid fa-chevron-down"></i></a> <!--placeholder-->
+		            <div class="dropdown-menu full-menu">
+
+		                <div class="dropdown-column">
+		                    <h4><a href="modelli3d.html">Modelli 3D</a></h4>
+		                    <ul>
+		                        <li><a href="#">Personaggi</a></li>
+		                        <li><a href="#">Ambienti</a></li>
+		                        <li><a href="#">Oggetti</a></li>
+		                        <li><a href="#">Veicoli</a></li>
+		                    </ul>
+		                </div>
+
+		                <div class="dropdown-column">
+		                    <h4><a href="textures.html">Textures</a></h4>
+		                    <ul>
+		                        <li><a href="#">Metalli PBR</a></li>
+		                        <li><a href="#">Legno</a></li>
+		                        <li><a href="#">Organico</a></li>
+		                        <li><a href="#">Inorganico</a></li>
+		                    </ul>
+		                </div>
+		                
+		            </div>
+		        </li>
+		        <li><a href="commissioni.html">Commissioni</a></li>
+		        <li><a href="stampe3d.html">Stampe 3D</a></li>
+		    </ul>
+		    
+		</nav>
+        
+       <div class="search-bar">
+		    <form id="searchForm" action="search" method="GET">
+		    
+		        <input type="text" id="searchInput" name="q" placeholder="Ricerca..." autocomplete="off">
+		        
+		        <button type="submit" class="search-btn">
+		            <i class="fa-solid fa-magnifying-glass"></i> <!--placeholder-->
+		        </button>
+		        <!-- Contenitore vuoto per AJAX (anche qua ho chiesto a gemini ) -->
+		        <div id="searchSuggestions" class="suggestions-box" style="display: none;">
+		          
+		        </div>
+		
+		    </form>
+		</div>
+        
+      	<div class="user-icons">
+		    <button type="button" class="icon-btn" title="Wishlist">
+		        <i class="fa-regular fa-heart"></i> <!--placeholder-->
+		    </button>
+		    
+		    <div class="dropdown profile-dropdown">
+		        <button type="button" class="icon-btn" title="Profilo">
+		            <i class="fa-regular fa-user"></i> <!--placeholder-->
+		        </button>
+
+		        <!-- nota per JSP: if (utente == null) allora si mostra questo -->
+
+		        <ul class="dropdown-menu profile-menu">
+		            <li><a href="login.html">Log in</a></li>
+		            <li><a href="signup.html">Sign up</a></li>
+		        </ul>
+ 
+		        <!-- JSP: else compare solo se l'utente è loggato -->
+
+		        <!-- 
+		        <ul class="dropdown-menu profile-menu">
+		            <li class="menu-header"><strong>Username</strong></li>
+		            <li><hr></li>
+		            <li><a href="area-utente.html">Profilo</a></li>
+		            <li><a href="storico-acquisti.html">Storico Acquisti</a></li>
+		            <li><a href="impostazioni.html">Impostazioni</a></li>
+		            <li><a href="assistenza.html">Assistenza</a></li>
+		            <li><hr></li>
+		            <li><a href="logout">Log out</a></li>
+		        </ul>
+		        -->
+		    </div>
+		
+		    <button type="button" class="icon-btn" title="Carrello">
+		        <i class="fa-solid fa-cart-shopping"></i> <!--placeholder-->
+		    </button>
+		</div>
+	</header>
+	<main class="commission-page-container">
+		<div class="commission-form-wrapper">
+	            
+	            <h1>Richiedi un Progetto su Misura</h1>
+	            <p>Compila il form per ricevere un preventivo per le tue stampe, modelli o texture.</p>
+	
+	            <form id="commissionForm" action="submitCommissionServlet" method="POST">
+	                <fieldset class="form-section">
+	                    <legend><i class="fa-solid fa-wand-magic-sparkles"></i> Cosa commissionare?</legend>
+	                    
+	                    <div class="checkbox-group inline-group">
+	                        <label>
+	                            <input type="checkbox" name="tipo_commissione" value="stampa_3d" id="checkStampa"> Stampa 3D
+	                        </label>
+	                        <label>
+	                            <input type="checkbox" name="tipo_commissione" value="modello_3d" id="checkModello"> Creazione Modello 3D
+	                        </label>
+	                        <label>
+	                            <input type="checkbox" name="tipo_commissione" value="texture" id="checkTexture"> Richiesta Texture
+	                        </label>
+	                    </div>
+	                </fieldset>
+	                <hr class="dashed-divider">
+	                <fieldset class="form-section">
+	                    <legend><i class="fa-solid fa-pen-nib"></i> Descrizione</legend>
+	                    
+	                    <div class="form-group">
+	                        <textarea name="descrizione_principale" rows="6" placeholder="Descrivi il tuo progetto nei dettagli..." required></textarea>
+	                    </div>
+	                    <div class="optional-3d-section" id="optional3DSection">
+	                        <p class="section-subtitle">Se modello 3D (opzionale):</p>
+	                        
+	                        <div class="split-options">
+	                            <div class="option-box">
+	                                <label>
+	                                    <input type="checkbox" name="include_texture"> Includere texture
+	                                </label>
+	                                <textarea name="descrizione_texture" rows="3" placeholder="Descrizione texture..."></textarea>
+	                            </div>
+	                            <div class="option-box">
+	                                <label>
+	                                    <input type="checkbox" name="include_animazione"> Includere Animazione
+	                                </label>
+	                                <textarea name="descrizione_animazione" rows="3" placeholder="Descrizione animazione..."></textarea>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </fieldset>
+	
+	                <hr class="dashed-divider">
+	                <fieldset class="form-section">
+	                    <legend><i class="fa-solid fa-address-card"></i> Inserimento Dati Personali</legend>
+	                    
+	                    <div class="personal-data-layout">
+	                        <div class="data-inputs">
+	                            <div class="form-group">
+	                                <label for="commEmail">E-mail :</label>
+	                                <input type="email" id="commEmail" name="email" required>
+	                            </div>
+	                            
+	                            <div class="form-group address-group">
+	                                <label>Indirizzo (ecc) : <span class="note">solo per le stampe 3d che devono essere consegnate</span></label>
+	                                <input type="text" name="indirizzo_via" placeholder="Via/Piazza e Civico">
+	                                <div class="address-row">
+	                                    <input type="text" name="indirizzo_citta" placeholder="Città">
+	                                    <input type="text" name="indirizzo_cap" placeholder="CAP">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="data-info-side">
+	                            <h4>Info Utili</h4>
+	                            <ul>
+	                                <li>I preventivi sono gratuiti.</li>
+	                                <li>Tempo di risposta: 24/48h.</li>
+	                                <li>Spedizione tracciabile per le stampe fisiche.</li>
+	                            </ul>
+	                        </div>
+	                        
+	                    </div>
+	                </fieldset>
+	                <div class="form-actions">
+	                    <button type="submit" class="btn-primary btn-large">Invia Richiesta di Preventivo</button>
+	                </div>
+	
+	            </form>
+	        </div>
+    </main>
+	<footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>SolidifyLab</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-artstation"></i></a>
+                    <a href="#"><i class="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Supporto</h4>
+                <ul>
+                    <li><a href="contatti.html">Contattaci</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="spedizioni.html">Spedizioni e Resi</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legale</h4>
+                <ul>
+                    <li><a href="termini.html">Termini di Servizio</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="cookie.html">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SolidifyLab | Progetto Universitario | Made with Love by WizardWeb</p>
+        </div>
+    </footer>
+
+    <div id="cartOverlayBg" class="cart-overlay-bg" style="display: none;"></div>
+    <aside id="cartOverlayPanel" class="cart-overlay-panel" style="right: -400px;"></aside>
+    <div id="toast-container" class="toast-container"></div>
+   
+</body>
+</html>

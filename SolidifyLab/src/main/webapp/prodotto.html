@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettaglio Prodotto | SolidifyLab</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html"><strong>LOGO</strong></a>
+        </div>
+        
+        <nav class="main-nav">
+            <ul>
+                <li class="dropdown">
+                    <a href="catalogo.html">Catalogo <i class="fa-solid fa-chevron-down"></i></a>
+                    <div class="dropdown-menu full-menu">
+                        <div class="dropdown-column">
+                            <h4><a href="modelli3d.html">Modelli 3D</a></h4>
+                            <ul>
+                                <li><a href="#">Personaggi</a></li>
+                                <li><a href="#">Ambienti</a></li>
+                                <li><a href="#">Oggetti</a></li>
+                                <li><a href="#">Veicoli</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown-column">
+                            <h4><a href="textures.html">Textures</a></h4>
+                            <ul>
+                                <li><a href="#">Metalli PBR</a></li>
+                                <li><a href="#">Legno</a></li>
+                                <li><a href="#">Organico</a></li>
+                                <li><a href="#">Inorganico</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="commissioni.html">Commissioni</a></li>
+                <li><a href="stampe3d.html">Stampe 3D</a></li>
+            </ul>
+        </nav>
+        
+        <div class="search-bar">
+            <form id="searchForm" action="search" method="GET">
+                <input type="text" id="searchInput" name="q" placeholder="Ricerca..." autocomplete="off">
+                <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <div id="searchSuggestions" class="suggestions-box" style="display: none;"></div>
+            </form>
+        </div>
+        
+        <div class="user-icons">
+            <button type="button" class="icon-btn" title="Wishlist">
+                <i class="fa-regular fa-heart"></i>
+            </button>
+            <div class="dropdown profile-dropdown">
+                <button type="button" class="icon-btn" title="Profilo">
+                    <i class="fa-regular fa-user"></i>
+                </button>
+                <ul class="dropdown-menu profile-menu">
+                    <li><a href="login.html">Log in</a></li>
+                    <li><a href="signup.html">Sign up</a></li>
+                </ul>
+            </div>
+            <button type="button" class="icon-btn" title="Carrello">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-badge">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="product-page-container">
+        
+        <div class="product-top-nav">
+            <a href="javascript:history.back()" class="btn-back">
+                <i class="fa-solid fa-chevron-left"></i> BACK
+            </a>
+            <nav class="breadcrumbs" aria-label="Percorso di navigazione">
+                <a href="catalogo.html">Libreria</a> 
+                <span class="separator">/</span> 
+                <a href="#">Categoria</a> 
+                <span class="separator">/</span> 
+                <span class="current-page">Nome Prodotto</span>
+            </nav>
+        </div>
+
+        <div class="product-layout">
+            
+            <aside class="product-gallery-side">
+                
+                <div class="main-product-image">
+                    <span class="img-placeholder">(IMG Preview Prodotto)</span>
+                    <div class="icon-360" title="Visualizza modello a 360 gradi">
+                        <i class="fa-solid fa-arrows-rotate"></i> <span>360°</span>
+                    </div>
+                </div>
+
+                <!-- ⬇️ [JSP LOGIC: IF MODELLO 3D] ⬇️ -->
+                <div class="polycount-indicator">
+                    <p><strong>Livello di Dettaglio:</strong></p>
+                    <div class="poly-steps">
+                        <div class="step"><span class="dot"></span><label>Low</label></div>
+                        <div class="step"><span class="dot"></span><label>Mid</label></div>
+                        <div class="step"><span class="dot"></span><label>Sub-D</label></div>
+                        <div class="step"><span class="dot"></span><label>Hero</label></div>
+                        <div class="step active"><span class="dot filled"></span><label>High</label></div>
+                    </div>
+                </div>
+
+                <!-- [JSP LOGIC: IF TEXTURE] -->
+                <div class="resolution-indicator">
+                    <p><strong>Risoluzione disponibile:</strong></p>
+                    <div class="resolution-steps">
+                        <span class="res-badge">1K</span>
+                        <span class="res-badge">2K</span>
+                        <span class="res-badge active">4K</span>
+                        <span class="res-badge">8K</span>
+                    </div>
+                </div>
+
+                <!-- [JSP LOGIC: IF STAMPA 3D]  -->
+                <div class="material-selector">
+                    <p><strong>Seleziona Materiale:</strong></p>
+                    <div class="material-options">
+                        <label class="mat-radio">
+                            <input type="radio" name="materiale" value="resina_grigia" checked>
+                            <span>Resina Grigia (Alto Dettaglio)</span>
+                        </label>
+                        <label class="mat-radio">
+                            <input type="radio" name="materiale" value="pla_nero">
+                            <span>PLA Nero (Resistente)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="product-purchase-action">
+                    <button type="button" class="btn-primary btn-add-cart-large">
+                        <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO - € 25,00
+                    </button>
+                </div>
+
+                <div class="product-meta">
+                    <p><strong>Licenza:</strong> Royalty Free (Standard)</p>
+                    <p><strong>Autore:</strong> WizardWeb</p>
+                    <p><strong>Data Pubblicazione:</strong> 09/08/2026</p>
+                </div>
+            </aside>
+
+            <section class="product-info-side">
+                
+                <header class="product-info-header">
+                    <h1 class="product-title">NOME PRODOTTO</h1>
+                    <button type="button" class="btn-wishlist-large" title="Aggiungi alla Wishlist">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                </header>
+
+                <div class="product-description">
+                    <p>Descrizione dettagliata del prodotto. Ottimizzato per i migliori workflow PBR, pronto per essere utilizzato nei tuoi progetti creativi e professionali.</p>
+                </div>
+
+                <!-- [JSP LOGIC: IF MODELLO 3D]  -->
+                <div class="product-specs-box">
+                    <h3>Specifiche Modello 3D</h3>
+                    <hr class="box-divider">
+                    <div class="specs-grid">
+                        <ul class="specs-list">
+                            <li><strong>Geometria:</strong> Polygon mesh</li>
+                            <li><strong>Poligoni:</strong> 250,000</li>
+                        </ul>
+                        <ul class="specs-list">
+                            <li><strong>Textures:</strong> Sì (4K PBR)</li>
+                            <li><strong>Rigged:</strong> No</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="product-formats-box">
+                    <h3>Formati / Software Compatibili</h3>
+                    <hr class="box-divider">
+                    <div class="formats-layout">
+                        <ul class="formats-list">
+                            <li>.BLEND</li>
+                            <li>.FBX</li>
+                            <li>.OBJ</li>
+                        </ul>
+                        <div class="software-icons-grid">
+                            <div class="soft-box" title="Blender"><i class="fa-solid fa-cube"></i></div>
+                            <div class="soft-box" title="Unreal Engine"><i class="fa-brands fa-gamepad"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- [JSP LOGIC: IF TEXTURE]-->
+                <div class="product-specs-box">
+                    <h3>Specifiche Texture</h3>
+                    <hr class="box-divider">
+                    <div class="specs-grid">
+                        <ul class="specs-list">
+                            <li><strong>Seamless:</strong> Sì</li>
+                            <li><strong>Workflow:</strong> PBR Metallic/Roughness</li>
+                        </ul>
+                        <ul class="specs-list">
+                            <li><strong>Mappe incluse:</strong> Albedo, Normal, Roughness, AO</li>
+                            <li><strong>Formato File:</strong> .PNG</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ⬇️ [JSP LOGIC: IF STAMPA 3D] ⬇️ -->
+                <div class="product-shipping-box">
+                    <h3>Dettagli di Stampa e Spedizione</h3>
+                    <hr class="box-divider">
+                    <div class="shipping-info-layout">
+                        <ul class="specs-list">
+                            <li><strong>Dimensioni (LxPxA):</strong> 12 x 8 x 15 cm</li>
+                            <li><strong>Infill (Riempimento):</strong> 100% (Solido)</li>
+                            <li><strong>Lavorazione:</strong> 3-5 giorni lavorativi</li>
+                        </ul>
+                        <div class="shipping-icon-box">
+                            <i class="fa-solid fa-box-open"></i>
+                            <p>Spedizione Tracciata Inclusa</p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+    
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>SolidifyLab</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-artstation"></i></a>
+                    <a href="#"><i class="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Supporto</h4>
+                <ul>
+                    <li><a href="contatti.html">Contattaci</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="spedizioni.html">Spedizioni e Resi</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legale</h4>
+                <ul>
+                    <li><a href="termini.html">Termini di Servizio</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="cookie.html">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SolidifyLab | Progetto Universitario | Made with Love by WizardWeb</p>
+        </div>
+    </footer>
+
+    <div id="cartOverlayBg" class="cart-overlay-bg" style="display: none;"></div>
+    <aside id="cartOverlayPanel" class="cart-overlay-panel" style="right: -400px;"></aside>
+    <div id="toast-container" class="toast-container"></div>
+
+</body>
+</html>

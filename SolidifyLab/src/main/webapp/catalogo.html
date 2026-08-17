@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Catalogo | SolidifyLab</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="main-header">
+        <div class="logo">
+        <a href="index.html">
+            <strong>LOGO</strong> <!--placeholder-->
+        </a>
+    </div>
+        
+       <nav class="main-nav">
+       <!-- a quanto pare si chiama la scala cinese ottimo -->
+		    <ul>
+		        <li class="dropdown">
+		            <a href="catalogo.html">Catalogo <i class="fa-solid fa-chevron-down"></i></a> <!--placeholder-->
+		            <div class="dropdown-menu full-menu">
+
+		                <div class="dropdown-column">
+		                    <h4><a href="modelli3d.html">Modelli 3D</a></h4>
+		                    <ul>
+		                        <li><a href="#">Personaggi</a></li>
+		                        <li><a href="#">Ambienti</a></li>
+		                        <li><a href="#">Oggetti</a></li>
+		                        <li><a href="#">Veicoli</a></li>
+		                    </ul>
+		                </div>
+
+		                <div class="dropdown-column">
+		                    <h4><a href="textures.html">Textures</a></h4>
+		                    <ul>
+		                        <li><a href="#">Metalli PBR</a></li>
+		                        <li><a href="#">Legno</a></li>
+		                        <li><a href="#">Organico</a></li>
+		                        <li><a href="#">Inorganico</a></li>
+		                    </ul>
+		                </div>
+		                
+		            </div>
+		        </li>
+		        <li><a href="commissioni.html">Commissioni</a></li>
+		        <li><a href="stampe3d.html">Stampe 3D</a></li>
+		    </ul>
+		    
+		</nav>
+        
+       <div class="search-bar">
+		    <form id="searchForm" action="search" method="GET">
+		    
+		        <input type="text" id="searchInput" name="q" placeholder="Ricerca..." autocomplete="off">
+		        
+		        <button type="submit" class="search-btn">
+		            <i class="fa-solid fa-magnifying-glass"></i> <!--placeholder-->
+		        </button>
+		        <!-- Contenitore vuoto per AJAX (anche qua ho chiesto a gemini ) -->
+		        <div id="searchSuggestions" class="suggestions-box" style="display: none;">
+		          
+		        </div>
+		
+		    </form>
+		</div>
+        
+      	<div class="user-icons">
+		    <button type="button" class="icon-btn" title="Wishlist">
+		        <i class="fa-regular fa-heart"></i> <!--placeholder-->
+		    </button>
+		    
+		    <div class="dropdown profile-dropdown">
+		        <button type="button" class="icon-btn" title="Profilo">
+		            <i class="fa-regular fa-user"></i> <!--placeholder-->
+		        </button>
+
+		        <!-- nota per JSP: if (utente == null) allora si mostra questo -->
+
+		        <ul class="dropdown-menu profile-menu">
+		            <li><a href="login.html">Log in</a></li>
+		            <li><a href="signup.html">Sign up</a></li>
+		        </ul>
+ 
+		        <!-- JSP: else compare solo se l'utente è loggato -->
+
+		        <!-- 
+		        <ul class="dropdown-menu profile-menu">
+		            <li class="menu-header"><strong>Username</strong></li>
+		            <li><hr></li>
+		            <li><a href="area-utente.html">Profilo</a></li>
+		            <li><a href="storico-acquisti.html">Storico Acquisti</a></li>
+		            <li><a href="impostazioni.html">Impostazioni</a></li>
+		            <li><a href="assistenza.html">Assistenza</a></li>
+		            <li><hr></li>
+		            <li><a href="logout">Log out</a></li>
+		        </ul>
+		        -->
+		    </div>
+		
+		    <button type="button" class="icon-btn" title="Carrello">
+		        <i class="fa-solid fa-cart-shopping"></i> <!--placeholder-->
+		    </button>
+		</div>
+	</header>
+	<main class="catalog-page">
+        
+        <div class="catalog-tabs-container">
+            <div class="catalog-tabs">
+                <a href="catalogo-modelli.html" class="tab-btn active">3D MODELS</a>
+                <a href="catalogo-textures.html" class="tab-btn">TEXTURES</a>
+            </div>
+        </div>
+        <div class="catalog-layout">
+            <aside class="catalog-sidebar">
+                <div class="filter-group">
+                    <h3>Filtro Prezzi</h3>
+                    <div class="price-slider">
+                        <input type="range" id="priceRange" name="price" min="0" max="200" step="5" value="100">
+                        <div class="price-labels">
+                            <span>0€</span>
+                            <span>Max €€</span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="sidebar-divider">
+                <div class="filter-group">
+                    <h3>Categorie</h3>
+                    <ul class="filter-list"> <!--placeholder perché non so come farla benissimo-->
+                        <li>
+                            <details open>
+                                <summary>Personaggi <i class="fa-solid fa-angle-down"></i></summary>
+                                <ul class="sub-filter-list">
+                                    <li><label><input type="checkbox" name="subcat" value="fantasy"> Fantasy</label></li>
+                                    <li><label><input type="checkbox" name="subcat" value="scifi"> Sci-Fi</label></li>
+                                    <li><label><input type="checkbox" name="subcat" value="realistici"> Realistici</label></li>
+                                </ul>
+                            </details>
+                        </li>
+                        <li><label><input type="checkbox" name="cat" value="ambienti"> Ambienti</label></li>
+                        <li><label><input type="checkbox" name="cat" value="veicoli"> Veicoli</label></li>
+                        <li><label><input type="checkbox" name="cat" value="oggetti"> Oggetti / Props</label></li>
+                        
+                    </ul>
+                </div>
+
+            </aside>
+            <section class="catalog-main-content">
+                <nav class="breadcrumbs" aria-label="Percorso di navigazione">
+                    <a href="catalogo.html">Libreria Modelli 3D</a> 
+                    <span class="separator">/</span> 
+                    <a href="#">Personaggi</a> 
+                    <span class="separator">/</span> 
+                    <span class="current-page">Fantasy</span>
+                </nav>
+                <div class="catalog-products-grid">
+                    
+                    <article class="product-card">
+                        <div class="product-badges">
+                            <span class="badge-new">New</span>
+                            <button type="button" class="btn-wishlist" title="Wishlist-add">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <a href="dettaglio-prodotto.html" class="product-link">
+                            <div class="product-image">
+                                <span>(IMG 1)</span>
+                            </div>
+                            <div class="product-info-minimal">
+                                <h4 class="product-title">Guerriero Fantasy</h4>
+                                <div class="product-price">€ 15,00</div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="product-card">
+                        <div class="product-badges">
+                            <button type="button" class="btn-wishlist" title="Wishlist-add">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                        <a href="dettaglio-prodotto.html" class="product-link">
+                            <div class="product-image">
+                                <span>(IMG 2)</span>
+                            </div>
+                            <div class="product-info-minimal">
+                                <h4 class="product-title">Pack Textures Metallo</h4>
+                                <div class="product-price">€ 22,50</div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="product-card">
+                        <div class="product-badges">
+                            <span class="badge-new">New</span>
+                            <button type="button" class="btn-wishlist" title="Wishlist-add">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                        <a href="dettaglio-prodotto.html" class="product-link">
+                            <div class="product-image">
+                                <span>(IMG 3)</span>
+                            </div>
+                            <div class="product-info-minimal">
+                                <h4 class="product-title">Spada Medievale</h4>
+                                <div class="product-price">€ 9,90</div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="product-card">
+                        <div class="product-badges">
+                            <button type="button" class="btn-wishlist" title="Wishlist-add">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                        <a href="dettaglio-prodotto.html" class="product-link">
+                            <div class="product-image">
+                                <span>(IMG 4)</span>
+                            </div>
+                            <div class="product-info-minimal">
+                                <h4 class="product-title">Stanza Sci-Fi Modulare</h4>
+                                <div class="product-price">€ 35,00</div>
+                            </div>
+                        </a>
+                    </article>
+
+                </div>
+            </section>
+            
+        </div>
+        <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>SolidifyLab</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-artstation"></i></a>
+                    <a href="#"><i class="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Supporto</h4>
+                <ul>
+                    <li><a href="contatti.html">Contattaci</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="spedizioni.html">Spedizioni e Resi</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legale</h4>
+                <ul>
+                    <li><a href="termini.html">Termini di Servizio</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="cookie.html">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SolidifyLab | Progetto Universitario | Made with Love by WizardWeb</p>
+        </div>
+    </footer>
+
+    <div id="cartOverlayBg" class="cart-overlay-bg" style="display: none;"></div>
+    <aside id="cartOverlayPanel" class="cart-overlay-panel" style="right: -400px;"></aside>
+    <div id="toast-container" class="toast-container"></div>
+</body>
+</html>

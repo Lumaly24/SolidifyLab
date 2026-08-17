@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | SolidifyLab</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <strong>LOGO</strong> <!--placeholder-->
+        </div>
+        
+       <nav class="main-nav">
+       <!-- a quanto pare si chiama la scala cinese ottimo -->
+		    <ul>
+		        <li class="dropdown">
+		            <a href="catalogo.html">Catalogo <i class="fa-solid fa-chevron-down"></i></a> <!--placeholder-->
+		            <div class="dropdown-menu full-menu">
+
+		                <div class="dropdown-column">
+		                    <h4><a href="modelli3d.html">Modelli 3D</a></h4>
+		                    <ul>
+		                        <li><a href="#">Personaggi</a></li>
+		                        <li><a href="#">Ambienti</a></li>
+		                        <li><a href="#">Oggetti</a></li>
+		                        <li><a href="#">Veicoli</a></li>
+		                    </ul>
+		                </div>
+
+		                <div class="dropdown-column">
+		                    <h4><a href="textures.html">Textures</a></h4>
+		                    <ul>
+		                        <li><a href="#">Metalli PBR</a></li>
+		                        <li><a href="#">Legno</a></li>
+		                        <li><a href="#">Organico</a></li>
+		                        <li><a href="#">Inorganico</a></li>
+		                    </ul>
+		                </div>
+		                
+		            </div>
+		        </li>
+		        <li><a href="commissioni.html">Commissioni</a></li>
+		        <li><a href="stampe3d.html">Stampe 3D</a></li>
+		    </ul>
+		    
+		</nav>
+        
+       <div class="search-bar">
+		    <form id="searchForm" action="search" method="GET">
+		    
+		        <input type="text" id="searchInput" name="q" placeholder="Ricerca..." autocomplete="off">
+		        
+		        <button type="submit" class="search-btn">
+		            <i class="fa-solid fa-magnifying-glass"></i> <!--placeholder-->
+		        </button>
+		        <!-- Contenitore vuoto per AJAX (anche qua ho chiesto a gemini ) -->
+		        <div id="searchSuggestions" class="suggestions-box" style="display: none;">
+		          
+		        </div>
+		
+		    </form>
+		</div>
+        
+      	<div class="user-icons">
+		    <button type="button" class="icon-btn" title="Wishlist">
+		        <i class="fa-regular fa-heart"></i> <!--placeholder-->
+		    </button>
+		    
+		    <div class="dropdown profile-dropdown">
+		        <button type="button" class="icon-btn" title="Profilo">
+		            <i class="fa-regular fa-user"></i> <!--placeholder-->
+		        </button>
+
+		        <!-- nota per JSP: if (utente == null) allora si mostra questo -->
+
+		        <ul class="dropdown-menu profile-menu">
+		            <li><a href="login.html">Log in</a></li>
+		            <li><a href="signup.html">Sign up</a></li>
+		        </ul>
+ 
+		        <!-- JSP: else compare solo se l'utente è loggato -->
+
+		        <!-- 
+		        <ul class="dropdown-menu profile-menu">
+		            <li class="menu-header"><strong>Username</strong></li>
+		            <li><hr></li>
+		            <li><a href="area-utente.html">Profilo</a></li>
+		            <li><a href="storico-acquisti.html">Storico Acquisti</a></li>
+		            <li><a href="impostazioni.html">Impostazioni</a></li>
+		            <li><a href="assistenza.html">Assistenza</a></li>
+		            <li><hr></li>
+		            <li><a href="logout">Log out</a></li>
+		        </ul>
+		        -->
+		    </div>
+		
+		    <button type="button" class="icon-btn" title="Carrello">
+		        <i class="fa-solid fa-cart-shopping"></i> <!--placeholder-->
+		    </button>
+		</div>
+	</header>
+
+    <main>
+        
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>ESPLORA LA LIBRERIA</h1>
+                <div class="hero-buttons">
+                    <a href="libreria.html" class="btn">ESPLORA LA LIBRERIA <i class="fa-solid fa-arrow-right"></i> </a> 
+                    <a href="info.html" class="btn">SCOPRI DI PIÙ <i class="fa-solid fa-arrow-right"></i></a> 
+                </div>
+            </div>
+        </section>
+<hr class="section-divider">
+        <section class="categories-section">
+		    <h2>CATEGORIE PRINCIPALI</h2>
+		    <div class="categories-grid">
+		        <a href="modelli3d.html" class="category-card">
+		            <div class="card-img-container">
+		                <img src="" alt="Modelli 3D"> <!--placeholder-->
+		            </div>
+		            <div class="card-info">
+		                <h3>Modelli 3D</h3>
+		                <p></p> <!--da riempire-->
+		            </div>
+		        </a>
+
+		        <a href="textures.html" class="category-card">
+		            <div class="card-img-container">
+		                <img src="" alt="Textures"> <!--placeholder-->
+		            </div>
+		            <div class="card-info">
+		                <h3>Textures</h3>
+		                <p></p> <!--da riempire-->
+		            </div>
+		        </a>
+
+		        <a href="stampe3d.html" class="category-card">
+		            <div class="card-img-container">
+		                <img src="" alt="Stampe 3D"> <!--placeholder-->
+		            </div>
+		            <div class="card-info">
+		                <h3>Stampe 3D</h3>
+		                <p></p> <!--da riempire-->
+		            </div>
+		        </a>
+
+    		</div>
+		</section>
+<hr class="section-divider">
+        <section class="featured-products-section">
+            <h2>PRODOTTI IN EVIDENZA</h2>
+
+            <div class="products-carousel">
+            
+                <article class="product-card">
+                    <div class="product-badges">
+                        <span class="badge-new">new</span>
+                        <button type="button" class="btn-wishlist" title="Wishlist-add">
+							<i class="fa-regular fa-heart"></i>
+						</button>
+                    </div>
+
+                    <a href="dettaglio-prodotto.html" class="product-link">
+                        <div class="product-image">
+                            <span>(IMG 1)</span>
+                        </div>
+                        <div class="product-price">
+                            <span>€ 15,00</span>
+                        </div>
+                    </a>
+                </article>
+                
+                 <article class="product-card">
+                    <div class="product-badges">
+                        <span class="badge-new">new</span>
+                        <button type="button" class="btn-wishlist" title="Wishlist-add">
+							<i class="fa-regular fa-heart"></i>
+						</button>
+                    </div>
+                    <a href="dettaglio-prodotto.html" class="product-link">
+                        <div class="product-image">
+                            <span>(IMG 2)</span>
+                        </div>
+                        <div class="product-price">
+                            <span>€ 22,50</span>
+                        </div>
+                    </a>
+                </article>
+                
+                 <article class="product-card">
+                    <div class="product-badges">
+                        <span class="badge-new">new</span>
+                        <button type="button" class="btn-wishlist" title="Wishlist-add">
+							<i class="fa-regular fa-heart"></i>
+						</button>
+                    </div>
+                    <a href="dettaglio-prodotto.html" class="product-link">
+                        <div class="product-image">
+                            <span>(IMG 3)</span>
+                        </div>
+                        <div class="product-price">
+                            <span>€ 12,00</span>
+                        </div>
+                    </a>
+                </article>
+                
+                 <article class="product-card">
+                    <div class="product-badges">
+                        <button type="button" class="btn-wishlist" title="Wishlist-add">
+							<i class="fa-regular fa-heart"></i>
+						</button>
+                    </div>
+                    <a href="dettaglio-prodotto.html" class="product-link">
+                        <div class="product-image">
+                            <span>(IMG 4)</span>
+                        </div>
+                        <div class="product-price">
+                            <span>€ 35,00</span>
+                        </div>
+                    </a>
+                </article>
+     
+                 <article class="product-card">
+                    <div class="product-badges">
+                        <button type="button" class="btn-wishlist" title="Wishlist-add">
+							<i class="fa-regular fa-heart"></i>
+						</button>
+                    </div>
+                    <a href="dettaglio-prodotto.html" class="product-link">
+                        <div class="product-image">
+                            <span>(IMG 5)</span>
+                        </div>
+                        <div class="product-price">
+                            <span>€ 9,99</span>
+                        </div>
+                    </a>
+                </article>
+                
+                 <article class="product-card">
+                    <div class="product-badges">
+                        <button type="button" class="btn-wishlist" title="Wishlist-add">
+							<i class="fa-regular fa-heart"></i>
+						</button>
+                    </div>
+                    <a href="dettaglio-prodotto.html" class="product-link">
+                        <div class="product-image">
+                            <span>(IMG 6)</span>
+                        </div>
+                        <div class="product-price">
+                            <span>€ 45,00</span>
+                        </div>
+                    </a>
+                </article>
+              
+                 <article class="product-card">
+                    <div class="product-badges">
+                        <button type="button" class="btn-wishlist" title="Wishlist-add">
+							<i class="fa-regular fa-heart"></i>
+						</button>
+                    </div>
+                    <a href="dettaglio-prodotto.html" class="product-link">
+                        <div class="product-image">
+                            <span>(IMG 7)</span>
+                        </div>
+                        <div class="product-price">
+                            <span>€ 18,50</span>
+                        </div>
+                    </a>
+                </article>
+
+            </div>
+        </section>
+<hr class="section-divider">
+        <section class="cta-section">
+            <h2>INIZIA OGGI IL TUO VIAGGIO CREATIVO</h2>
+            <div class="cta-buttons">
+                <a href="login.html" class="btn-login">LOG IN</a>
+                <a href="signup.html" class="btn-signup">SIGN UP</a>
+            </div>
+        </section>
+
+    </main>
+<hr class="section-divider">
+    <footer class="main-footer">
+	    <div class="footer-container">
+	        
+	        <div class="footer-brand">
+	            <h3>SolidifyLab</h3>
+	            <div class="social-icons">
+	                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+	                <a href="#"><i class="fa-brands fa-artstation"></i></a>
+	                <a href="#"><i class="fa-brands fa-github"></i></a>
+	            </div>
+	        </div>
+	
+	        <div class="footer-links">
+	            <h4>Supporto</h4>
+	            <ul>
+	                <li><a href="contatti.html">Contattaci</a></li>
+	                <li><a href="faq.html">FAQ</a></li>
+	                <li><a href="spedizioni.html">Spedizioni e Resi</a></li>
+	            </ul>
+	        </div>
+	        
+	        <div class="footer-links">
+	            <h4>Legale</h4>
+	            <ul>
+	                <li><a href="termini.html">Termini di Servizio</a></li>
+	                <li><a href="privacy.html">Privacy Policy</a></li>
+	                <li><a href="cookie.html">Cookie Policy</a></li>
+	            </ul>
+	        </div>
+	        
+	    </div>
+	
+	    <div class="footer-bottom">
+	        <p>&copy; 2026 SolidifyLab | Progetto Universitario | Made with Love by WizardWeb</p>
+	        <div class="payment-icons">
+	            <i class="fa-brands fa-cc-visa"></i>
+	            <i class="fa-brands fa-cc-mastercard"></i>
+	            <i class="fa-brands fa-paypal"></i>
+	        </div>
+	    </div>
+	    
+	    <!-- Contenitore per i Messaggi di Conferma / Notifiche (ho chiesto a gemini per capire come fare i messaggi di conferma) -->
+	    <div id="toast-container" class="toast-container"></div>
+	</footer>
+
+    <div id="cartOverlayBg" class="cart-overlay-bg" style="display: none;"></div>
+    <aside id="cartOverlayPanel" class="cart-overlay-panel" style="right: -400px;">
+        <header class="cart-overlay-header">
+            <h3><i class="fa-solid fa-cart-shopping"></i> Il tuo Carrello</h3>
+            
+            <button type="button" id="closeCartBtn" class="btn-close-overlay" title="Chiudi">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+
+        <div class="cart-overlay-body">
+
+            <article class="mini-cart-item">
+                <div class="mini-item-img">
+                    <span>(IMG)</span>
+                </div>
+                <div class="mini-item-details">
+                    <h4 class="mini-item-title">Modello Guerriero Fantasy</h4>
+                    <div class="mini-item-price-row">
+                        <span class="mini-item-qty">1 x</span>
+                        <span class="mini-item-price">€ 15,00</span>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn-remove-mini" title="Rimuovi prodotto">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            </article>
+
+            
+            <article class="mini-cart-item">
+                <div class="mini-item-img">
+                    <span>(IMG)</span>
+                </div>
+                <div class="mini-item-details">
+                    <h4 class="mini-item-title">Pack Textures Metallo</h4>
+                    <div class="mini-item-price-row">
+                        <span class="mini-item-qty">2 x</span>
+                        <span class="mini-item-price">€ 12,00</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-remove-mini" title="Rimuovi prodotto">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            </article>
+
+        </div>
+
+       
+        <footer class="cart-overlay-footer">
+            <div class="cart-overlay-total">
+                <span>Subtotale:</span>
+                <strong>€ 39,00</strong>
+            </div>
+            
+            <div class="cart-overlay-actions">
+                
+                <a href="carrello.html" class="btn-outline btn-full">VAI AL CARRELLO</a>
+                <a href="carrello.html" class="btn-primary btn-full">CHECKOUT <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </footer>
+
+    </aside>
+</body>
+</html>
