@@ -1,0 +1,227 @@
+@font-face {
+	font-family: 'ModernAesthetic';
+	src: url('../fonts/ModernAesthetic.otf') format('opentype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'elephant';
+	src: url('../fonts/ELEPHNT.TTF') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Afterglow';
+	src: url('../fonts/Afterglow.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'coolveticarg';
+	src: url('../fonts/coolveticarg.otf') format('opentype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'coolveticaitalic';
+	src: url('../fonts/coolveticaitalic.otf') format('opentype');
+	font-weight: normal;
+	font-style: italic;
+}
+
+h1, h2 {
+	font-family: 'ModernAesthetic', serif;
+	font-weight: normal;
+}
+
+h3, h4 {
+	font-family: 'elephant', sans-serif;
+	font-weight: normal;
+}
+
+.main-nav > ul > li > a {
+	font-family: 'elephant', sans-serif;
+	font-weight: normal;
+}
+
+.dropdown, .dropdown-column {
+	font-family: 'Afterglow', serif;
+	font-weight: normal;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    gap: 40px;
+}
+
+.main-header a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.main-nav > ul {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    justify-content: center;
+}
+
+.main-nav > ul > li {
+	display: inline-flex;
+	align-items: center;
+}
+
+.main-nav > ul > li.dropdown {
+    position: relative;
+}
+
+.main-nav .full-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    min-width: 320px;
+    z-index: 1000;
+}
+
+.main-nav li.dropdown:hover .full-menu {
+	display: flex;
+	gap: 30px;
+}
+
+.main-nav > ul > li:not(:last-child)::after {
+	content: "";
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background-image: url('../images/blue-3d-star.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+	margin-left: 25px;
+	margin-right: 25px;
+	vertical-align: middle;
+	animation: stelle-blu 4s linear infinite;
+	flex-shrink: 0;
+}
+
+@keyframes stelle-blu {
+	0%, 100% {
+	transform: scale(1);
+	transform: rotate(0deg);
+	}
+	50% {
+		transform: scale(1.5);
+		transform: rotate(45deg);
+	}
+}
+
+.dropdown-column ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.search-bar {
+	margin-left: auto;
+	margin-right: 25px;
+}
+
+.search-bar form {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.search-bar input {
+    padding: 8px 35px 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 300px;
+}
+
+.search-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.user-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.profile-dropdown {
+	position: relative;
+}
+
+.profile-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    padding: 10px 0;
+    min-width: 160px;
+    list-style: none;
+    z-index: 1000;
+}
+
+.profile-dropdown:hover .profile-menu {
+	display: block;
+}
+
+.profile-menu li a {
+    display: block;
+    padding: 8px 16px;
+}

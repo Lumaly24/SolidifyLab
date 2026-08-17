@@ -1,0 +1,110 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+    	<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<link rel="icon" href="${pageContext.request.contextPath}/icons8-star-16.png"> 
+    	<title>${titoloPagina != null ? titoloPagina : 'Home'} | SolidifyLab</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
+	</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+        	<a href="${pageContext.request.contextPath}/">
+            	<strong>LOGO</strong> <!--placeholder-->
+            </a>
+        </div>
+        
+       <nav class="main-nav">
+       <!-- a quanto pare si chiama la scala cinese ottimo -->
+		    <ul>
+		        <li class="dropdown">
+		            <a href="${pageContext.request.contextPath}/catalogo">Catalogo <i class="fa-solid fa-chevron-down"></i></a> <!--placeholder-->
+		            <div class="dropdown-menu full-menu">
+
+		                <div class="dropdown-column">
+		                    <h4><a href="${pageContext.request.contextPath}/catalogo">Modelli 3D</a></h4>
+		                    <ul>
+		                        <li><a href="#">Personaggi</a></li>
+		                        <li><a href="#">Ambienti</a></li>
+		                        <li><a href="#">Oggetti</a></li>
+		                        <li><a href="#">Veicoli</a></li>
+		                    </ul>
+		                </div>
+
+		                <div class="dropdown-column">
+		                	<h4><a href="${pageContext.request.contextPath}/catalogo">Textures</a></h4>
+		                    <ul>
+		                        <li><a href="#">Metalli PBR</a></li>
+		                        <li><a href="#">Legno</a></li>
+		                        <li><a href="#">Organico</a></li>
+		                        <li><a href="#">Inorganico</a></li>
+		                    </ul>
+		                </div>
+		                
+		            </div>
+		        </li>
+		        <li><a href="${pageContext.request.contextPath}/commissioni">Commissioni</a></li>
+		        <li><a href="${pageContext.request.contextPath}/stampe">Stampe 3D</a></li>
+		    </ul>
+		    
+		</nav>
+        
+       <div class="search-bar">
+		    <form id="searchForm" action="${pageContext.request.contextPath}/search" method="GET">
+		    
+		        <input type="text" id="searchInput" name="q" placeholder="Ricerca..." autocomplete="off">
+		        
+		        <button type="submit" class="search-btn">
+		            <i class="fa-solid fa-magnifying-glass"></i> <!--placeholder-->
+		        </button>
+		        <!-- Contenitore vuoto per AJAX (anche qua ho chiesto a gemini ) -->
+		        <div id="searchSuggestions" class="suggestions-box" style="display: none;">
+		          
+		        </div>
+		
+		    </form>
+		</div>
+        
+      	<div class="user-icons">
+		    <button type="button" class="icon-btn" title="Wishlist">
+		        <i class="fa-regular fa-heart"></i> <!--placeholder-->
+		    </button>
+		    
+		    <div class="dropdown profile-dropdown">
+		        <button type="button" class="icon-btn" title="Profilo">
+		            <i class="fa-regular fa-user"></i> <!--placeholder-->
+		        </button>
+
+		        <!-- nota per JSP: if (utente == null) allora si mostra questo -->
+
+		        <ul class="dropdown-menu profile-menu">
+		            <li><a href="${pageContext.request.contextPath}/login">Log in</a></li>
+		            <li><a href="${pageContext.request.contextPath}/signup">Sign up</a></li>
+		        </ul>
+ 
+		        <!-- JSP: else compare solo se l'utente è loggato -->
+
+		        <!-- 
+		        <ul class="dropdown-menu profile-menu">
+		            <li class="menu-header"><strong>Username</strong></li>
+		            <li><hr></li>
+		            <li><a href="${pageContext.request.contextPath}/profilo">Profilo</a></li>
+		            <li><a href="${pageContext.request.contextPath}/storico-acquisti">Storico Acquisti</a></li>
+		            <li><a href="${pageContext.request.contextPath}/impostazioni">Impostazioni</a></li>
+		            <li><a href="${pageContext.request.contextPath}/assistenza">Assistenza</a></li>
+		            <li><hr></li>
+		            <li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>
+		        </ul>
+		        -->
+		    </div>
+		
+		    <button type="button" class="icon-btn" title="Carrello">
+		        <i class="fa-solid fa-cart-shopping"></i> <!--placeholder-->
+		    </button>
+		</div>
+	</header>
