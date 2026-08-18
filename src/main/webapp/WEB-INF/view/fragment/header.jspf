@@ -5,19 +5,16 @@
 	<head>
     	<meta charset="UTF-8">
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    	<link rel="icon" href="${pageContext.request.contextPath}/icons8-star-16.png"> 
+    	<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/icons8-star-16.png" type="image/png"> 
     	<title>${titoloPagina != null ? titoloPagina : 'Home'} | SolidifyLab</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
+		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/global.css">
+		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header.css">
 	</head>
 <body>
 
     <header class="main-header">
-        <div class="logo">
-        	<a href="${pageContext.request.contextPath}/">
-            	<strong>LOGO</strong> <!--placeholder-->
-            </a>
-        </div>
+       
         
        <nav class="main-nav">
        <!-- a quanto pare si chiama la scala cinese ottimo -->
@@ -53,6 +50,12 @@
 		    </ul>
 		    
 		</nav>
+		
+		 <div class="logo">
+  				<a href="${pageContext.request.contextPath}/index.jsp">
+   				 <img src="${pageContext.request.contextPath}/images/logo-prova1.png" alt="Logo">
+ 				 </a>
+		</div>
         
        <div class="search-bar">
 		    <form id="searchForm" action="${pageContext.request.contextPath}/search" method="GET">
@@ -80,27 +83,10 @@
 		            <i class="fa-regular fa-user"></i> <!--placeholder-->
 		        </button>
 
-		        <!-- nota per JSP: if (utente == null) allora si mostra questo -->
-
 		        <ul class="dropdown-menu profile-menu">
 		            <li><a href="${pageContext.request.contextPath}/login">Log in</a></li>
 		            <li><a href="${pageContext.request.contextPath}/signup">Sign up</a></li>
 		        </ul>
- 
-		        <!-- JSP: else compare solo se l'utente è loggato -->
-
-		        <!-- 
-		        <ul class="dropdown-menu profile-menu">
-		            <li class="menu-header"><strong>Username</strong></li>
-		            <li><hr></li>
-		            <li><a href="${pageContext.request.contextPath}/profilo">Profilo</a></li>
-		            <li><a href="${pageContext.request.contextPath}/storico-acquisti">Storico Acquisti</a></li>
-		            <li><a href="${pageContext.request.contextPath}/impostazioni">Impostazioni</a></li>
-		            <li><a href="${pageContext.request.contextPath}/assistenza">Assistenza</a></li>
-		            <li><hr></li>
-		            <li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>
-		        </ul>
-		        -->
 		    </div>
 		
 		    <button type="button" class="icon-btn" title="Carrello">
