@@ -63,7 +63,7 @@
 
             <div class="carousel-outer-container">
             
-                <button type="button" class="carousel-arrow prev-btn hidden" id="prevBtn" aria-label="Precedente" style="display: none !important;">
+                <button type="button" class="carousel-arrow prev-btn hidden" id="prevBtn" aria-label="Precedente">
     				<i class="fa-solid fa-chevron-left"></i>
 				</button>
 
@@ -202,6 +202,19 @@
                 <a href="${pageContext.request.contextPath}/signup" class="btn-signup">SIGN UP</a>
             </div>
         </section>
+        
+        <div class="scroll-progress-nav" id="scrollProgressNav">
+    		<div class="dot active" data-section="0" title="Hero"></div>
+    		<div class="dot" data-section="1" title="Categorie"></div>
+    		<div class="dot" data-section="2" title="Prodotti"></div>
+    		<div class="dot" data-section="3" title="Inizia / Footer"></div>
+    
+    		<button type="button" class="btn-back-to-top" id="backToTopBtn" title="Torna su">
+        		<i class="fa-solid fa-arrow-up"></i>
+    		</button>
+		</div>
+
+		<%@ include file="WEB-INF/view/fragment/footer.jspf" %>
 
     </main>
     
@@ -214,48 +227,91 @@
         if (carousel && prevBtn && nextBtn) {
 
             function updateArrows() {
-                // Arrotondiamo per evitare micro-decimali del browser
-                const scrollLeft = Math.round(carousel.scrollLeft);
-                const maxScroll = Math.round(carousel.scrollWidth - carousel.clientWidth);
+                const scrollLeft = Math.ceil(carousel.scrollLeft);
+                const maxScroll = Math.floor(carousel.scrollWidth - carousel.clientWidth);
 
-                // --- FRECCIA SINISTRA ---
-                // Se siamo nei primi 20px (inizio assoluto), NASCONDI.
-                // Se abbiamo scrollato più a destra di 20px, MOSTRA.
-                if (scrollLeft > 20) {
+                // Freccia Sinistra: appare appena si scorre più di 5px verso destra
+                if (scrollLeft > 5) {
                     prevBtn.classList.remove('hidden');
                 } else {
                     prevBtn.classList.add('hidden');
                 }
 
-                // --- FRECCIA DESTRA ---
-                // Se siamo arrivati in fondo (a meno di 20px dalla fine), NASCONDI.
-                if (scrollLeft >= maxScroll - 20) {
+                // Freccia Destra: scompare solo quando si arriva alla fine del carosello
+                if (scrollLeft >= maxScroll - 10) {
                     nextBtn.classList.add('hidden');
                 } else {
                     nextBtn.classList.remove('hidden');
                 }
             }
 
-            // Click freccia destra
+            // Click freccia destra (220px equivale a 1 card da 200px + gap 20px)
             nextBtn.addEventListener('click', function () {
-                carousel.scrollBy({ left: 240, behavior: 'smooth' });
+                carousel.scrollBy({ left: 220, behavior: 'smooth' });
             });
 
             // Click freccia sinistra
             prevBtn.addEventListener('click', function () {
-                carousel.scrollBy({ left: -240, behavior: 'smooth' });
+                carousel.scrollBy({ left: -220, behavior: 'smooth' });
             });
 
-            // Aggiorna lo stato in tempo reale durante lo scroll
+            // Eventi per aggiornare la visibilità delle frecce
             carousel.addEventListener('scroll', updateArrows);
             window.addEventListener('resize', updateArrows);
 
-            // Controlli di sicurezza all'avvio
+            // Controllo iniziale
             updateArrows();
-            setTimeout(updateArrows, 100);
-            setTimeout(updateArrows, 300);
         }
     });
 </script>
 
-<%@ include file="WEB-INF/view/fragment/footer.jspf" %>
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+    	const main = document.querySelector('main');
+    	const sections = document.querySelectorAll('main > section');
+    	const dots = document.querySelectorAll('.scroll-progress-nav .dot');
+    	const backToTopBtn = document.getElementById('backToTopBtn');
+    	const footer = document.querySelector('.main-footer');
+
+    	if (main && sections.length > 0) {
+
+        	// Click sui pallini
+        	dots.forEach((dot, index) => {
+            	dot.addEventListener('click', function () {
+                	if (sections[index]) {
+                    	sections[index].scrollIntoView({ behavior: 'smooth' });
+                	}
+            	});
+        	});
+
+        	// Click su Torna Su
+        	if (backToTopBtn) {
+            	backToTopBtn.addEventListener('click', function () {
+                	main.scrollTo({ top: 0, behavior: 'smooth' });
+            	});
+        	}
+
+        	// Calcolo dello Scroll
+        	main.addEventListener('scroll', function () {
+            	const scrollPosition = main.scrollTop;
+            	const maxScroll = main.scrollHeight - main.clientHeight;
+            	const sectionHeight = main.clientHeight;
+
+            	let currentIndex = Math.round(scrollPosition / sectionHeight);
+
+            	// Se siamo arrivati in fondo al footer, evidenzia l'ultimo pallino (sezione 4)
+            	if (scrollPosition >= maxScroll - 50) {
+                	currentIndex = sections.length - 1;
+            	}
+
+            	dots.forEach((dot, i) => {
+                	dot.classList.toggle('active', i === currentIndex);
+            	});
+
+            	if (backToTopBtn) {
+                	backToTopBtn.classList.toggle('visible', scrollPosition > 100);
+            	}
+        	});
+    	}
+	});
+</script>
