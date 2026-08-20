@@ -29,17 +29,17 @@
 	           
             <div class="form-step active" id="step-1">
                 <fieldset class="form-section">
-                    <legend><i class="fa-solid fa-wand-magic-sparkles"></i><span> Cosa commissionare?</span></legend>
+                    <legend><i class="fa-solid fa-wand-magic-sparkles"></i><span> Cosa vuoi ordinare?</span></legend>
                     
                     <div class="checkbox-group inline-group">
                         <label>
                             <input type="checkbox" name="tipo_commissione" value="stampa_3d" id="checkStampa"> Stampa 3D
                         </label>
                         <label>
-                            <input type="checkbox" name="tipo_commissione" value="modello_3d" id="checkModello"> Creazione Modello 3D
+                            <input type="checkbox" name="tipo_commissione" value="modello_3d" id="checkModello"> Modello 3D
                         </label>
                         <label>
-                            <input type="checkbox" name="tipo_commissione" value="texture" id="checkTexture"> Richiesta Texture
+                            <input type="checkbox" name="tipo_commissione" value="texture" id="checkTexture"> Texture
                         </label>
                     </div>
                 </fieldset>
@@ -51,25 +51,25 @@
 
             <div class="form-step" id="step-2">
                 <fieldset class="form-section">
-                    <legend><i class="fa-solid fa-pen-nib"></i><span> Descrizione</span></legend>
+                    <legend><i class="fa-solid fa-pen-nib"></i><span> Descrizione ordine</span></legend>
                     
                     <div class="form-group">
                         <textarea name="descrizione_principale" rows="4" placeholder="Descrivi il tuo progetto nei dettagli..." required></textarea>
                     </div>
 
                     <div class="optional-3d-section" id="optional3DSection">
-                        <p class="section-subtitle">Se modello 3D (opzionale):</p>
+                        <p class="section-subtitle">Se stai ordinando un modello 3D *:</p>
                         
                         <div class="split-options">
                             <div class="option-box">
                                 <label>
-                                    <input type="checkbox" name="include_texture"> Includere texture
+                                    <input type="checkbox" name="include_texture"> Modello con texture
                                 </label>
                                 <textarea name="descrizione_texture" rows="2" placeholder="Descrizione texture..."></textarea>
                             </div>
                             <div class="option-box">
                                 <label>
-                                    <input type="checkbox" name="include_animazione"> Includere Animazione
+                                    <input type="checkbox" name="include_animazione"> Modello animato
                                 </label>
                                 <textarea name="descrizione_animazione" rows="2" placeholder="Descrizione animazione..."></textarea>
                             </div>
@@ -95,7 +95,8 @@
                             </div>
                             
                             <div class="form-group address-group">
-                                <label>Indirizzo (ecc) : <span class="note">solo per le stampe 3d da consegnare</span></label>
+                            <!-- da far comparire solo se spuntaa -->
+                                <label>Indirizzo: <span class="note">solo per le stampe 3d da consegnare</span></label>
                                 <input type="text" name="indirizzo_via" placeholder="Via/Piazza e Civico">
                                 <div class="address-row">
                                     <input type="text" name="indirizzo_citta" placeholder="Città">

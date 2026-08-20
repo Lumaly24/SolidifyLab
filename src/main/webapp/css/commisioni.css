@@ -1,3 +1,24 @@
+#step-2 legend, #step-3 legend {
+	font-family: 'elephant', serif;
+	font-weight: lighter;
+}
+
+textarea, input[type="text"], input[type="email"] {
+    font-family: 'coolveticarg', serif;
+}
+
+.personal-data-layout label, .address-group .note {
+    font-family: 'coolveticarg', serif;
+}
+
+.data-info-side h4 {
+    font-family: 'elephant', sans-serif;
+}
+
+.data-info-side ul li {
+    font-family: 'coolveticarg', sans-serif;
+}
+
 .bg-video-container {
     position: fixed;
     top: 0;
@@ -131,6 +152,10 @@
     gap: 10px;
 }
 
+.option-box label {
+    font-family: 'coolveticarg', sans-serif;
+}
+
 .form-group textarea, .form-group input, .option-box textarea {
     width: 100%;
     padding: 10px 14px;
@@ -151,7 +176,8 @@
 }
 
 .section-subtitle {
-    font-weight: 700;
+	font-family: 'coolveticarg', serif;
+    font-weight: normal;
     font-size: 0.9rem;
     color: #0f0326;
     margin: 15px 0 8px 0;
