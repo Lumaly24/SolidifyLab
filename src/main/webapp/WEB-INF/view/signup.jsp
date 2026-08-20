@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% request.setAttribute("titoloPagina", "Sign Up"); %>
+
+<% request.setAttribute("titoloPagina", "Login"); 
+   request.setAttribute("cssPagina", "auth.css"); 
+%>
 <%@ include file="fragment/header.jspf" %>
+
+<div class="bg-video-container">
+    <div class="bg-video-overlay"></div>
+</div>
 
     <main class="auth-page-container">
         <section class="auth-box signup-box">

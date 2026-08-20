@@ -10,8 +10,9 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/global.css">
 		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header.css">
-		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/index.css">
+		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/${cssPagina != null ? cssPagina : 'index.css'}">
 		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer.css">
+		<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/icons8-star-16.png?v=2" type="image/png">
 	</head>
 <body>
 

@@ -229,9 +229,9 @@
             function updateArrows() {
                 const scrollLeft = Math.ceil(carousel.scrollLeft);
                 const maxScroll = Math.floor(carousel.scrollWidth - carousel.clientWidth);
-
+                
                 // Freccia Sinistra: appare appena si scorre più di 5px verso destra
-                if (scrollLeft > 5) {
+                if (scrollLeft > 249) {               	
                     prevBtn.classList.remove('hidden');
                 } else {
                     prevBtn.classList.add('hidden');
