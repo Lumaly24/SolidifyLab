@@ -1,0 +1,50 @@
+@font-face {
+    font-family: 'ModernAesthetic';
+    src: url('../fonts/ModernAesthetic.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'elephant';
+    src: url('../fonts/ELEPHNT.TTF') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Afterglow';
+    src: url('../fonts/Afterglow.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'coolveticarg';
+    src: url('../fonts/coolveticarg.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'coolveticaitalic';
+    src: url('../fonts/coolveticaitalic.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    font-family: 'ModernAesthetic', serif;
+    font-weight: normal;
+}
+
+h3, h4 {
+    font-family: 'elephant', sans-serif;
+    font-weight: normal;
+}
