@@ -1,76 +1,77 @@
-
-    <footer class="main-footer">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<footer class="main-footer">
     
-	    <div class="footer-container">
-	        
-	        <div class="footer-brand">
-	            <h3>SolidifyLab</h3>
-	            <div class="social-icons">
-	                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-	                <a href="#"><i class="fa-brands fa-artstation"></i></a>
-	                <a href="#"><i class="fa-brands fa-github"></i></a>
-	            </div>
-	        </div>
-	
-	        <div class="footer-links">
-	            <h4>Supporto</h4>
-	            <ul>
-	                <li><a href="#">Contattaci</a></li>
-	                <li><a href="#">FAQ</a></li>
-	                <li><a href="#">Spedizioni e Resi</a></li>
-	            </ul>
-	        </div>
-	        
-	        <div class="footer-links">
-	            <h4>Legale</h4>
-	            <ul>
-	                <li><a href="#">Termini di Servizio</a></li>
-	                <li><a href="#">Privacy Policy</a></li>
-	                <li><a href="#">Cookie Policy</a></li>
-	            </ul>
-	        </div>
-	        
-	    </div>
-	
-	    <div class="footer-bottom">
-	        <p>&copy; 2026 SolidifyLab | Progetto Universitario | Made with Love by WizardWeb</p>
-	        <div class="payment-icons">
-	            <i class="fa-brands fa-cc-visa"></i>
-	            <i class="fa-brands fa-cc-mastercard"></i>
-	            <i class="fa-brands fa-paypal"></i>
-	        </div>
-	    </div>
-	    
-	    <!-- Contenitore per i Messaggi di Conferma / Notifiche (ho chiesto a gemini per capire come fare i messaggi di conferma) -->
-	    <div id="toast-container" class="toast-container"></div>
-	</footer>
-
-    <div id="cartOverlayBg" class="cart-overlay-bg" style="display: none;"></div>
-    <aside id="cartOverlayPanel" class="cart-overlay-panel" style="right: -400px;">
-        <header class="cart-overlay-header">
-            <h3><i class="fa-solid fa-cart-shopping"></i> Il tuo Carrello</h3>
-            
-            <button type="button" id="closeCartBtn" class="btn-close-overlay" title="Chiudi">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </header>
-
-        <div class="cart-overlay-body">
-            <!-- Contenuto carrello dinamico -->
+    <div class="footer-container">
+        
+        <div class="footer-brand">
+            <h3>SolidifyLab</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-artstation"></i></a>
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+            </div>
         </div>
 
-        <footer class="cart-overlay-footer">
-            <div class="cart-overlay-total">
-                <span>Subtotale:</span>
-                <strong>&euro; 0,00</strong>
-            </div>
-            
-            <div class="cart-overlay-actions">
-                <a href="${pageContext.request.contextPath}/carrello" class="btn-outline btn-full">VAI AL CARRELLO</a>
-                <a href="${pageContext.request.contextPath}/carrello" class="btn-primary btn-full">CHECKOUT <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-        </footer>
+        <div class="footer-links">
+            <h4>Supporto</h4>
+            <ul>
+                <li><a href="#">Contattaci</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Spedizioni e Resi</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Legale</h4>
+            <ul>
+                <li><a href="#">Termini di Servizio</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Cookie Policy</a></li>
+            </ul>
+        </div>
+        
+    </div>
 
-    </aside>
+    <div class="footer-bottom">
+        <p>&copy; 2026 SolidifyLab | Progetto Universitario | Made with Love by WizardWeb</p>
+        <div class="payment-icons">
+            <i class="fa-brands fa-cc-visa"></i>
+            <i class="fa-brands fa-cc-mastercard"></i>
+            <i class="fa-brands fa-paypal"></i>
+        </div>
+    </div>
+    
+    <!-- Contenitore per i Messaggi di Conferma / Notifiche -->
+    <div id="toast-container" class="toast-container"></div>
+</footer>
+
+<div id="cartOverlayBg" class="cart-overlay-bg" style="display: none;"></div>
+<aside id="cartOverlayPanel" class="cart-overlay-panel" style="right: -400px;">
+    <header class="cart-overlay-header">
+        <h3><i class="fa-solid fa-cart-shopping"></i> Il tuo Carrello</h3>
+        
+        <button type="button" id="closeCartBtn" class="btn-close-overlay" title="Chiudi">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </header>
+
+    <div class="cart-overlay-body">
+        <!-- Contenuto carrello dinamico -->
+    </div>
+
+    <footer class="cart-overlay-footer">
+        <div class="cart-overlay-total">
+            <span>Subtotale:</span>
+            <strong>&euro; 0,00</strong>
+        </div>
+        
+        <div class="cart-overlay-actions">
+            <!-- Link corretti con estensione .jsp per indirizzare alle pagine specifiche -->
+            <a href="${pageContext.request.contextPath}/carrello.jsp" class="btn-outline btn-full">VAI AL CARRELLO</a>
+            <a href="${pageContext.request.contextPath}/checkout.jsp" class="btn-primary btn-full">CHECKOUT <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </footer>
+
+</aside>
 </body>
 </html>
