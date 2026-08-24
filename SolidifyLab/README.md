@@ -1,3 +1,0 @@
-# SolidifyLab
-
-Progetto Universitario
