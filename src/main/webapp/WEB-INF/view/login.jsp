@@ -44,7 +44,7 @@
             </form>
             
             <div class="auth-footer">
-                <p>Non sei registrato? <a href="${pageContext.request.contextPath}/signup.jsp">Sign up</a></p>
+                <p>Non sei registrato? <a href="${pageContext.request.contextPath}/signup">Sign up</a></p>
                 <p><a href="#" class="forgot-pwd">Hai dimenticato la password?</a></p>
             </div>
             

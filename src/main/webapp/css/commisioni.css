@@ -136,6 +136,24 @@ textarea, input[type="text"], input[type="email"] {
     margin-bottom: 18px;
 }
 
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    outline: none;
+    background-image: url('../images/checkbox-empty.png');
+}
+
+input[type="checkbox"]:checked {
+    background-image: url('../images/checkbox-full.png');
+}
+
 .checkbox-group.inline-group {
     display: flex;
     flex-direction: column;
@@ -154,6 +172,20 @@ textarea, input[type="text"], input[type="email"] {
 
 .option-box label {
     font-family: 'coolveticarg', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.option-box textarea {
+    display: none;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.option-box:has(input[type="checkbox"]:checked) textarea {
+    display: block !important;
 }
 
 .form-group textarea, .form-group input, .option-box textarea {
@@ -166,6 +198,24 @@ textarea, input[type="text"], input[type="email"] {
     color: #0f0326;
     outline: none;
     box-sizing: border-box;
+}
+
+label:has(input[type="checkbox"]) {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    transform-origin: left center;
+    will-change: transform;
+}
+
+label:has(input[type="checkbox"]):hover {
+    transform: scale(1.05) !important;
+}
+
+label:has(input[type="checkbox"]):active {
+    transform: scale(1.05) !important;
 }
 
 .split-options {
@@ -256,4 +306,9 @@ textarea, input[type="text"], input[type="email"] {
 
 .auth-btn:hover {
     background: #f7ccde;
+}
+
+.address-group, #optional3DSection {
+    display: none;
+    transition: all 0.3s ease-in-out;
 }

@@ -76,23 +76,29 @@
 		</div>
         
       	<div class="user-icons">
-		    <button type="button" class="icon-btn" title="Wishlist">
-		        <i class="fa-regular fa-heart"></i> <!--placeholder-->
-		    </button>
+      		<a href="${pageContext.request.contextPath}/wishlist.jsp">
+		    	<button type="button" class="icon-btn" title="Wishlist">
+		        	<i class="fa-regular fa-heart"></i> <!--placeholder-->
+		    	</button>
+		    </a>	
 		    
 		    <div class="dropdown profile-dropdown">
-		        <button type="button" class="icon-btn" title="Profilo">
-		            <i class="fa-regular fa-user"></i> <!--placeholder-->
-		        </button>
-
+		    	<a href="${pageContext.request.contextPath}/login.jsp">
+		        	<button type="button" class="icon-btn" title="Profilo">
+		            	<i class="fa-regular fa-user"></i> <!--placeholder-->
+		        	</button>
+				</a>
+				
 		        <ul class="dropdown-menu profile-menu">
 		            <li><a href="${pageContext.request.contextPath}/login">Log in</a></li>
 		            <li><a href="${pageContext.request.contextPath}/signup">Sign up</a></li>
 		        </ul>
 		    </div>
 		
-		    <button type="button" class="icon-btn" title="Carrello">
-		        <i class="fa-solid fa-cart-shopping"></i> <!--placeholder-->
-		    </button>
+			<a href="${pageContext.request.contextPath}/carrello.jsp">
+		    	<button type="button" class="icon-btn" title="Carrello">
+		        	<i class="fa-solid fa-cart-shopping"></i> <!--placeholder-->
+		    	</button>
+		    </a>	
 		</div>
 	</header>

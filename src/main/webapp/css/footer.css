@@ -1,10 +1,8 @@
 .main-footer {
     background-color: #e56399;
-    color: #eff1ed;
     padding: 3.5rem 0 0 0;
     margin-top: 0;
     width: 100%;
-    border-top: 1px solid #f4c1d7;
     position: relative;
     z-index: 10;
     scroll-snap-align: end;

@@ -56,7 +56,7 @@
             </form>
             
             <div class="auth-footer">
-                <p>Sei già registrato? <a href="${pageContext.request.contextPath}/login.jsp">Log in</a></p>
+                <p>Sei già registrato? <a href="${pageContext.request.contextPath}/login">Log in</a></p>
             </div>
             
         </section>
@@ -66,9 +66,7 @@
     // Variabile globale per bloccare il form se l'email esiste già
     let isEmailValid = false;
 
-    // ==========================================
-    // CHIAMATA AJAX (FETCH API + JSON) PER EMAIL
-    // ==========================================
+    // chiamata ajax per fetch email
     document.getElementById('regEmail').addEventListener('blur', function() {
         const email = this.value.trim();
         const feedback = document.getElementById('emailAjaxFeedback');
