@@ -25,7 +25,7 @@
             <div class="categories-grid">
                 <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=MODELLO_3D" class="category-card">
                     <div class="card-img-container">
-                        <img src="" alt="Modelli 3D">
+                        <img src="" alt="Modelli 3D" loading="lazy">
                     </div>
                     <div class="card-info">
                         <h3>Modelli 3D</h3>
@@ -35,7 +35,7 @@
 
                 <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=TEXTURE" class="category-card">
                     <div class="card-img-container">
-                        <img src="" alt="Textures">
+                        <img src="" alt="Textures" loading="lazy">
                     </div>
                     <div class="card-info">
                         <h3>Textures</h3>
@@ -45,7 +45,7 @@
 
                 <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=STAMPA_3D" class="category-card">
                     <div class="card-img-container">
-                        <img src="" alt="Stampe 3D">
+                        <img src="" alt="Stampe 3D" loading="lazy">
                     </div>
                     <div class="card-info">
                         <h3>Stampe 3D</h3>
@@ -74,27 +74,46 @@
                                 <p class="empty-carousel-msg text-center">Nuovi prodotti in arrivo a breve!</p>
                             </c:when>
                             <c:otherwise>
-                                <!-- varStatus="status" ci permette di contare l'indice del ciclo -->
                                 <c:forEach var="prodotto" items="${prodottiInEvidenza}" varStatus="status">
                                     <article class="product-card">
                                         
                                         <div class="product-badges">
                                             
-                                            <!-- LOGICA DEL "NEW": Se l'indice è 0, 1 o 2 (i primi tre), mostra l'etichetta -->
+                                            <!-- LOGICA DEL "NEW" -->
                                             <c:if test="${status.index < 3}">
-                                                <img src="${pageContext.request.contextPath}/images/new-button.png" alt="New" class="new-button-img">
+                                                <img src="${pageContext.request.contextPath}/images/new-button.png" alt="New" class="new-button-img" loading="lazy">
                                             </c:if>
                                             
-                                            <!-- FORM WISHLIST -->
-                                            <form action="${pageContext.request.contextPath}/AggiungiWishlistServlet" method="POST" class="inline-form">
-                                                <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-                                                <button type="submit" class="btn-wishlist" title="Wishlist-add">
-                                                    <i class="fa-regular fa-heart"></i>
-                                                </button>
-                                            </form>
+                                            <!-- VERIFICA PRE-ESISTENZA IN WISHLIST -->
+                                            <c:set var="inWishlist" value="false" />
+                                            <c:forEach var="wId" items="${sessionScope.wishlistIds}">
+                                                <c:if test="${wId == prodotto.id}">
+                                                    <c:set var="inWishlist" value="true" />
+                                                </c:if>
+                                            </c:forEach>
+
+                                            <!-- GESTIONE CLICK WISHLIST (Loggato vs Ospite) -->
+                                            <c:choose>
+                                                <c:when test="${not empty sessionScope.utenteLoggato}">
+                                                    <!-- Se loggato: Form AJAX -->
+                                                    <form action="${pageContext.request.contextPath}/AggiungiWishlistServlet" method="POST" class="inline-form wishlist-form">
+                                                        <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+                                                        <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}" style="transition: transform 0.2s ease;">
+                                                            <!-- Cuore dinamico pieno/vuoto -->
+                                                            <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
+                                                        </button>
+                                                    </form>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!-- Se ospite: Pulsante finto che porta al Login -->
+                                                    <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="alert('Devi effettuare il login per usare la Wishlist!'); window.location.href='${pageContext.request.contextPath}/login';">
+                                                        <i class="fa-regular fa-heart"></i>
+                                                    </button>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            
                                         </div>
                                         
-                                        <!-- Link al Dettaglio Prodotto reale -->
                                         <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
                                             <div class="product-image">
                                                 <span>(IMG ${prodotto.nome})</span>
@@ -120,12 +139,24 @@
 
         <!-- CTA SECTION -->
         <section class="cta-section">
-		    <h2>INIZIA OGGI IL TUO VIAGGIO CREATIVO</h2>
-		    <div class="cta-buttons">
-		        <a href="${pageContext.request.contextPath}/login" class="btn-login">LOG IN</a>
-		        <a href="${pageContext.request.contextPath}/signup" class="btn-signup">SIGN UP</a>
-		    </div>
-		</section>
+            <!-- TITOLO E BOTTONI DINAMICI IN BASE ALLA SESSIONE -->
+            <c:choose>
+                <c:when test="${not empty sessionScope.utenteLoggato}">
+                    <h2>BENTORNATO! CONTINUA A ESPLORARE</h2>
+                    <div class="cta-buttons">
+                        <a href="${pageContext.request.contextPath}/ProfiloServlet" class="btn-login">IL MIO PROFILO</a>
+                        <a href="${pageContext.request.contextPath}/WishlistServlet" class="btn-signup">VAI ALLA WISHLIST</a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <h2>INIZIA OGGI IL TUO VIAGGIO CREATIVO</h2>
+                    <div class="cta-buttons">
+                        <a href="${pageContext.request.contextPath}/login" class="btn-login">LOG IN</a>
+                        <a href="${pageContext.request.contextPath}/signup" class="btn-signup">SIGN UP</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </section>
         
         <!-- SCROLL PROGRESS NAV -->
         <div class="scroll-progress-nav" id="scrollProgressNav">
@@ -144,6 +175,7 @@
     </main>
     
 <script>
+    // --- SCRIPT 1: GESTIONE FRECCE CAROSELLO ---
     document.addEventListener("DOMContentLoaded", function () {
         const carousel = document.getElementById('productsCarousel');
         const prevBtn = document.getElementById('prevBtn');
@@ -182,15 +214,13 @@
             updateArrows();
         }
     });
-</script>
 
-<script>
+    // --- SCRIPT 2: GESTIONE SCROLL SPY LATERALE ---
     document.addEventListener("DOMContentLoaded", function () {
         const main = document.querySelector('main');
         const sections = document.querySelectorAll('main > section');
         const dots = document.querySelectorAll('.scroll-progress-nav .dot');
         const backToTopBtn = document.getElementById('backToTopBtn');
-        const footer = document.querySelector('.main-footer');
 
         if (main && sections.length > 0) {
 
@@ -228,5 +258,51 @@
                 }
             });
         }
+    });
+
+    // --- SCRIPT 3: CHICCA AJAX PER LA WISHLIST ---
+    document.addEventListener("DOMContentLoaded", function () {
+        const wishlistForms = document.querySelectorAll('.wishlist-form');
+        
+        wishlistForms.forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                
+                const url = this.action;
+                const formData = new FormData(this);
+                const btn = this.querySelector('.btn-wishlist');
+                const icon = btn.querySelector('i');
+                
+                fetch(url, {
+                    method: 'POST',
+                    body: new URLSearchParams(formData),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Toggle logica: Se era vuoto lo riempie, se era pieno lo svuota
+                        if(icon.classList.contains('fa-regular')) {
+                            icon.classList.remove('fa-regular');
+                            icon.classList.add('fa-solid');
+                            icon.style.color = '#e56399';
+                        } else {
+                            icon.classList.remove('fa-solid');
+                            icon.classList.add('fa-regular');
+                            icon.style.color = '';
+                        }
+                        
+                        btn.style.transform = 'scale(1.3)';
+                        setTimeout(() => { btn.style.transform = 'scale(1)'; }, 200);
+                    } else {
+                        console.error('Errore durante la modifica della wishlist.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore di rete durante la richiesta AJAX:', error);
+                });
+            });
+        });
     });
 </script>
