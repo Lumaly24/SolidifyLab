@@ -68,7 +68,7 @@
             
             <section class="hero-section">
                 <div class="hero-card">
-                    <h1>SERVIZIO STAMPA 3D</h1>
+                    <h1>SERVIZIO STAMPA <span>3</span>D</h1>
                     <p>
                         Scegli tra i nostri modelli ottimizzati per la stampa o richiedi un preventivo personalizzato. 
                         Garantiamo altissima risoluzione in Resina 8K e massima resistenza in PLA.
