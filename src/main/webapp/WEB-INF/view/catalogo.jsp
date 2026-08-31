@@ -88,7 +88,7 @@
                     </nav>
 
                     <!-- AGGIUNTA ADMIN: Bottone "Nuovo Prodotto" -->
-                    <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.admin}">
+                    <c:if test="${empty sessionScope.utenteLoggato or sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
                         <a href="${pageContext.request.contextPath}/admin.jsp#gestione-prodotti" class="btn-primary" style="padding: 5px 15px; font-size: 0.9em;">
                             <i class="fa-solid fa-plus"></i> Nuovo Prodotto
                         </a>

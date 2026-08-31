@@ -6,17 +6,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-@WebServlet("/Stampe") // Minuscolo, come nel tuo header
-public class StampeServlet extends HttpServlet {
+@WebServlet("/Logout")
+public class LogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Punta al tuo file stampe.jsp
-        request.getRequestDispatcher("/WEB-INF/view/stampe.jsp").forward(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // Distrugge la sessione!
+        }
+        response.sendRedirect(request.getContextPath() + "/Home");
     }
 }

@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<c:if test="${empty sessionScope.utenteLoggato or !sessionScope.utenteLoggato.admin}">
+<c:if test="${empty sessionScope.utenteLoggato or sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
     <c:redirect url="${pageContext.request.contextPath}/login" />
 </c:if>
 
@@ -14,7 +14,7 @@
     <header class="admin-header">
         <div class="logo"><strong>SolidifyLab ADMIN</strong></div>
         <div class="admin-user">
-            <span>Benvenuto, ${sessionScope.utenteLoggato.username}</span>
+            <span>Benvenuto, ${sessionScope.utenteLoggato.nome}</span>
             <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn-outline-small text-red">Esci</a>
         </div>
     </header>
@@ -133,7 +133,8 @@
                                 <td>${prodotto.id}</td>
                                 <td>${prodotto.nome}</td>
                                 <td>${prodotto.categoria}</td>
-                                <td>€ <fmt:formatNumber value="${prodotto.prezzo}" pattern="#,##0.00"/></td>
+                                <!-- Corretto in prezzoCorrente -->
+                                <td>€ <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></td>
                                 <td class="table-actions">
                                     <form action="${pageContext.request.contextPath}/EditProductServlet" method="GET">
                                         <input type="hidden" name="id" value="${prodotto.id}">
@@ -154,15 +155,15 @@
             <section id="gestione-ordini" class="admin-card mt-4">
                 <h2>Gestione Ordini</h2>
                 
-                <!-- CHECKLIST: Filtro ordini per cliente -->
+                <!-- CHECKLIST: Filtro ordini per cliente (aggiornato a email) -->
                 <div class="filter-bar">
                     <form action="${pageContext.request.contextPath}/FiltraOrdiniAdminServlet" method="GET">
                         <div class="form-group">
-                            <label for="filtroCliente">Filtra per Username Cliente:</label>
-                            <input type="text" id="filtroCliente" name="username_cliente" value="${param.username_cliente}" placeholder="Es. mario.rossi">
+                            <label for="filtroCliente">Filtra per Email Cliente:</label>
+                            <input type="text" id="filtroCliente" name="email_cliente" value="${param.email_cliente}" placeholder="Es. mario@rossi.it">
                         </div>
                         <button type="submit" class="btn-primary"><i class="fa-solid fa-search"></i> Cerca</button>
-                        <c:if test="${not empty param.username_cliente}">
+                        <c:if test="${not empty param.email_cliente}">
                             <a href="${pageContext.request.contextPath}/admin.jsp#gestione-ordini" class="btn-outline-small">Reset</a>
                         </c:if>
                     </form>
@@ -185,7 +186,8 @@
                             <tr>
                                 <td>#${ordine.id}</td>
                                 <td>${ordine.data}</td>
-                                <td><strong>${ordine.utente.username}</strong></td>
+                                <!-- Corretto per mostrare nome e cognome invece di username -->
+                                <td><strong>${ordine.utente.nome} ${ordine.utente.cognome}</strong></td>
                                 <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
                                 <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
                                 <td>
@@ -205,7 +207,7 @@
                     <thead>
                         <tr>
                             <th>ID Req.</th>
-                            <th>Utente</th>
+                            <th>Utente (Email)</th>
                             <th>Tipo (3D/Texture)</th>
                             <th>Stato</th>
                             <th>Azioni</th>
@@ -215,7 +217,8 @@
                         <c:forEach var="comm" items="${listaCommissioni}">
                             <tr>
                                 <td>#${comm.id}</td>
-                                <td>${comm.utente.username}</td>
+                                <!-- Corretto per usare l'attributo email del bean Commissione -->
+                                <td>${comm.email}</td>
                                 <td>${comm.tipo}</td>
                                 <td>
                                     <span class="status-badge status-${comm.stato.toLowerCase().replace(' ', '-')}">${comm.stato}</span>

@@ -56,7 +56,7 @@
             </form>
             
             <div class="auth-footer">
-                <p>Sei già registrato? <a href="${pageContext.request.contextPath}/login">Log in</a></p>
+                <p>Sei già registrato? <a href="${pageContext.request.contextPath}/Login">Log in</a></p>
             </div>
             
         </section>

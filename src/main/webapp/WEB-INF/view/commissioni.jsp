@@ -10,6 +10,16 @@
 
 <%@ include file="fragment/header.jspf" %>
 
+<!-- Modal Popup Personalizzato -->
+<div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+    <div style="background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 380px; width: 85%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);">
+        <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #e56399; margin-bottom: 15px;"></i>
+        <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 10px;">Attenzione!</h3>
+        <p id="customAlertText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 20px; color: #333;">Seleziona almeno una tipologia di ordine per proseguire!</p>
+        <button type="button" class="btn-primary auth-btn" onclick="closeCustomAlert()">Okay</button>
+    </div>
+</div>
+
 <!-- Stile dinamico per i bordi di errore -->
 <style>
     .input-error {
@@ -23,7 +33,7 @@
 <c:set var="tipiSelezionati" value="${fn:join(paramValues.tipo_commissione, ',')}" />
 
 <!-- Modal Popup Successo -->
-<div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+  <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
     <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 40px 30px; max-width: 400px; width: 85%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
         <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: #2ecc71; margin-bottom: 20px;"></i>
         <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 15px; color: #333;">Evviva!</h3>
@@ -51,7 +61,8 @@
             <div class="step-dot" id="dot-3">3</div>
         </div>
         
-        <form id="commissionForm" action="${pageContext.request.contextPath}/RichiestaCommissioneServlet" method="POST" enctype="multipart/form-data" onsubmit="return validaCommissione()">
+        <!-- AGGIUNTO L'ATTRIBUTO novalidate QUI SOTTO -->
+        <form id="commissionForm" action="${pageContext.request.contextPath}/RichiestaCommissioneServlet" method="POST" enctype="multipart/form-data" onsubmit="return validaCommissione()" novalidate>
             
             <!-- STEP 1 -->
             <div class="form-step active" id="step-1">
@@ -226,6 +237,24 @@
         document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
     }
 
+    // --- FUNZIONI CUSTOM ALERT ---
+    function showCustomAlert(message) {
+        const modal = document.getElementById('customAlert');
+        const modalText = document.getElementById('customAlertText');
+        if (modal && modalText) {
+            modalText.innerText = message;
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeCustomAlert() {
+        const modal = document.getElementById('customAlert');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // --- FUNZIONI SUCCESS MODAL ---
     function showSuccessModal(customMessage) {
         const modal = document.getElementById('successModal');
         const modalText = document.getElementById('successModalText');
@@ -245,6 +274,7 @@
         }
     }
 
+    // --- NAVIGAZIONE A STEP ---
     function nextStep(stepNumber) {
         const currentActiveStep = document.querySelector('.form-step.active');
         clearErrors();
@@ -253,8 +283,7 @@
         if (currentActiveStep && currentActiveStep.id === 'step-1') {
             const checkboxes = document.querySelectorAll('input[name="tipo_commissione"]:checked');
             if (checkboxes.length === 0) {
-                document.getElementById('err-tipo').innerText = 'Devi selezionare almeno un\'opzione per proseguire.';
-                document.getElementById('groupCheckboxes').classList.add('input-error');
+                showCustomAlert('Seleziona almeno una tipologia di ordine per proseguire!');
                 return; 
             }
         }
@@ -313,6 +342,7 @@
         });
     }
 
+    // --- VALIDAZIONE FINALE ---
     function validaCommissione() {
         let isValid = true;
         clearErrors();
@@ -322,8 +352,7 @@
         const checkTexture = document.getElementById('checkTexture').checked;
         
         if(!checkStampa && !checkModello && !checkTexture) {
-            document.getElementById('err-tipo').innerText = 'Devi selezionare almeno un\'opzione per proseguire.';
-            document.getElementById('groupCheckboxes').classList.add('input-error');
+            showCustomAlert('Devi selezionare almeno un\'opzione per proseguire.');
             nextStep(1); 
             return false;
         }
@@ -360,7 +389,8 @@
         const emailInput = document.getElementById('commEmail');
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!regexEmail.test(emailInput.value.trim())) {
-            document.getElementById('err-email').innerText = 'Inserisci un indirizzo email valido.';
+            // MODIFICATO IL MESSAGGIO DI ERRORE DELL'EMAIL
+            document.getElementById('err-email').innerText = 'Per favore riempire il campo con email valida';
             emailInput.classList.add('input-error');
             isValid = false;
         }
@@ -391,8 +421,9 @@
         return isValid;
     }
 
+    // --- LOGICA EVENTI AL CARICAMENTO DELLA PAGINA ---
     document.addEventListener('DOMContentLoaded', () => {
-        // --- 1. Gestione Visibilità Dinamica ---
+        // 1. Gestione Visibilità Dinamica
         const checkStampa = document.getElementById('checkStampa');
         const checkModello = document.getElementById('checkModello');
         const checkTexture = document.getElementById('checkTexture');
@@ -429,7 +460,7 @@
         updateMainSections();
         updateSubOptionsStampa();
 
-        // --- 2. Gestione Feedback Upload File ---
+        // 2. Gestione Feedback Upload File
         const fileInput = document.getElementById('fileRiferimento');
         const fileFeedback = document.getElementById('file-feedback');
         
@@ -437,9 +468,8 @@
             fileInput.addEventListener('change', function(e) {
                 const files = e.target.files;
                 if (files.length === 0) {
-                    fileFeedback.innerHTML = ''; // Svuota se l'utente annulla la selezione
+                    fileFeedback.innerHTML = ''; 
                 } else {
-                    // Prende i nomi di tutti i file selezionati e li unisce con una virgola
                     let fileNames = Array.from(files).map(f => f.name).join(', ');
                     fileFeedback.innerHTML = '<i class="fa-solid fa-check"></i> Hai selezionato: ' + fileNames;
                 }

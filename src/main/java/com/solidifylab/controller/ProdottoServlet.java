@@ -7,13 +7,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/prodotto")
+@WebServlet("/Prodotto")
 public class ProdottoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // In futuro: String id = request.getParameter("id"); per cercare il modello nel DB
         request.getRequestDispatcher("/WEB-INF/view/prodotto.jsp").forward(request, response);
     }
 }
