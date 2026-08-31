@@ -34,30 +34,15 @@
                     <h3>Filtro Prezzi</h3>
                     
                     <div class="price-slider">
-    				<c:set var="currentVal" value="${not empty param.max_price ? param.max_price : 150}" />
-    
-    					<input type="range" id="priceRange" name="max_price" min="0" max="300" step="10" value="${currentVal}"oninput="
-               					document.getElementById('priceVal').innerText = this.value + '€';
-              					 let pct = ((this.value - this.min) / (this.max - this.min)) * 100;
-               						this.style.background = `linear-gradient(to right, #374477 0%, #374477 ${pct}%, rgba(255, 255, 255, 0.45) ${pct}%, rgba(255, 255, 255, 0.45) 100%)`;">
+                        <c:set var="currentVal" value="${not empty param.max_price ? param.max_price : 150}" />
+                        
+                        <input type="range" id="priceRange" name="max_price" min="0" max="300" step="10" value="${currentVal}">
                         
                         <div class="price-labels">
-        					<span>0€</span>
-        					<span>Fino a: <b id="priceVal">${currentVal}€</b></span>
-    					</div>
-					</div>
-					
-					<script>
-    					// Applica il gradiente corretto appena la pagina carica
-    					document.addEventListener("DOMContentLoaded", function() {
-        				const slider = document.getElementById('priceRange');
-        				if (slider) {
-            			let pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
-            			slider.style.background = `linear-gradient(to right, #374477 0%, #374477 ${pct}%, rgba(255, 255, 255, 0.45) ${pct}%, rgba(255, 255, 255, 0.45) 100%)`;
-        				}
-   						});
-					</script>
-					
+                            <span>Da 0€</span>
+                            <span>Fino a: <b id="priceVal">${currentVal}€</b></span>
+                        </div>
+                    </div>
                 </div>
                 
                 <button type="submit" class="btn-primary w-100 mt-3">Applica Filtri</button>
@@ -67,7 +52,6 @@
         <!-- COLONNA DI DESTRA -->
         <section class="catalog-main-content">
             
-            <!-- BREADCRUMBS ACCANTO AI FILTRI -->
             <div class="top-nav-row">
                 <nav class="breadcrumbs" aria-label="Percorso di navigazione">
                     <a href="${pageContext.request.contextPath}/index.jsp">Home</a> 
@@ -75,15 +59,13 @@
                     <span class="current-page">Modelli Stampabili</span>
                 </nav>
 
-                <!-- Bottone Admin -->
-                <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.admin}">
-                    <a href="${pageContext.request.contextPath}/admin.jsp#gestione-prodotti" class="btn-primary" style="padding: 5px 15px; font-size: 0.9em;">
-                        <i class="fa-solid fa-plus"></i> Nuova Stampa
-                    </a>
-                </c:if>
+                <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
+				    <a href="${pageContext.request.contextPath}/admin.jsp#gestione-prodotti" class="btn-primary" style="padding: 5px 15px; font-size: 0.9em;">
+				        <i class="fa-solid fa-plus"></i> Nuova Stampa
+				    </a>
+				</c:if>
             </div>
             
-            <!-- HERO DEDICATA SOTTO LE BREADCRUMBS -->
             <section class="hero-section">
                 <div class="hero-card">
                     <h1>SERVIZIO STAMPA 3D</h1>
@@ -109,7 +91,6 @@
                 </div>
             </section>
 
-            <!-- GRIGLIA PRODOTTI -->
             <div class="catalog-products-grid">
                 <c:choose>
                     <c:when test="${empty listaStampe}">
@@ -150,14 +131,34 @@
 </main>
 
 <script>
-    // Forzo l'aggiornamento grafico del gradiente al load della pagina per evitare glitch di rendering del browser
     document.addEventListener("DOMContentLoaded", function() {
         const slider = document.getElementById('priceRange');
+        const priceDisplay = document.getElementById('priceVal');
+
+        function updateSlider() {
+            if (!slider) return;
+            const min = parseFloat(slider.min) || 0;
+            const max = parseFloat(slider.max) || 300;
+            const val = parseFloat(slider.value) || 0;
+            
+            // 1. Calcola la percentuale
+            const pct = ((val - min) / (max - min)) * 100;
+
+            // 2. Aggiorna il testo del prezzo
+            if (priceDisplay) {
+                priceDisplay.innerText = val + '€';
+            }
+
+            // 3. Inietta la percentuale direttamente nella variabile CSS del custom slider
+            slider.style.setProperty('--slider-pct', pct + '%');
+        }
+
         if (slider) {
-            let pct = (slider.value - slider.min) / (slider.max - slider.min) * 100;
-            slider.style.background = `linear-gradient(to right, #374477 ${pct}%, rgba(255, 255, 255, 0.45) ${pct}%)`;
+            slider.addEventListener('input', updateSlider);
+            slider.addEventListener('change', updateSlider);
+            updateSlider(); // Esecuzione al primo caricamento
         }
     });
 </script>
-    
+
 <%@ include file="fragment/footer.jspf" %>

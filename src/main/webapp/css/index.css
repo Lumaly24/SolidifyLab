@@ -1,8 +1,34 @@
+/* Sezione 1: Hero */
+main > section:nth-of-type(1) {
+    background-image: linear-gradient(rgba(15, 3, 38, 0.4), rgba(15, 3, 38, 0.4)), 
+                      url('https://le-tue-immagini.com/sfondo-hero.jpg');
+}
+
+/* Sezione 2: Categorie */
+main > section:nth-of-type(2) {
+    background-image: linear-gradient(rgba(185, 193, 223, 0.7), rgba(185, 193, 223, 0.7)), 
+                      url('https://le-tue-immagini.com/sfondo-categorie.jpg');
+}
+
+/* Sezione 3: Prodotti in evidenza */
+main > section:nth-of-type(3) {
+    background-image: linear-gradient(rgba(15, 3, 38, 0.8), rgba(15, 3, 38, 0.8)), 
+                      url('https://le-tue-immagini.com/sfondo-prodotti.jpg');
+}
+
+/* Sezione 4: CTA / Registrazione */
+main > section:nth-of-type(4) {
+    background-image: linear-gradient(rgba(15, 3, 38, 0.85), rgba(15, 3, 38, 0.85)), 
+                      url('https://le-tue-immagini.com/sfondo-cta.jpg');
+}
+
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
     overflow: hidden;
+    background-color: #0f0326;
+    color: #eff1ed;
 }
 
 main {
@@ -14,7 +40,7 @@ main {
 }
 
 main > section {
-	min-height: calc(100vh - 70px);
+    min-height: calc(100vh - 70px);
     height: calc(100vh - 70px);
     scroll-snap-align: start;
     scroll-snap-stop: always;
@@ -22,8 +48,12 @@ main > section {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-	padding: 2rem 1rem;
-	box-sizing: border-box;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
 }
 
 main > section:last-of-type {
@@ -52,17 +82,17 @@ main > section#cta, main > section:nth-of-type(4) {
     padding-top: 4rem;
     padding-bottom: 4rem;
 }
-/*sezione 1*/
 
 .hero-section {
     text-align: center;
-    background: #b9c1df;
+    background: transparent;
 }
 
 .hero-content h1 {
     font-size: 3rem;
     margin-bottom: 25px;
     letter-spacing: 2px;
+    color: #e56399;
 }
 
 .hero-buttons {
@@ -73,30 +103,35 @@ main > section#cta, main > section:nth-of-type(4) {
 
 .hero-buttons .btn {
     padding: 12px 28px;
-    border: 2px solid #333;
     border-radius: 30px;
     text-decoration: none;
-    color: #333;
     font-weight: bold;
+    color: #e56399;
+    background: rgba(229, 99, 153, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(229, 99, 153, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
 
 .hero-buttons .btn:hover {
-    background-color: #333;
-    color: #fff;
+    background: rgba(229, 99, 153, 0.35);
+    border-color: #e56399;
+    color: #eff1ed;
     transform: translateY(-3px);
 }
 
-/*sezione 2*/
-
 .categories-section {
     text-align: center;
-    background: #fafafa;
+    background-color: #b9c1df;
+    color: #0f0326;
 }
 
 .categories-section h2 {
     font-size: 2.2rem;
     margin-bottom: 30px;
+    color: #0f0326;
 }
 
 .categories-grid {
@@ -109,38 +144,45 @@ main > section#cta, main > section:nth-of-type(4) {
 
 .category-card {
     flex: 1;
-    background: #ffffff;
-    border: 1px solid #eee;
+    background: rgba(239, 241, 237, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(15, 3, 38, 0.2);
     border-radius: 12px;
     padding: 20px;
     text-decoration: none;
-    color: inherit;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #0f0326;
+    box-shadow: 0 8px 32px 0 rgba(15, 3, 38, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .category-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    background: rgba(239, 241, 237, 0.65);
+    box-shadow: 0 12px 40px 0 rgba(15, 3, 38, 0.2);
 }
 
 .card-img-container {
     height: 180px;
-    background-color: #eee; /* Placeholder grigio in attesa delle immagini */
+    background: rgba(15, 3, 38, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(15, 3, 38, 0.15);
     border-radius: 8px;
     margin-bottom: 15px;
 }
 
-/*sezione 3*/
-
 .featured-products-section {
     width: 100%;
     text-align: center;
+    background-color: #0f0326;
+    color: #eff1ed;
 }
 
 .featured-products-section h2 {
     font-size: 2.2rem;
     margin-bottom: 30px;
+    color: #e56399;
 }
 
 .carousel-outer-container {
@@ -175,18 +217,21 @@ main > section#cta, main > section:nth-of-type(4) {
 
 .product-card {
     flex: 0 0 200px;
-    background: #b9c1df;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(229, 99, 153, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(229, 99, 153, 0.3);
     border-radius: 12px;
     padding: 15px;
     position: relative;
     scroll-snap-align: start;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .product-card:hover {
     transform: translateY(-4px);
+    border-color: #e56399;
 }
 
 .product-badges {
@@ -207,17 +252,13 @@ main > section#cta, main > section:nth-of-type(4) {
 }
 
 @keyframes new-badge {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
 }
 
 .badge-new {
-    background: #0f0326;
-    color: #fff;
+    background: #e56399;
+    color: #0f0326;
     font-size: 0.75rem;
     padding: 3px 10px;
     border-radius: 12px;
@@ -230,6 +271,7 @@ main > section#cta, main > section:nth-of-type(4) {
     border: none;
     cursor: pointer;
     font-size: 1.1rem;
+    color: #eff1ed;
     margin-left: auto;
     display: flex;
     align-items: center;
@@ -245,20 +287,23 @@ main > section#cta, main > section:nth-of-type(4) {
 
 .product-image {
     height: 130px;
-    background: #f4f4f4;
+    background: rgba(239, 241, 237, 0.1);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(239, 241, 237, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 6px;
     margin-bottom: 10px;
     font-weight: bold;
-    color: #888;
+    color: #eff1ed;
 }
 
 .product-price {
     font-family: 'coolveticaitalic', serif;
     font-weight: lighter;
-    color: #333;
+    color: #e56399;
 }
 
 .product-card a, .product-link, .product-price span, .product-image span {
@@ -274,17 +319,17 @@ main > section#cta, main > section:nth-of-type(4) {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(229, 99, 153, 0.4);
+    background: rgba(15, 3, 38, 0.5);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    color: #1a1a1a;
+    color: #e56399;
     font-size: 1.1rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -298,10 +343,10 @@ main > section#cta, main > section:nth-of-type(4) {
 }
 
 .carousel-arrow:hover {
-    background: rgba(255, 255, 255, 0.5);
-    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(229, 99, 153, 0.3);
+    border-color: #e56399;
     transform: translateY(-50%) scale(1.1);
-    color: #e60073;
+    color: #eff1ed;
 }
 
 button.carousel-arrow.hidden {
@@ -311,17 +356,7 @@ button.carousel-arrow.hidden {
     pointer-events: none !important;
 }
 
-.prev-btn {
-    left: -20px;
-}
-
-.next-btn {
-    right: -20px;
-}
-
-/*sezione 4*/
-
-section.cta-section {
+.prev-btn { left: -20px; } .next-btn { right: -20px; } section.cta-section {
     height: calc(100vh - 70px);
     min-height: calc(100vh - 70px);
     scroll-snap-align: start;
@@ -333,11 +368,11 @@ section.cta-section {
     align-items: center;
     gap: 20px;
     padding: 2rem 1rem;
+    background: #0f0326;
 }
 
 .cta-section {
     text-align: center;
-    background: #f8f8f8;
 }
 
 .cta-section h2 {
@@ -345,7 +380,7 @@ section.cta-section {
     font-weight: 700;
     text-align: center;
     margin: 0;
-    color: #1a1a1a;
+    color: #b9c1df;
 }
 
 .cta-buttons {
@@ -355,33 +390,38 @@ section.cta-section {
     margin-top: 0;
 }
 
-.cta-buttons .btn-login, .cta-buttons .btn-signup {
-    padding: 0.8rem 2.2rem;
-    border-radius: 30px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
 .btn-login, .btn-signup {
     padding: 14px 36px;
     border-radius: 30px;
     text-decoration: none;
     font-weight: bold;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-login {
-    background-color: #333;
-    color: #fff;
+    background: #b9c1df;
+    color: #0f0326;
+    border: 1px solid #b9c1df;
 }
 
 .btn-signup {
-    border: 2px solid #333;
-    color: #333;
+    background: rgba(185, 193, 223, 0.15);
+    border: 2px solid #b9c1df;
+    color: #b9c1df;
 }
 
-.btn-login:hover, .btn-signup:hover {
+.btn-login:hover {
+    background: #eff1ed;
+    border-color: #eff1ed;
+    transform: scale(1.05);
+}
+
+.btn-signup:hover {
+    background: rgba(185, 193, 223, 0.35);
+    color: #eff1ed;
     transform: scale(1.05);
 }
 
@@ -397,33 +437,33 @@ section.cta-section {
     gap: 14px;
     padding: 12px 8px;
     border-radius: 30px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(15, 3, 38, 0.4);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
+    border: 1px solid rgba(239, 241, 237, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 .scroll-progress-nav .dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(239, 241, 237, 0.3);
+    border: 1px solid rgba(239, 241, 237, 0.5);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .scroll-progress-nav .dot:hover {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(239, 241, 237, 0.8);
     transform: scale(1.15);
 }
 
 .scroll-progress-nav .dot.active {
-    background: #b9c1df;
-    border-color: #b9c1df;
+    background: #e56399;
+    border-color: #e56399;
     transform: scale(1.3);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 10px rgba(229, 99, 153, 0.5);
 }
 
 .btn-back-to-top {
@@ -431,8 +471,8 @@ section.cta-section {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(239, 241, 237, 0.3);
+    background: rgba(15, 3, 38, 0.4);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     color: #b9c1df;
@@ -441,7 +481,7 @@ section.cta-section {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease, transform 0.2s ease, background 0.2s ease;
@@ -453,6 +493,7 @@ section.cta-section {
 }
 
 .btn-back-to-top:hover {
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(185, 193, 223, 0.3);
+    color: #eff1ed;
     transform: translateY(-3px);
 }
