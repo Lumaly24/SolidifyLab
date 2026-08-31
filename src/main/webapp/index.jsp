@@ -106,7 +106,7 @@
                                                 </c:when>
                                                 <c:otherwise>
                                                     <!-- Se ospite: Pulsante finto che porta al Login -->
-                                                    <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="alert('Devi effettuare il login per usare la Wishlist!'); window.location.href='${pageContext.request.contextPath}/login';">
+                                                    <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="alert('Devi effettuare il login per usare la Wishlist!'); window.location.href='${pageContext.request.contextPath}/Login';">
                                                         <i class="fa-regular fa-heart"></i>
                                                     </button>
                                                 </c:otherwise>
@@ -119,7 +119,7 @@
                                                 <span>(IMG ${prodotto.nome})</span>
                                             </div>
                                             <div class="product-price">
-                                                <span>&euro; <fmt:formatNumber value="${prodotto.prezzo}" pattern="#,##0.00"/></span>
+                                                <span>&euro; <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></span>
                                             </div>
                                         </a>
                                     </article>
@@ -138,25 +138,43 @@
         </section>
 
         <!-- CTA SECTION -->
-        <section class="cta-section">
-            <!-- TITOLO E BOTTONI DINAMICI IN BASE ALLA SESSIONE -->
-            <c:choose>
-                <c:when test="${not empty sessionScope.utenteLoggato}">
-                    <h2>BENTORNATO! CONTINUA A ESPLORARE</h2>
-                    <div class="cta-buttons">
-                        <a href="${pageContext.request.contextPath}/ProfiloServlet" class="btn-login">IL MIO PROFILO</a>
-                        <a href="${pageContext.request.contextPath}/WishlistServlet" class="btn-signup">VAI ALLA WISHLIST</a>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <h2>INIZIA OGGI IL TUO VIAGGIO CREATIVO</h2>
-                    <div class="cta-buttons">
-                        <a href="${pageContext.request.contextPath}/login" class="btn-login">LOG IN</a>
-                        <a href="${pageContext.request.contextPath}/signup" class="btn-signup">SIGN UP</a>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-        </section>
+		<section class="cta-section">
+		    <!-- TITOLO E BOTTONI DINAMICI IN BASE ALLA SESSIONE E AL RUOLO -->
+		    <c:choose>
+		        <%-- L'UTENTE È LOGGATO --%>
+		        <c:when test="${not empty sessionScope.utenteLoggato}">
+		            
+		            <!-- Mostriamo il nome dell'utente preso dal DB! -->
+		            <h2>Bentornato, <c:out value="${sessionScope.utenteLoggato.nome}" />!</h2>
+		            
+		            <div class="cta-buttons">
+		                
+		                <%-- TASTI ESCLUSIVI PER L'AMMINISTRATORE --%>
+		                <c:if test="${sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
+		                    <a href="${pageContext.request.contextPath}/AdminDashboard" class="btn-login">PANNELLO ADMIN</a>
+		                    <a href="${pageContext.request.contextPath}/ModificaProdotto" class="btn-login">GESTISCI CATALOGO</a>
+		                </c:if>
+		                
+		                <%-- TASTI PER L'UTENTE NORMALE --%>
+		                <c:if test="${sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
+		                    <a href="${pageContext.request.contextPath}/UserDashboard" class="btn-login">IL MIO PROFILO</a>
+		                    <a href="${pageContext.request.contextPath}/wishlist" class="btn-signup">VAI ALLA WISHLIST</a>
+		                </c:if>
+		                		                
+		            </div>
+		            
+		        </c:when>
+		        
+		        <%-- L'UTENTE NON È LOGGATO (OSPITE) --%>
+		        <c:otherwise>
+		            <h2>INIZIA OGGI IL TUO VIAGGIO CREATIVO</h2>
+		            <div class="cta-buttons">
+		                <a href="${pageContext.request.contextPath}/Login" class="btn-login">LOG IN</a>
+		                <a href="${pageContext.request.contextPath}/Signup" class="btn-signup">SIGN UP</a>
+		            </div>
+		        </c:otherwise>
+		    </c:choose>
+		</section>
         
         <!-- SCROLL PROGRESS NAV -->
         <div class="scroll-progress-nav" id="scrollProgressNav">

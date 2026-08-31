@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!-- CONTROLLO ACCESSO: Se l'utente non è in sessione, torna al login -->
 <c:if test="${empty sessionScope.utenteLoggato}">
@@ -46,16 +47,16 @@
                 
                 <div class="kpi-grid">
                     <div class="kpi-card">
-                        <h3>Ordini in corso</h3>
-                        <p class="kpi-number">1</p>
+                        <h3>Ordini Effettuati</h3>
+                        <p class="kpi-number">${sessionScope.storicoOrdini != null ? fn:length(sessionScope.storicoOrdini) : 0}</p>
                     </div>
                     <div class="kpi-card">
                         <h3>Asset Digitali</h3>
-                        <p class="kpi-number">${sessionScope.libreriaDigitale.size()}</p>
+                        <p class="kpi-number">${sessionScope.libreriaDigitale != null ? fn:length(sessionScope.libreriaDigitale) : 0}</p>
                     </div>
                     <div class="kpi-card">
                         <h3>Elementi in Wishlist</h3>
-                        <p class="kpi-number">4</p>
+                        <p class="kpi-number">${sessionScope.wishlist != null ? fn:length(sessionScope.wishlist) : 0}</p>
                     </div>
                 </div>
             </section>
@@ -107,28 +108,34 @@
                 <p>Qui trovi tutti i Modelli 3D e le Textures che hai acquistato, sempre pronti per il download.</p>
                 
                 <div class="digital-library-grid">
-                    <c:forEach var="asset" items="${sessionScope.libreriaDigitale}">
-                        <div class="library-item-card">
-                            <div class="library-img">
-                                <span>(IMG)</span>
-                            </div>
-                            <div class="library-info">
-                                <h4>${asset.prodotto.nome}</h4>
-                                <span class="badge-format">${asset.formatoFile}</span>
-                            </div>
-                            <a href="${pageContext.request.contextPath}/DownloadAssetServlet?id=${asset.prodotto.id}" class="btn-outline-small w-100">
-                                <i class="fa-solid fa-download"></i> Scarica Asset
-                            </a>
-                        </div>
-                    </c:forEach>
+                    <c:choose>
+                        <c:when test="${empty sessionScope.libreriaDigitale}">
+                            <p>Non hai ancora acquistato nessun asset digitale.</p>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="asset" items="${sessionScope.libreriaDigitale}">
+                                <div class="library-item-card">
+                                    <div class="library-img">
+                                        <span>(IMG)</span>
+                                    </div>
+                                    <div class="library-info">
+                                        <h4>${asset.prodotto.nome}</h4>
+                                        <span class="badge-format">${asset.formatoFile}</span>
+                                    </div>
+                                    <a href="${pageContext.request.contextPath}/DownloadAssetServlet?id=${asset.prodotto.id}" class="btn-outline-small w-100">
+                                        <i class="fa-solid fa-download"></i> Scarica Asset
+                                    </a>
+                                </div>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </section>
 
-            <!-- TAB 4: I MIEI ORDINI (Con Filtro Date aggiunto e senza CSS inline) -->
+            <!-- TAB 4: I MIEI ORDINI -->
             <section id="ordini" class="user-tab-content">
                 <h2>Storico Ordini</h2>
                 
-                <!-- CHECKLIST: Filtro per intervallo di date -->
                 <div class="orders-filter-bar">
                     <form action="${pageContext.request.contextPath}/FiltraOrdiniUtenteServlet" method="GET" class="filter-form">
                         
@@ -201,29 +208,25 @@
                 <p>Segui l'avanzamento dei tuoi progetti 3D su misura.</p>
                 
                 <div class="commissions-list mt-3">
-                    
-                    <div class="commission-card">
-                        <div class="commission-card-header">
-                            <h3 class="commission-title">Modello 3D: Spada Fantasy Personalizzata</h3>
-                            <span class="status-badge status-lavorazione">In Lavorazione (60%)</span>
-                        </div>
-                        <div class="commission-card-footer">
-                            <p class="commission-date">Richiesta inviata il: 12/08/2026</p>
-                            <button class="btn-outline-small"><i class="fa-regular fa-comments"></i> Messaggi</button>
-                        </div>
-                    </div>
-
-                    <div class="commission-card">
-                        <div class="commission-card-header">
-                            <h3 class="commission-title">Stampa 3D: Busto Batman (Resina)</h3>
-                            <span class="status-badge status-preventivo">Preventivo Pronto</span>
-                        </div>
-                        <div class="commission-card-footer">
-                            <p class="commission-date">Costo stimato: € 45,00</p>
-                            <button class="btn-primary"><i class="fa-solid fa-check"></i> Accetta e Paga</button>
-                        </div>
-                    </div>
-
+                    <c:choose>
+                        <c:when test="${empty sessionScope.mieCommissioni}">
+                            <p>Non hai ancora richiesto nessun progetto su misura.</p>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="comm" items="${sessionScope.mieCommissioni}">
+                                <div class="commission-card">
+                                    <div class="commission-card-header">
+                                        <h3 class="commission-title">Richiesta #${comm.id} - ${comm.tipi}</h3>
+                                        <span class="status-badge status-${fn:toLowerCase(comm.stato)}">${comm.stato}</span>
+                                    </div>
+                                    <div class="commission-card-footer">
+                                        <p class="commission-date">Inviata il: <fmt:formatDate value="${comm.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                        <button class="btn-outline-small"><i class="fa-solid fa-eye"></i> Dettagli</button>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </section>
 
@@ -232,12 +235,21 @@
                 <h2>Metodi di Pagamento Salvati</h2>
                 
                 <div class="payment-cards-grid mt-3">
-                    <div class="saved-card">
-                        <div class="card-brand"><i class="fa-brands fa-cc-visa"></i></div>
-                        <div class="card-number">**** **** **** 4242</div>
-                        <div class="card-expiry">Scadenza: 12/28</div>
-                        <button class="btn-icon text-red mt-2"><i class="fa-solid fa-trash"></i> Rimuovi</button>
-                    </div>
+                    <c:choose>
+                        <c:when test="${empty sessionScope.metodiPagamento}">
+                            <p style="grid-column: 1 / -1; margin-bottom: 15px;">Nessun metodo di pagamento salvato.</p>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="carta" items="${sessionScope.metodiPagamento}">
+                                <div class="saved-card">
+                                    <div class="card-brand"><i class="fa-brands fa-cc-visa"></i></div>
+                                    <div class="card-number">${carta.cartaMascherata}</div>
+                                    <div class="card-expiry">Scadenza: ${carta.scadenza}</div>
+                                    <button class="btn-icon text-red mt-2"><i class="fa-solid fa-trash"></i> Rimuovi</button>
+                                </div>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
 
                     <div class="saved-card add-new-card">
                         <i class="fa-solid fa-plus"></i>
@@ -252,7 +264,6 @@
                 
                 <div class="security-card mt-3">
                     <h3>Cambia Password</h3>
-                    <!-- CHECKLIST: Validazione JS per il cambio password -->
                     <form action="${pageContext.request.contextPath}/ChangePasswordServlet" method="POST" class="mt-2" onsubmit="return validaPassword()">
                         <div class="form-group">
                             <label for="oldPwd">Password Attuale</label>
@@ -287,33 +298,27 @@
 
 <!-- ================= SCRIPT ================= -->
 <script>
-    // Gestione dei Tab Menu (Ora manipola solo le classi CSS, non gli stili)
     function switchTab(tabId, clickedElement) {
-        
-        // Rimuove la classe attiva da tutte le sezioni
         let tabs = document.querySelectorAll('.user-tab-content');
         tabs.forEach(tab => {
             tab.classList.remove('active-tab');
         });
 
-        // Rimuove la classe attiva dal menu laterale
         let links = document.querySelectorAll('#userMenu a');
         links.forEach(link => {
             link.classList.remove('active');
         });
 
-        // Aggiunge la classe attiva alla sezione cliccata
         document.getElementById(tabId).classList.add('active-tab');
         clickedElement.classList.add('active');
     }
 
-    // Validazione Cambio Password (Requisito Checklist: form regex)
     function validaPassword() {
         let isValid = true;
         document.getElementById('err-newpwd').innerText = '';
 
         const newPwd = document.getElementById('newPwd').value.trim();
-        const pwdRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // Almeno 8 caratteri, 1 lettera, 1 numero
+        const pwdRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; 
 
         if (!pwdRegex.test(newPwd)) {
             document.getElementById('err-newpwd').innerText = "La password deve contenere almeno 8 caratteri, inclusi lettere e numeri.";

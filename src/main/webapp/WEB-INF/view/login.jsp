@@ -17,15 +17,15 @@
             
             <h2>Log in</h2>
             
-            <!-- BLOCCO ERRORI SERVER: Mostra l'errore se la Servlet rileva credenziali sbagliate -->
-            <c:if test="${not empty errorMessage}">
+            <!-- BLOCCO ERRORI SERVER: Allineato a "erroreLogin" per corrispondere alla Servlet -->
+            <c:if test="${not empty erroreLogin}">
                 <div class="error-msg global-error">
-                    <c:out value="${errorMessage}"/>
+                    <c:out value="${erroreLogin}"/>
                 </div>
             </c:if>
             
-            <!-- Aggiunto onsubmit per la validazione JavaScript -->
-            <form id="loginForm" action="${pageContext.request.contextPath}/LoginServlet" method="POST" onsubmit="return validaLogin()">
+            <!-- CORRETTO: action punta a /Login (senza "Servlet") -->
+            <form id="loginForm" action="${pageContext.request.contextPath}/Login" method="POST" onsubmit="return validaLogin()">
                 
                 <div class="form-group">
                     <label for="loginEmail">Email</label>
@@ -44,7 +44,7 @@
             </form>
             
             <div class="auth-footer">
-                <p>Non sei registrato? <a href="${pageContext.request.contextPath}/signup">Sign up</a></p>
+                <p>Non sei registrato? <a href="${pageContext.request.contextPath}/Signup">Sign up</a></p>
                 <p><a href="#" class="forgot-pwd">Hai dimenticato la password?</a></p>
             </div>
             

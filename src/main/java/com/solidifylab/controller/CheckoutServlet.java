@@ -7,16 +7,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/Stampe") // Minuscolo, come nel tuo header
-public class StampeServlet extends HttpServlet {
+@WebServlet("/Checkout")
+public class CheckoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Punta al tuo file stampe.jsp
-        request.getRequestDispatcher("/WEB-INF/view/stampe.jsp").forward(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        if (request.getSession(false) != null && request.getSession().getAttribute("utenteLoggato") != null) {
+            request.getRequestDispatcher("/WEB-INF/view/checkout.jsp").forward(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/Login?errore=auth");
+        }
     }
 }
