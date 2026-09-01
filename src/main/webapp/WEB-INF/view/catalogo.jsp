@@ -2,17 +2,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<% request.setAttribute("titoloPagina", "Catalogo"); %>
+<% 
+    request.setAttribute("titoloPagina", "Catalogo"); 
+    request.setAttribute("cssPagina", "catalogo.css");
+%>
+
 <%@ include file="fragment/header.jspf" %>
 
     <main class="catalog-page">
-        
-        <div class="catalog-tabs-container">
-            <div class="catalog-tabs">
-                <a href="${pageContext.request.contextPath}/CatalogoServlet?tipo=3D" class="tab-btn active">3D MODELS</a>
-                <a href="${pageContext.request.contextPath}/CatalogoServlet?tipo=TEXTURES" class="tab-btn">TEXTURES</a>
-            </div>
-        </div>
         
         <div class="catalog-layout">
             
@@ -53,10 +50,10 @@
                         </ul>
                     </div>
 
-                    <!-- NUOVO: Call to action per mandare l'utente alla pagina delle stampe -->
-                    <div class="physical-promo mt-4" style="background: #f1f8ff; border-left: 4px solid #0056b3; padding: 15px; border-radius: 4px;">
-                        <h4 style="margin-top: 0; color: #0056b3;">Vuoi un oggetto fisico?</h4>
-                        <p style="font-size: 0.9em; margin-bottom: 10px;">Scopri i nostri modelli già pronti per essere stampati e spediti a casa tua.</p>
+                    <!-- NUOVO: Call to action per mandare l'utente alla pagina delle stampe (stili inline puliti per usare il CSS) -->
+                    <div class="physical-promo mt-4">
+                        <h4>Vuoi un oggetto fisico?</h4>
+                        <p style="font-size: 0.9em; margin-bottom: 15px;">Scopri i nostri modelli già pronti per essere stampati e spediti a casa tua.</p>
                         <a href="${pageContext.request.contextPath}/stampe.jsp" class="btn-outline-small w-100 text-center" style="display: block;">Vai alle Stampe 3D</a>
                     </div>
                     
@@ -67,16 +64,27 @@
             <!-- ================= MAIN CONTENT ================= -->
             <section class="catalog-main-content">
                 
-                <!-- REQUISITO CHECKLIST: Barra di ricerca AJAX -->
-                <div class="ajax-search-container" style="margin-bottom: 20px; position: relative;">
-                    <div class="search-input-wrapper" style="display: flex; gap: 10px;">
-                        <input type="text" id="ajaxSearchBar" placeholder="Cerca un modello 3D o una texture..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" autocomplete="off">
-                        <button type="button" class="btn-primary"><i class="fa-solid fa-search"></i></button>
+                <!-- NUOVO CONTENITORE: Tabs e Ricerca in linea -->
+                <div class="top-controls-inline">
+                    
+                    <!-- TABS SPOSTATI QUI -->
+                    <div class="catalog-tabs">
+                        <a href="${pageContext.request.contextPath}/CatalogoServlet?tipo=3D" class="tab-btn active">3D MODELS</a>
+                        <a href="${pageContext.request.contextPath}/CatalogoServlet?tipo=TEXTURES" class="tab-btn">TEXTURES</a>
                     </div>
-                    <!-- Qui appariranno i suggerimenti via JS -->
-                    <div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; z-index: 10; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <!-- Riempito dinamicamente da JS -->
+
+                    <!-- REQUISITO CHECKLIST: Barra di ricerca AJAX -->
+                    <div class="ajax-search-container">
+                        <div class="search-input-wrapper">
+                            <input type="text" id="ajaxSearchBar" placeholder="Cerca un modello 3D o una texture..." autocomplete="off">
+                            <button type="button" class="btn-primary btn-search"><i class="fa-solid fa-search"></i></button>
+                        </div>
+                        <!-- Qui appariranno i suggerimenti via JS -->
+                        <div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; max-height: 200px; overflow-y: auto;">
+                            <!-- Riempito dinamicamente da JS -->
+                        </div>
                     </div>
+                    
                 </div>
 
                 <!-- Modifica Header Catalogo: Flexbox per mettere il bottone Admin a destra -->
@@ -100,7 +108,7 @@
                     <!-- CICLO JSP: Mostriamo i prodotti dal Database -->
                     <c:choose>
                         <c:when test="${empty listaProdotti}">
-                            <p>Nessun prodotto trovato per questa ricerca.</p>
+                            <p style="grid-column: 1 / -1; color: rgba(255,255,255,0.8);">Nessun prodotto trovato per questa ricerca.</p>
                         </c:when>
                         <c:otherwise>
                             <c:forEach var="prodotto" items="${listaProdotti}">
@@ -117,9 +125,9 @@
 
                                         <!-- AGGIUNTA ADMIN: Tasto Cestino per eliminare il prodotto -->
                                         <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.admin}">
-                                            <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="POST" style="display:inline; margin-left: 10px;">
+                                            <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="POST" style="display:inline;">
                                                 <input type="hidden" name="id" value="${prodotto.id}">
-                                                <button type="submit" class="btn-wishlist" style="color: #dc3545;" title="Elimina dal DB" onclick="return confirm('ATTENZIONE: Sei sicuro di voler eliminare definitivamente questo prodotto dal catalogo?');">
+                                                <button type="submit" class="btn-wishlist" style="color: #ff4d4d;" title="Elimina dal DB" onclick="return confirm('ATTENZIONE: Sei sicuro di voler eliminare definitivamente questo prodotto dal catalogo?');">
                                                     <i class="fa-solid fa-trash-can"></i>
                                                 </button>
                                             </form>
@@ -167,9 +175,11 @@
                             if(data.length > 0) {
                                 data.forEach(item => {
                                     let div = document.createElement('div');
-                                    div.style.padding = '10px';
-                                    div.style.borderBottom = '1px solid #eee';
+                                    div.style.padding = '12px 15px';
+                                    div.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
                                     div.style.cursor = 'pointer';
+                                    div.style.transition = 'background 0.2s';
+                                    
                                     // Mostra nome e prezzo suggerito
                                     div.innerHTML = `<strong>\${item.nome}</strong> - €\${item.prezzo}`;
                                     
@@ -178,15 +188,15 @@
                                         window.location.href = '${pageContext.request.contextPath}/DettaglioProdottoServlet?id=' + item.id;
                                     };
                                     
-                                    // Hover effect
-                                    div.onmouseover = function() { this.style.backgroundColor = '#f1f8ff'; };
+                                    // Hover effect adattato al dark/glass theme
+                                    div.onmouseover = function() { this.style.backgroundColor = 'rgba(255,255,255,0.1)'; };
                                     div.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
                                     
                                     suggestionsBox.appendChild(div);
                                 });
                                 suggestionsBox.style.display = 'block';
                             } else {
-                                suggestionsBox.innerHTML = '<div style="padding:10px; color:#888;">Nessun risultato...</div>';
+                                suggestionsBox.innerHTML = '<div style="padding:12px 15px; color:rgba(255,255,255,0.7);">Nessun risultato...</div>';
                                 suggestionsBox.style.display = 'block';
                             }
                         })
