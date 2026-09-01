@@ -20,7 +20,6 @@
             </nav>
         </div>
 
-        <div class="product-layout">
             
             <!-- ================= COLONNA SINISTRA (Immagine e Carrello) ================= -->
             <aside class="product-gallery-side">
