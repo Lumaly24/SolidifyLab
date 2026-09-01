@@ -23,12 +23,12 @@
 .catalog-page {
     position: relative;
     z-index: 1;
-    padding-top: 130px; 
+    padding-top: 130px;
     padding-bottom: 140px;
     padding-left: 20px;
     padding-right: 20px;
     max-width: 1250px;
-    margin: 0 auto; 
+    margin: 0 auto;
     min-height: 100vh; 
     display: flex;
     flex-direction: column;
@@ -265,20 +265,16 @@
     box-shadow: 0 12px 35px rgba(15, 3, 38, 0.08);
 }
 
-.hero-card h1 span {
-	font-family: 'elephant', serif;
-	font-weight: lighter;
-	font-size: 1.8rem;
-    color: #0f0326;
-    margin-bottom: 6px;
-    letter-spacing: 1px;
-}
-
 .hero-card h1 {
     font-size: 1.8rem;
     color: #0f0326;
     margin-bottom: 6px;
     letter-spacing: 1px;
+}
+
+.hero-card h1 span {
+	font-family: 'elephant', serif;
+	font-weight: lighter;
 }
 
 .hero-card p {

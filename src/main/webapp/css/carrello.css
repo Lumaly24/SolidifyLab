@@ -54,6 +54,8 @@ html, body {
 }
 
 .empty-cart-msg p {
+	font-family: 'coolveticaitalic', serif;
+	font-weight: lighter;
     color: #2b2b2b;
     font-size: 1rem;
     margin-bottom: 25px;

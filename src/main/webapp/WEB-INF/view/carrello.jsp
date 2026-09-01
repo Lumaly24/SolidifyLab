@@ -6,6 +6,7 @@
 <% request.setAttribute("titoloPagina", "Carrello"); 
 	request.setAttribute("cssPagina", "carrello.css");
 %>
+
 <%@ include file="fragment/header.jspf" %>
 
     <main class="cart-page-container">
