@@ -10,7 +10,7 @@
         <!-- HERO SECTION -->
         <section class="hero-section">
             <div class="hero-content">
-                <h1>ESPLORA<br>LA LIBRERIA</h1>
+                <h1>ESPLORA LA LIBRERIA</h1>
                 <div class="hero-buttons">
                     <a href="${pageContext.request.contextPath}/CatalogoServlet" class="btn"> ESPLORA LA LIBRERIA <i class="fa-solid fa-arrow-right"></i> </a> 
                     <a href="#" class="btn"> SCOPRI DI PIÙ <i class="fa-solid fa-arrow-right"></i></a> 
@@ -92,17 +92,20 @@
                                                 </c:if>
                                             </c:forEach>
 
-                                            <!-- GESTIONE CLICK WISHLIST -->
+                                            <!-- GESTIONE CLICK WISHLIST (Loggato vs Ospite) -->
                                             <c:choose>
                                                 <c:when test="${not empty sessionScope.utenteLoggato}">
+                                                    <!-- Se loggato: Form AJAX -->
                                                     <form action="${pageContext.request.contextPath}/AggiungiWishlistServlet" method="POST" class="inline-form wishlist-form">
                                                         <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-                                                        <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
+                                                        <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}" style="transition: transform 0.2s ease;">
+                                                            <!-- Cuore dinamico pieno/vuoto -->
                                                             <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
                                                         </button>
                                                     </form>
                                                 </c:when>
                                                 <c:otherwise>
+                                                    <!-- Se ospite: Pulsante finto che porta al Login -->
                                                     <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="alert('Devi effettuare il login per usare la Wishlist!'); window.location.href='${pageContext.request.contextPath}/Login';">
                                                         <i class="fa-regular fa-heart"></i>
                                                     </button>
@@ -134,84 +137,111 @@
             </div>
         </section>
 
-        <!-- CTA SECTION (SEZIONE 4) -->
-        <section class="cta-section">
-            <div class="cta-content">
-                <c:choose>
-                    <c:when test="${not empty sessionScope.utenteLoggato}">
-                        <h2>Bentornato, <c:out value="${sessionScope.utenteLoggato.nome}" />!</h2>
-                        <div class="cta-buttons">
-                            <c:if test="${sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
-                                <a href="${pageContext.request.contextPath}/AdminDashboard" class="btn-login">PANNELLO ADMIN</a>
-                                <a href="${pageContext.request.contextPath}/ModificaProdotto" class="btn-login">GESTISCI CATALOGO</a>
-                            </c:if>
-                            <c:if test="${sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
-                                <a href="${pageContext.request.contextPath}/UserDashboard" class="btn-login">IL MIO PROFILO</a>
-                                <a href="${pageContext.request.contextPath}/wishlist" class="btn-signup">VAI ALLA WISHLIST</a>
-                            </c:if>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <h2>INIZIA OGGI IL TUO VIAGGIO CREATIVO</h2>
-                        <div class="cta-buttons">
-                            <a href="${pageContext.request.contextPath}/Login" class="btn-login">LOG IN</a>
-                            <a href="${pageContext.request.contextPath}/Signup" class="btn-signup">SIGN UP</a>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </section>
-
-        <!-- FOOTER SECTION (SEZIONE 5 DEDICATA) -->
-        <section class="footer-section">
-            <%@ include file="/WEB-INF/view/fragment/footer.jspf" %>
-        </section>
+        <!-- CTA SECTION -->
+		<section class="cta-section">
+		    <!-- TITOLO E BOTTONI DINAMICI IN BASE ALLA SESSIONE E AL RUOLO -->
+		    <c:choose>
+		        <%-- L'UTENTE È LOGGATO --%>
+		        <c:when test="${not empty sessionScope.utenteLoggato}">
+		            
+		            <!-- Mostriamo il nome dell'utente preso dal DB! -->
+		            <h2>Bentornato, <c:out value="${sessionScope.utenteLoggato.username}" />!</h2>
+		            
+		            <div class="cta-buttons">
+		                
+		                <%-- TASTI ESCLUSIVI PER L'AMMINISTRATORE --%>
+		                <c:if test="${sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
+		                    <a href="${pageContext.request.contextPath}/AdminDashboard" class="btn-login">PANNELLO ADMIN</a>
+		                    <a href="${pageContext.request.contextPath}/ModificaProdotto" class="btn-login">GESTISCI CATALOGO</a>
+		                </c:if>
+		                
+		                <%-- TASTI PER L'UTENTE NORMALE --%>
+		                <c:if test="${sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
+		                    <a href="${pageContext.request.contextPath}/UserDashboard" class="btn-login">IL MIO PROFILO</a>
+		                    <a href="${pageContext.request.contextPath}/wishlist" class="btn-signup">VAI ALLA WISHLIST</a>
+		                </c:if>
+		                		                
+		            </div>
+		            
+		        </c:when>
+		        
+		        <%-- L'UTENTE NON È LOGGATO (OSPITE) --%>
+		        <c:otherwise>
+		            <h2>INIZIA OGGI IL TUO VIAGGIO CREATIVO</h2>
+		            <div class="cta-buttons">
+		                <a href="${pageContext.request.contextPath}/Login" class="btn-login">LOG IN</a>
+		                <a href="${pageContext.request.contextPath}/Signup" class="btn-signup">SIGN UP</a>
+		            </div>
+		        </c:otherwise>
+		    </c:choose>
+		</section>
         
         <!-- SCROLL PROGRESS NAV -->
         <div class="scroll-progress-nav" id="scrollProgressNav">
             <div class="dot active" data-section="0" title="Hero"></div>
             <div class="dot" data-section="1" title="Categorie"></div>
             <div class="dot" data-section="2" title="Prodotti"></div>
-            <div class="dot" data-section="3" title="Inizia"></div>
-            <div class="dot" data-section="4" title="Footer"></div>
+            <div class="dot" data-section="3" title="Inizia / Footer"></div>
     
             <button type="button" class="btn-back-to-top" id="backToTopBtn" title="Torna su">
                 <i class="fa-solid fa-arrow-up"></i>
             </button>
         </div>
 
-    </main>
+        <%@ include file="/WEB-INF/view/fragment/footer.jspf" %>
 
+    </main>
+    
 <script>
+    // --- SCRIPT 1: GESTIONE FRECCE CAROSELLO ---
     document.addEventListener("DOMContentLoaded", function () {
-        // --- SCRIPT 1: CAROSELLO ---
         const carousel = document.getElementById('productsCarousel');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
         if (carousel && prevBtn && nextBtn) {
+
             function updateArrows() {
                 const scrollLeft = Math.ceil(carousel.scrollLeft);
                 const maxScroll = Math.floor(carousel.scrollWidth - carousel.clientWidth);
                 
-                prevBtn.classList.toggle('hidden', scrollLeft <= 10);
-                nextBtn.classList.toggle('hidden', scrollLeft >= maxScroll - 10);
+                if (scrollLeft > 249) {                 
+                    prevBtn.classList.remove('hidden');
+                } else {
+                    prevBtn.classList.add('hidden');
+                }
+
+                if (scrollLeft >= maxScroll - 10) {
+                    nextBtn.classList.add('hidden');
+                } else {
+                    nextBtn.classList.remove('hidden');
+                }
             }
 
-            nextBtn.addEventListener('click', () => carousel.scrollBy({ left: 220, behavior: 'smooth' }));
-            prevBtn.addEventListener('click', () => carousel.scrollBy({ left: -220, behavior: 'smooth' }));
+            nextBtn.addEventListener('click', function () {
+                carousel.scrollBy({ left: 220, behavior: 'smooth' });
+            });
+
+            prevBtn.addEventListener('click', function () {
+                carousel.scrollBy({ left: -220, behavior: 'smooth' });
+            });
+
             carousel.addEventListener('scroll', updateArrows);
             window.addEventListener('resize', updateArrows);
+
             updateArrows();
         }
+    });
 
-        // --- SCRIPT 2: SCROLL SPY CON OBSERVER (PRECISO AL 100%) ---
+    // --- SCRIPT 2: GESTIONE SCROLL SPY LATERALE ---
+    document.addEventListener("DOMContentLoaded", function () {
         const main = document.querySelector('main');
         const sections = document.querySelectorAll('main > section');
         const dots = document.querySelectorAll('.scroll-progress-nav .dot');
         const backToTopBtn = document.getElementById('backToTopBtn');
 
         if (main && sections.length > 0) {
+
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', function () {
                     if (sections[index]) {
@@ -226,29 +256,36 @@
                 });
             }
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const index = Array.from(sections).indexOf(entry.target);
-                        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-                    }
-                });
-            }, { root: main, threshold: 0.5 });
-
-            sections.forEach(sec => observer.observe(sec));
-
             main.addEventListener('scroll', function () {
+                const scrollPosition = main.scrollTop;
+                const maxScroll = main.scrollHeight - main.clientHeight;
+                const sectionHeight = main.clientHeight;
+
+                let currentIndex = Math.round(scrollPosition / sectionHeight);
+
+                if (scrollPosition >= maxScroll - 50) {
+                    currentIndex = sections.length - 1;
+                }
+
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentIndex);
+                });
+
                 if (backToTopBtn) {
-                    backToTopBtn.classList.toggle('visible', main.scrollTop > 100);
+                    backToTopBtn.classList.toggle('visible', scrollPosition > 100);
                 }
             });
         }
+    });
 
-        // --- SCRIPT 3: WISHLIST AJAX ---
+    // --- SCRIPT 3: CHICCA AJAX PER LA WISHLIST ---
+    document.addEventListener("DOMContentLoaded", function () {
         const wishlistForms = document.querySelectorAll('.wishlist-form');
+        
         wishlistForms.forEach(form => {
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); 
+                
                 const url = this.action;
                 const formData = new FormData(this);
                 const btn = this.querySelector('.btn-wishlist');
@@ -257,19 +294,32 @@
                 fetch(url, {
                     method: 'POST',
                     body: new URLSearchParams(formData),
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
                 })
                 .then(response => {
                     if (response.ok) {
-                        icon.classList.toggle('fa-regular');
-                        icon.classList.toggle('fa-solid');
-                        icon.style.color = icon.classList.contains('fa-solid') ? '#e56399' : '';
+                        // Toggle logica: Se era vuoto lo riempie, se era pieno lo svuota
+                        if(icon.classList.contains('fa-regular')) {
+                            icon.classList.remove('fa-regular');
+                            icon.classList.add('fa-solid');
+                            icon.style.color = '#e56399';
+                        } else {
+                            icon.classList.remove('fa-solid');
+                            icon.classList.add('fa-regular');
+                            icon.style.color = '';
+                        }
                         
                         btn.style.transform = 'scale(1.3)';
                         setTimeout(() => { btn.style.transform = 'scale(1)'; }, 200);
+                    } else {
+                        console.error('Errore durante la modifica della wishlist.');
                     }
                 })
-                .catch(err => console.error('Errore Wishlist:', err));
+                .catch(error => {
+                    console.error('Errore di rete durante la richiesta AJAX:', error);
+                });
             });
         });
     });

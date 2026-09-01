@@ -48,28 +48,3 @@ h3, h4 {
     font-family: 'elephant', sans-serif;
     font-weight: normal;
 }
-
-html, body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-}
-
-body:not(:has(.hero-section)) main {
-    min-height: 100vh !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding-top: 80px !important;
-    padding-bottom: 40px !important;
-    box-sizing: border-box !important;
-}
-
-body:not(:has(.hero-section)) footer, 
-body:not(:has(.hero-section)) .main-footer {
-    width: 100% !important;
-    position: relative !important;
-    flex-shrink: 0 !important;
-    display: block !important;
-}

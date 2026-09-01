@@ -3,9 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<% request.setAttribute("titoloPagina", "Carrello"); 
-	request.setAttribute("cssPagina", "carrello.css");
-%>
+<% request.setAttribute("titoloPagina", "Carrello"); %>
 <%@ include file="fragment/header.jspf" %>
 
     <main class="cart-page-container">

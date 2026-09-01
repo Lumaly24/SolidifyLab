@@ -22,10 +22,10 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.35) !important;
-    backdrop-filter: blur(20px) !important;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(20px);
     box-shadow: 0 8px 32px rgba(0, 0 0 0.15);
-    -webkit-backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     gap: 20px;
 }
@@ -123,9 +123,6 @@
 .search-bar input {
     padding: 8px 35px 8px 12px;
     border-radius: 20px;
-    background: rgba(239, 241, 237, 0.12);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
     border: 1px solid #ccc;
     outline: none;
     width: 300px;
@@ -316,32 +313,4 @@
     background-color: #f5f5f5;
     color: #e60073;
     padding-left: 20px;
-}
-
-.main-nav .full-menu, .main-nav .full-menu a, .dropdown-column, .dropdown-column a, .dropdown-column h3, .dropdown-column h4 {
-    color: #0f0326 !important;
-}
-
-.main-nav .full-menu a:hover, .dropdown-column a:hover {
-    color: #e56399 !important;
-}
-
-/* FIX HEADER VISIBILE E TRASPARENTE STILE VETRO SATINATO */
-header.main-header,
-.main-header {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 9999 !important;
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(20px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important;
-}
-
-.main-nav ul, .main-nav ul li, .main-nav ul li a {
-    background: transparent !important;
-    color: #0f0326 !important;
 }

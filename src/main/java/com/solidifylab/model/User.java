@@ -5,8 +5,9 @@ public class User {
     private int id;
     private String email;
     private String passwordHash; 
-    private String nome;
-    private String cognome;
+    private String username; // NUOVO CAMPO AGGIUNTO
+    private String nome;     // Rimane, ma ora sarà opzionale
+    private String cognome;  // Rimane, ma ora sarà opzionale
     private String ruolo;
 
     // --- Nuovi attributi per la Dashboard (Spedizioni) ---
@@ -29,6 +30,10 @@ public class User {
 
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    // --- Getter e Setter per USERNAME ---
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
