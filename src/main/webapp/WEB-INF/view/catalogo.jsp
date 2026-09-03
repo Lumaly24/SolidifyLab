@@ -13,21 +13,42 @@
         
         <div class="catalog-layout">
             
-            <!-- ================= SIDEBAR FILTRI ================= -->
             <aside class="catalog-sidebar">
-                <!-- Avvolgiamo i filtri in un form GET -->
+            
                 <form action="${pageContext.request.contextPath}/CatalogoServlet" method="GET">
                     
                     <div class="filter-group">
-                        <h3>Filtro Prezzi</h3>
-                        <div class="price-slider">
-                            <input type="range" id="priceRange" name="max_price" min="0" max="200" step="5" value="${not empty param.max_price ? param.max_price : 100}" oninput="document.getElementById('priceVal').innerText = this.value + '€'">
-                            <div class="price-labels">
-                                <span>0€</span>
-                                <span>Fino a: <b id="priceVal">${not empty param.max_price ? param.max_price : 100}€</b></span>
-                            </div>
-                        </div>
-                    </div>
+    <h3>Filtro Prezzi</h3>
+    <div class="price-slider">
+        <input type="range" id="priceRange" name="max_price" min="0" max="200" step="5" value="${not empty param.max_price ? param.max_price : 100}">
+        <div class="price-labels">
+            <span>0€</span>
+            <span>Fino a: <b id="priceVal">${not empty param.max_price ? param.max_price : 100}€</b></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const slider = document.getElementById('priceRange');
+        const priceVal = document.getElementById('priceVal');
+        
+        function updateSlider() {
+            // Calcola la percentuale di riempimento (es. da 0 a 100)
+            const percentage = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+            // Invia la percentuale al CSS creando una variabile personalizzata --val
+            slider.style.setProperty('--val', percentage + '%');
+            // Aggiorna il testo del prezzo
+            priceVal.innerText = slider.value + '€';
+        }
+        
+        // Esegue la funzione al caricamento della pagina per impostare il rosa iniziale
+        updateSlider();
+        
+        // Esegue la funzione ogni volta che muovi la stellina
+        slider.addEventListener('input', updateSlider);
+    });
+</script>
 
                     <hr class="sidebar-divider">
                     
@@ -44,20 +65,28 @@
                                     </ul>
                                 </details>
                             </li>
-                            <li><label><input type="checkbox" name="cat" value="ambienti"> Ambienti</label></li>
-                            <li><label><input type="checkbox" name="cat" value="veicoli"> Veicoli</label></li>
-                            <li><label><input type="checkbox" name="cat" value="oggetti"> Oggetti / Props</label></li>
+                            
+                            <li>
+                            	<details open>
+                            		<summary>Ambienti <i class="fa-solid fa-angle-down"></i></summary>
+                            		<ul class="sub-filter-list">
+                            			<li><label><input type="checkbox" name="cat" value="ambienti"> Interni/Esterni</label></li>
+                            			<li><label><input type="checkbox" name="cat" value="veicoli"> Veicoli</label></li>
+                            			<li><label><input type="checkbox" name="cat" value="oggetti"> Oggetti / Props</label></li>
+                            		</ul>	
+                            	</details>
+                            </li>		
                         </ul>
                     </div>
-
-                    <!-- NUOVO: Call to action per mandare l'utente alla pagina delle stampe (stili inline puliti per usare il CSS) -->
+                    
+                    <button type="submit" class="btn-primary w-100 mt-3">Applica Filtri</button>
+                    
                     <div class="physical-promo mt-4">
                         <h4>Vuoi un oggetto fisico?</h4>
                         <p style="font-size: 0.9em; margin-bottom: 15px;">Scopri i nostri modelli già pronti per essere stampati e spediti a casa tua.</p>
                         <a href="${pageContext.request.contextPath}/stampe.jsp" class="btn-outline-small w-100 text-center" style="display: block;">Vai alle Stampe 3D</a>
                     </div>
                     
-                    <button type="submit" class="btn-primary w-100 mt-3">Applica Filtri</button>
                 </form>
             </aside>
 
@@ -108,7 +137,7 @@
                     <!-- CICLO JSP: Mostriamo i prodotti dal Database -->
                     <c:choose>
                         <c:when test="${empty listaProdotti}">
-                            <p style="grid-column: 1 / -1; color: rgba(255,255,255,0.8);">Nessun prodotto trovato per questa ricerca.</p>
+                            <p>Nessun prodotto trovato per questa ricerca.</p>
                         </c:when>
                         <c:otherwise>
                             <c:forEach var="prodotto" items="${listaProdotti}">

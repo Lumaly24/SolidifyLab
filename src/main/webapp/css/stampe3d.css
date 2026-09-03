@@ -27,11 +27,12 @@
     padding-bottom: 140px;
     padding-left: 20px;
     padding-right: 20px;
-    max-width: 1250px;
+    max-width: 95%;
     margin: 0 auto;
     min-height: 100vh; 
     display: flex;
     flex-direction: column;
+    width:100%;
 }
 
 .catalog-layout {
@@ -40,6 +41,10 @@
     gap: 25px;
     align-items: start;
     width: 100%;
+}
+
+.catalog-main-content {
+    width: 100% !important;
 }
 
 .catalog-sidebar {
@@ -251,6 +256,12 @@
     display: flex;
     justify-content: center;
     margin-bottom: 25px;
+    width: 100%;
+}
+
+.hero-section, .hero-card {
+    width: 100% !important;
+    box-sizing: border-box;
 }
 
 .hero-card {
