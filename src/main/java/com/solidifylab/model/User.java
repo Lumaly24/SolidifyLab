@@ -5,17 +5,15 @@ public class User {
     private int id;
     private String email;
     private String passwordHash; 
-    private String username; // NUOVO CAMPO AGGIUNTO
-    private String nome;     // Rimane, ma ora sarà opzionale
-    private String cognome;  // Rimane, ma ora sarà opzionale
+    private String username;
+    private String nome;
+    private String cognome;
     private String ruolo;
-
-    // --- Nuovi attributi per la Dashboard (Spedizioni) ---
     private String indirizzo;
     private String citta;
     private String cap;
+    private String pfp;
 
-    // Costruttore vuoto (obbligatorio per i Bean)
     public User() {}
 
     // ==========================================
@@ -54,4 +52,11 @@ public class User {
 
     public String getCap() { return cap; }
     public void setCap(String cap) { this.cap = cap; }
+    
+    public String getPfp() {
+    	return pfp;
+    }
+    public void setPfp(String pfp) {
+    	this.pfp = pfp;
+    }
 }

@@ -8,7 +8,11 @@
     <c:redirect url="login.jsp" />
 </c:if>
 
-<% request.setAttribute("titoloPagina", "La mia Area Personale"); %>
+<% request.setAttribute("titoloPagina", "La mia Area Personale"); 
+	request.setAttribute("cssPagina", "areautente.css");
+%>
+
+
 <%@ include file="fragment/header.jspf" %>
 
 <main class="user-dashboard-container">
@@ -18,23 +22,36 @@
         <!-- ================= SIDEBAR NAVIGAZIONE ================= -->
         <aside class="user-sidebar">
             <div class="user-profile-summary">
-                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <div class="user-pfp">
+				    <c:choose>
+				    
+				        <c:when test="${empty sessionScope.utenteLoggato.pfp or sessionScope.utenteLoggato.pfp == 'default'}">
+				            
+				            <i class="fa-solid fa-user"></i>
+				        </c:when>
+				        <c:otherwise>
+				            
+				            <img src="${pageContext.request.contextPath}/images/pfps/${sessionScope.utenteLoggato.pfp}" alt="Foto Profilo">
+				        </c:otherwise>
+				    </c:choose>
+				</div>
+				
                 <h3>${sessionScope.utenteLoggato.nome} ${sessionScope.utenteLoggato.cognome}</h3>
                 <p>${sessionScope.utenteLoggato.email}</p>
             </div>
             
             <nav class="user-nav">
-                <ul id="userMenu">
-                    <li><a href="#dashboard" class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-gauge"></i> Panoramica</a></li>
-                    <li><a href="#anagrafica" onclick="switchTab('anagrafica', this)"><i class="fa-regular fa-address-card"></i> Anagrafica e Spedizioni</a></li>
-                    <li><a href="#libreria" onclick="switchTab('libreria', this)"><i class="fa-solid fa-cloud-arrow-down"></i> Libreria Digitale</a></li>
-                    <li><a href="#ordini" onclick="switchTab('ordini', this)"><i class="fa-solid fa-box-open"></i> I Miei Ordini</a></li>
-                    <li><a href="#commissioni" onclick="switchTab('commissioni', this)"><i class="fa-solid fa-palette"></i> Tracker Commissioni</a></li>
-                    <li><a href="#pagamenti" onclick="switchTab('pagamenti', this)"><i class="fa-solid fa-credit-card"></i> Metodi di Pagamento</a></li>
-                    <li><a href="#sicurezza" onclick="switchTab('sicurezza', this)"><i class="fa-solid fa-shield-halved"></i> Sicurezza e Privacy</a></li>
-                    <li><a href="${pageContext.request.contextPath}/LogoutServlet" class="text-red"><i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnettiti</a></li>
-                </ul>
-            </nav>
+			    <ul id="userMenu">
+			        <li><a href="#dashboard" class="active" onclick="switchTab('dashboard', this, event)"><i class="fa-solid fa-gauge"></i> Panoramica</a></li>
+			        <li><a href="#anagrafica" onclick="switchTab('anagrafica', this, event)"><i class="fa-regular fa-address-card"></i> Anagrafica e Spedizioni</a></li>
+			        <li><a href="#libreria" onclick="switchTab('libreria', this, event)"><i class="fa-solid fa-cloud-arrow-down"></i> Libreria Digitale</a></li>
+			        <li><a href="#ordini" onclick="switchTab('ordini', this, event)"><i class="fa-solid fa-box-open"></i> I Miei Ordini</a></li>
+			        <li><a href="#commissioni" onclick="switchTab('commissioni', this, event)"><i class="fa-solid fa-palette"></i> Tracker Commissioni</a></li>
+			        <li><a href="#pagamenti" onclick="switchTab('pagamenti', this, event)"><i class="fa-solid fa-credit-card"></i> Metodi di Pagamento</a></li>
+			        <li><a href="#sicurezza" onclick="switchTab('sicurezza', this, event)"><i class="fa-solid fa-shield-halved"></i> Sicurezza e Privacy</a></li>
+			        <li><a href="${pageContext.request.contextPath}/LogoutServlet" class="text-red"><i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnettiti</a></li>
+			    </ul>
+			</nav>
         </aside>
 
         <!-- ================= CONTENUTO PRINCIPALE (TABS) ================= -->
@@ -42,7 +59,7 @@
             
             <!-- TAB 1: PANORAMICA (DASHBOARD) -->
             <section id="dashboard" class="user-tab-content active-tab">
-                <h2>Bentornato, ${sessionScope.utenteLoggato.nome}!</h2>
+                <h2>Bentornato, ${sessionScope.utenteLoggato.username}!</h2>
                 <p>Dal tuo pannello di controllo puoi visualizzare le tue attività recenti e aggiornare le tue informazioni.</p>
                 
                 <div class="kpi-grid">
@@ -59,11 +76,46 @@
                         <p class="kpi-number">${sessionScope.wishlist != null ? fn:length(sessionScope.wishlist) : 0}</p>
                     </div>
                 </div>
+                
+                <!--  PFP A SCELTA -->
+				<div class="pfp-selection-container">
+						    <h3>Scegli la tua foto profilo!</h3>
+						    
+						    <form action="${pageContext.request.contextPath}/UpdatePfpServlet" method="POST" id="pfpForm">
+						        
+						        <input type="hidden" id="selectedPfp" name="Pfp_selezionata" value="default">
+						
+						        <div class="pfp-grid">
+						        
+						        	<div class="pfp-option default-icon-option ${empty sessionScope.utenteLoggato.pfp or sessionScope.utenteLoggato.pfp == 'default' ? 'selected' : ''}" 
+									         data-pfp="default" 
+									         onclick="selectPfp(this)">
+									        <i class="fa-solid fa-user"></i>
+									    </div>
+						        
+						            <c:forEach var="i" begin="1" end="10">
+						                
+						                <c:set var="nomeFile" value="pfp${i}.jpg" />
+						                
+						                <img src="${pageContext.request.contextPath}/images/pfps/pfp${i}.jpg" 
+						                     class="pfp-option ${sessionScope.utenteLoggato.pfp == nomeFile ? 'selected' : ''}"
+						                     data-pfp="${nomeFile}" 
+						                     alt="Pfp ${i}"
+						                     loading="lazy"
+						                     onclick="selectPfp(this)">
+						            </c:forEach>
+								</div>
+				
+				        <button type="submit" class="btn-primary mt-3">Salva Foto Profilo</button>
+				    </form>
+				</div>
+                
             </section>
 
             <!-- TAB 2: ANAGRAFICA E SPEDIZIONI -->
             <section id="anagrafica" class="user-tab-content">
                 <h2>Anagrafica e Indirizzi di Spedizione</h2>
+                
                 <form action="${pageContext.request.contextPath}/UpdateProfiloServlet" method="POST" class="user-form">
                     
                     <fieldset class="form-section">
@@ -294,39 +346,50 @@
 
         </div>
     </div>
+    
+	<script>    
+	    function selectPfp(imgElement) {
+		    const allPfps = document.querySelectorAll('.pfp-option');
+		    allPfps.forEach(img => {
+		        img.classList.remove('selected');
+		    });
+		
+		    imgElement.classList.add('selected');
+		
+		    const selectedValue = imgElement.getAttribute('data-pfp');
+		    document.getElementById('selectedPfp').value = selectedValue;
+		}
+	</script>  
+	  
 </main>
 
-<!-- ================= SCRIPT ================= -->
 <script>
-    function switchTab(tabId, clickedElement) {
-        let tabs = document.querySelectorAll('.user-tab-content');
-        tabs.forEach(tab => {
-            tab.classList.remove('active-tab');
-        });
-
-        let links = document.querySelectorAll('#userMenu a');
-        links.forEach(link => {
-            link.classList.remove('active');
-        });
-
-        document.getElementById(tabId).classList.add('active-tab');
-        clickedElement.classList.add('active');
-    }
-
-    function validaPassword() {
-        let isValid = true;
-        document.getElementById('err-newpwd').innerText = '';
-
-        const newPwd = document.getElementById('newPwd').value.trim();
-        const pwdRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; 
-
-        if (!pwdRegex.test(newPwd)) {
-            document.getElementById('err-newpwd').innerText = "La password deve contenere almeno 8 caratteri, inclusi lettere e numeri.";
-            isValid = false;
-        }
-
-        return isValid;
-    }
+	function switchTab(tabId, clickedElement, event) {
+	    // 1. Blocca il salto nativo dell'ancora #
+	    if (event) {
+	        event.preventDefault();
+	    }
+	
+	    // 2. Nascondi tutti i tab e rimuovi la classe active dai link
+	    let tabs = document.querySelectorAll('.user-tab-content');
+	    tabs.forEach(tab => {
+	        tab.classList.remove('active-tab');
+	    });
+	
+	    let links = document.querySelectorAll('#userMenu a');
+	    links.forEach(link => {
+	        link.classList.remove('active');
+	    });
+	
+	    // 3. Attiva il tab selezionato
+	    document.getElementById(tabId).classList.add('active-tab');
+	    clickedElement.classList.add('active');
+	
+	    // 4. Riporta la pagina all'inizio
+	    window.scrollTo({
+	        top: 0,
+	        behavior: 'smooth'
+	    });
+	}
 </script>
-
 <%@ include file="fragment/footer.jspf" %>

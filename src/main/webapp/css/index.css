@@ -89,6 +89,26 @@ main > section.hero-section, main > section:nth-of-type(1) {
     padding-right: 8% !important;
 }
 
+main > section.final-section {
+    height: auto !important;
+    min-height: 100vh !important;
+    display: block !important;
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important;
+    padding: 0 !important;
+    overflow: visible !important; 
+}
+
+main > section.final-section::before {
+    background-image: linear-gradient(rgba(15, 3, 38, 0.7), rgba(15, 3, 38, 0.7)), 
+                      url('https://plus.unsplash.com/premium_photo-1710939965477-d3399098aeed?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+
+main > section.final-section footer, main > section.final-section .main-footer {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
 .hero-section {
     background: transparent;
     box-sizing: border-box;
@@ -370,32 +390,6 @@ main > section.hero-section, main > section:nth-of-type(1) {
     opacity: 0 !important;
 }
 
-main > section:nth-of-type(4) {
-    height: 100vh !important;
-    min-height: 100vh !important;
-    padding-top: 100px !important;
-    padding-bottom: 20px !important;
-    justify-content: center !important;
-    align-items: center !important;
-}
-
-.cta-section {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}
-
-.cta-content {
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
 .cta-section h2 {
     font-size: 3rem;
     font-weight: 700;
@@ -439,16 +433,6 @@ main > section:nth-of-type(4) {
 
 .btn-signup:hover {
 	background: rgba(185, 193, 223, 0.35); color: #eff1ed; transform: scale(1.05); 
-}
-
-main > section.footer-section {
-    height: auto !important;
-    min-height: 0 !important;
-    scroll-snap-align: end !important;
-    scroll-snap-stop: normal !important;
-    padding: 0 !important;
-    background: transparent !important;
-    display: block !important;
 }
 
 main > section.footer-section::before {
@@ -529,25 +513,59 @@ main > section.footer-section footer {
     transform: translateY(-3px);
 }
 
-main > section.footer-section {
+main > section.final-section {
     height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    scroll-snap-align: end !important;
-    scroll-snap-stop: normal !important;
+    min-height: 100vh !important;
     display: block !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
+    scroll-snap-align: start !important;
+    scroll-snap-stop: normal !important;
     padding: 0 !important;
-    overflow: visible !important;
-    background: transparent !important;
+    overflow: visible !important; 
 }
 
-main > section.footer-section::before {
+main > section.final-section::before {
     display: none !important;
 }
 
-main > section.footer-section .main-footer {
+.cta-section {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 0 1rem;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: -15px; left: -15px; right: -15px; bottom: -15px;
+    background-image: linear-gradient(rgba(15, 3, 38, 0.7), rgba(15, 3, 38, 0.7)), 
+                      url('https://plus.unsplash.com/premium_photo-1710939965477-d3399098aeed?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
+    transform: scale(1.05);
+    z-index: -1;
+}
+
+.cta-content {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+main > section.final-section footer, main > section.final-section .main-footer {
     width: 100% !important;
     margin: 0 !important;
+    position: relative;
+    z-index: 10;
+    display: block;
 }

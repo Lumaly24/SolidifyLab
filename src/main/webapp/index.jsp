@@ -6,7 +6,7 @@
 <%@ include file="/WEB-INF/view/fragment/header.jspf" %>
 
     <main>
-        
+         
         <!-- HERO SECTION -->
         <section class="hero-section">
             <div class="hero-content">
@@ -134,46 +134,45 @@
             </div>
         </section>
 
-        <!-- CTA SECTION (SEZIONE 4) -->
-        <section class="cta-section">
-            <div class="cta-content">
-                <c:choose>
-                    <c:when test="${not empty sessionScope.utenteLoggato}">
-                        <h2>Bentornato, <c:out value="${sessionScope.utenteLoggato.nome}" />!</h2>
-                        <div class="cta-buttons">
-                            <c:if test="${sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
-                                <a href="${pageContext.request.contextPath}/AdminDashboard" class="btn-login">PANNELLO ADMIN</a>
-                                <a href="${pageContext.request.contextPath}/ModificaProdotto" class="btn-login">GESTISCI CATALOGO</a>
-                            </c:if>
-                            <c:if test="${sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
-                                <a href="${pageContext.request.contextPath}/UserDashboard" class="btn-login">IL MIO PROFILO</a>
-                                <a href="${pageContext.request.contextPath}/wishlist" class="btn-signup">VAI ALLA WISHLIST</a>
-                            </c:if>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <h2>INIZIA OGGI IL TUO VIAGGIO CREATIVO</h2>
-                        <div class="cta-buttons">
-                            <a href="${pageContext.request.contextPath}/Login" class="btn-login">LOG IN</a>
-                            <a href="${pageContext.request.contextPath}/Signup" class="btn-signup">SIGN UP</a>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+        <!-- SEZIONE FINALE (CTA + FOOTER UNIFICATI) -->
+        <section class="final-section">
+            <div class="cta-section">
+                <div class="cta-content">
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.utenteLoggato}">
+                            <h2>Bentornato, <c:out value="${sessionScope.utenteLoggato.username}" />!</h2>
+                            <div class="cta-buttons">
+                                <c:if test="${sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
+                                    <a href="${pageContext.request.contextPath}/AdminDashboard" class="btn-login">PANNELLO ADMIN</a>
+                                    <a href="${pageContext.request.contextPath}/ModificaProdotto" class="btn-login">GESTISCI CATALOGO</a>
+                                </c:if>
+                                <c:if test="${sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
+                                    <a href="${pageContext.request.contextPath}/UserDashboard" class="btn-login">IL MIO PROFILO</a>
+                                    <a href="${pageContext.request.contextPath}/wishlist" class="btn-signup">VAI ALLA WISHLIST</a>
+                                </c:if>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <h2>INIZIA OGGI IL TUO VIAGGIO CREATIVO</h2>
+                            <div class="cta-buttons">
+                                <a href="${pageContext.request.contextPath}/Login" class="btn-login">LOG IN</a>
+                                <a href="${pageContext.request.contextPath}/Signup" class="btn-signup">SIGN UP</a>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
-        </section>
 
-        <!-- FOOTER SECTION (SEZIONE 5 DEDICATA) -->
-        <section class="footer-section">
+            <!-- FOOTER DENTRO LA SEZIONE FINALE -->
             <%@ include file="/WEB-INF/view/fragment/footer.jspf" %>
         </section>
         
-        <!-- SCROLL PROGRESS NAV -->
+        <!-- SCROLL PROGRESS NAV (4 PALLINI) -->
         <div class="scroll-progress-nav" id="scrollProgressNav">
             <div class="dot active" data-section="0" title="Hero"></div>
             <div class="dot" data-section="1" title="Categorie"></div>
             <div class="dot" data-section="2" title="Prodotti"></div>
-            <div class="dot" data-section="3" title="Inizia"></div>
-            <div class="dot" data-section="4" title="Footer"></div>
+            <div class="dot" data-section="3" title="Info & Footer"></div>
     
             <button type="button" class="btn-back-to-top" id="backToTopBtn" title="Torna su">
                 <i class="fa-solid fa-arrow-up"></i>
