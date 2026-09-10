@@ -12,28 +12,16 @@ import com.solidifylab.model.Prodotto;
 
 public class ProdottoDAO {
 
-    /**
-     * Estrae tutti i prodotti attivi dal database.
-     * Perfetto per riempire il catalogo e il carosello della Home Page!
-     */
     public List<Prodotto> doRetrieveAll() {
-        // Creiamo una lista vuota che conterrà i nostri prodotti
         List<Prodotto> prodotti = new ArrayList<>();
-        
-        // La nostra query SQL (escludiamo quelli cancellati logicamente)
         String query = "SELECT * FROM prodotto WHERE cancellato = FALSE";
 
-        // Il blocco try-with-resources chiude in automatico la connessione quando finisce!
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
 
-            // Per ogni riga trovata nel database...
             while (rs.next()) {
-                // ...creiamo un nuovo "scatolone" Prodotto
                 Prodotto p = new Prodotto();
-                
-                // ...e lo riempiamo con i dati estratti dalle colonne!
                 p.setId(rs.getInt("id"));
                 p.setCategoriaId(rs.getInt("categoria_id"));
                 p.setNome(rs.getString("nome"));
@@ -46,7 +34,6 @@ public class ProdottoDAO {
                 p.setDataInserimento(rs.getString("data_inserimento"));
                 p.setCancellato(rs.getBoolean("cancellato"));
 
-                // Aggiungiamo il prodotto finito alla nostra lista
                 prodotti.add(p);
             }
             
@@ -55,7 +42,42 @@ public class ProdottoDAO {
             e.printStackTrace();
         }
         
-        // Restituiamo la lista piena (o vuota se c'è stato un errore)
+        return prodotti;
+    }
+
+
+    public List<Prodotto> doRetrieveByCategoria(int categoriaId) {
+        List<Prodotto> prodotti = new ArrayList<>();
+        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id = ?";
+
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setInt(1, categoriaId);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Prodotto p = new Prodotto();
+                    p.setId(rs.getInt("id"));
+                    p.setCategoriaId(rs.getInt("categoria_id"));
+                    p.setNome(rs.getString("nome"));
+                    p.setDescrizione(rs.getString("descrizione"));
+                    p.setPrezzoCorrente(rs.getDouble("prezzo_corrente"));
+                    p.setIvaCorrente(rs.getDouble("iva_corrente"));
+                    p.setQuantitaDisponibile(rs.getInt("quantita_disponibile"));
+                    p.setFormatoFile(rs.getString("formato_file"));
+                    p.setImmagineCopertinaUrl(rs.getString("immagine_copertina_url"));
+                    p.setDataInserimento(rs.getString("data_inserimento"));
+                    p.setCancellato(rs.getBoolean("cancellato"));
+                    
+                    prodotti.add(p);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore durante l'estrazione dei prodotti per categoria:");
+            e.printStackTrace();
+        }
+        
         return prodotti;
     }
 }

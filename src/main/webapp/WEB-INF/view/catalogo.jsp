@@ -98,10 +98,9 @@
                     
                     <!-- TABS SPOSTATI QUI -->
                     <div class="catalog-tabs">
-                        <a href="${pageContext.request.contextPath}/Catalogo?tipo=3D" class="tab-btn active">3D MODELS</a>
-                        <a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES" class="tab-btn">TEXTURES</a>
-                    </div>
-
+					    <a href="${pageContext.request.contextPath}/Catalogo?tipo=3D" class="tab-btn ${param.tipo == 'TEXTURES' ? '' : 'active'}">3D MODELS</a>
+					    <a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES" class="tab-btn ${param.tipo == 'TEXTURES' ? 'active' : ''}">TEXTURES</a>
+					</div>
                     <!-- REQUISITO CHECKLIST: Barra di ricerca AJAX -->
                     <div class="ajax-search-container">
                         <div class="search-input-wrapper">

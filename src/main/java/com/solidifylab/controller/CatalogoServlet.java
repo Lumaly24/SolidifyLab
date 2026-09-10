@@ -18,16 +18,25 @@ public class CatalogoServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        // 1. Inizializza il DAO
         ProdottoDAO prodottoDAO = new ProdottoDAO();
+        List<Prodotto> prodotti;
         
-        // 2. Estrai tutti i prodotti dal database TiDB
-        List<Prodotto> prodotti = prodottoDAO.doRetrieveAll();
+        // 1. Leggiamo il parametro 'tipo' dai tab in alto nella pagina
+        String tipo = request.getParameter("tipo");
         
-        // 3. Inserisci la lista nella request affinché la JSP possa leggerla
+        // 2. Filtriamo in base alla tab selezionata
+        if ("TEXTURES".equals(tipo)) {
+            // Categoria ID 2 = Texture (come impostato nel tuo database)
+            prodotti = prodottoDAO.doRetrieveByCategoria(2);
+        } else {
+            // Default o "3D" -> Categoria ID 1 = Modelli 3D
+            prodotti = prodottoDAO.doRetrieveByCategoria(1);
+        }
+        
+        // 3. Passiamo la lista filtrata alla request
         request.setAttribute("listaProdotti", prodotti);
         
-        // 4. Passa il controllo alla pagina catalogo.jsp
+        // 4. Forward alla JSP
         request.getRequestDispatcher("/WEB-INF/view/catalogo.jsp").forward(request, response);
     }
 
