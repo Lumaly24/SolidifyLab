@@ -144,12 +144,27 @@
 				                    <div class="product-badges">
 				                        
 				                        <!-- Tasto Wishlist CORRETTO -->
-				                        <form action="${pageContext.request.contextPath}/AggiungiWishlistServlet" method="POST" style="display:inline;">
-				                            <input type="hidden" name="id" value="${prodotto.id}">
-				                            <button type="submit" class="btn-wishlist" title="Aggiungi alla Wishlist">
-				                                <i class="fa-regular fa-heart"></i>
-				                            </button>
-				                        </form>
+				                        <c:set var="inWishlist" value="false" />
+                                            <c:forEach var="wId" items="${sessionScope.wishlistIds}">
+                                                <c:if test="${wId == prodotto.id}">
+                                                    <c:set var="inWishlist" value="true" />
+                                                </c:if>
+                                            </c:forEach>
+					                       <c:choose>
+	                                                <c:when test="${not empty sessionScope.utenteLoggato}">
+	                                                    <form action="${pageContext.request.contextPath}/AddWishlist" method="POST" class="inline-form wishlist-form">
+	                                                        <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+	                                                        <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
+	                                                            <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
+	                                                        </button>
+	                                                    </form>
+	                                                </c:when>
+	                                                <c:otherwise>
+	                                                    <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="alert('Devi effettuare il login per usare la Wishlist!'); window.location.href='${pageContext.request.contextPath}/Login';">
+	                                                        <i class="fa-regular fa-heart"></i>
+	                                                    </button>
+	                                                </c:otherwise>
+                                            </c:choose>
 				
 				                        <!-- AGGIUNTA ADMIN: Tasto Cestino CORRETTO -->
 				                        <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
