@@ -3,7 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<% request.setAttribute("titoloPagina", "La mia Wishlist"); %>
+<% request.setAttribute("titoloPagina", "La mia Wishlist"); 
+	request.setAttribute("cssPagina", "wishlist.css");
+%>
+
 <%@ include file="fragment/header.jspf" %>
 
 <main class="wishlist-page-container">
@@ -58,7 +61,7 @@
                 <c:choose>
                     <c:when test="${empty listaWishlist}">
                         <div class="empty-msg text-center w-100 mt-4">
-                            <i class="fa-regular fa-heart" style="font-size: 3em; color: #ccc;"></i>
+                            <i class="fa-regular fa-heart" style="font-size: 3em; color: #e56299;"></i>
                             <h3>La tua wishlist è vuota.</h3>
                             <p>Esplora il catalogo e salva qui i tuoi progetti preferiti!</p>
                             <a href="${pageContext.request.contextPath}/CatalogoServlet" class="btn-primary mt-3">Vai al Catalogo</a>

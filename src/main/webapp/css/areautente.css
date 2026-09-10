@@ -610,67 +610,6 @@ body {
 	margin-top: 25px; 
 }
 
-.pfp-selection-container .btn-primary .mt-3 {
-	margin-top: 20px;
-}
-
-.pfp-selection-container {
-    margin: 20px 0;
-    text-align: left;
-    color: #382381;
-}
-
-
-
-.pfp-grid {
-    justify-content: flex-start;
-    gap: 10px;
-    max-width: 300px;
-}
-
-.pfp-option {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    object-fit: cover;
-    cursor: pointer;
-    border: 3px solid transparent;
-    transition: all 0.3s ease;
-}
-
-.pfp-option:hover {
-    transform: scale(1.1);
-}
-
-.pfp-option.selected {
-    border-color: #b8aae8;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
-    transform: scale(1.1);
-}
-
-.pfp-option, .default-icon-option {
-    width: 55px;
-    height: 55px;
-    font-size: 1.5rem;
-}
-
-.default-icon-option {
-    background: #382381;
-    color: #b9c1df;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    box-sizing: border-box;
-}
-
-#pfpForm {
-    text-align: left;
-    margin-top: 20px;
-}
-
-
-
 @media (max-width: 900px) {
     .user-layout {
         grid-template-columns: 1fr;

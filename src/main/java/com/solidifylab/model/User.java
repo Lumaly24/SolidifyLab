@@ -12,7 +12,6 @@ public class User {
     private String indirizzo;
     private String citta;
     private String cap;
-    private String pfp;
 
     public User() {}
 
@@ -20,43 +19,54 @@ public class User {
     // Metodi Getter e Setter
     // ==========================================
     
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() { 
+    	return id; }
+    public void setId(int id) { 
+    	this.id = id; }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmail() { 
+    	return email; }
+    public void setEmail(String email) { 
+    	this.email = email; }
 
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public String getPasswordHash() { 
+    	return passwordHash; }
+    public void setPasswordHash(String passwordHash) { 
+    	this.passwordHash = passwordHash; }
 
     // --- Getter e Setter per USERNAME ---
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public String getUsername() { 
+    	return username; }
+    public void setUsername(String username) { 
+    	this.username = username; }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public String getNome() { 
+    	return nome; }
+    public void setNome(String nome) { 
+    	this.nome = nome; }
 
-    public String getCognome() { return cognome; }
-    public void setCognome(String cognome) { this.cognome = cognome; }
+    public String getCognome() { 
+    	return cognome; }
+    public void setCognome(String cognome) { 
+    	this.cognome = cognome; }
 
-    public String getRuolo() { return ruolo; }
-    public void setRuolo(String ruolo) { this.ruolo = ruolo; }
+    public String getRuolo() { 
+    	return ruolo; }
+    public void setRuolo(String ruolo) { 
+    	this.ruolo = ruolo; }
 
-    // --- Nuovi Getter e Setter ---
+    public String getIndirizzo() {
+    	return indirizzo; }
+    public void setIndirizzo(String indirizzo) { 
+    	this.indirizzo = indirizzo; }
 
-    public String getIndirizzo() { return indirizzo; }
-    public void setIndirizzo(String indirizzo) { this.indirizzo = indirizzo; }
+    public String getCitta() { 
+    	return citta; }
+    public void setCitta(String citta) { 
+    	this.citta = citta; }
 
-    public String getCitta() { return citta; }
-    public void setCitta(String citta) { this.citta = citta; }
-
-    public String getCap() { return cap; }
-    public void setCap(String cap) { this.cap = cap; }
-    
-    public String getPfp() {
-    	return pfp;
-    }
-    public void setPfp(String pfp) {
-    	this.pfp = pfp;
-    }
+    public String getCap() { 
+    	return cap; }
+    public void setCap(String cap) { 
+    	this.cap = cap; }
 }

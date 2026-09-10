@@ -76,41 +76,6 @@
                         <p class="kpi-number">${sessionScope.wishlist != null ? fn:length(sessionScope.wishlist) : 0}</p>
                     </div>
                 </div>
-                
-                <!--  PFP A SCELTA -->
-				<div class="pfp-selection-container">
-						    <h3>Scegli la tua foto profilo!</h3>
-						    
-						    <form action="${pageContext.request.contextPath}/UpdatePfpServlet" method="POST" id="pfpForm">
-						        
-						        <input type="hidden" id="selectedPfp" name="Pfp_selezionata" value="default">
-						
-						        <div class="pfp-grid">
-						        
-						        	<div class="pfp-option default-icon-option ${empty sessionScope.utenteLoggato.pfp or sessionScope.utenteLoggato.pfp == 'default' ? 'selected' : ''}" 
-									         data-pfp="default" 
-									         onclick="selectPfp(this)">
-									        <i class="fa-solid fa-user"></i>
-									    </div>
-						        
-						            <c:forEach var="i" begin="1" end="10">
-						                
-						                <c:set var="nomeFile" value="pfp${i}.jpg" />
-						                
-						                <img src="${pageContext.request.contextPath}/images/pfps/pfp${i}.jpg" 
-						                     class="pfp-option ${sessionScope.utenteLoggato.pfp == nomeFile ? 'selected' : ''}"
-						                     data-pfp="${nomeFile}" 
-						                     alt="Pfp ${i}"
-						                     loading="lazy"
-						                     onclick="selectPfp(this)">
-						            </c:forEach>
-								</div>
-				
-				        <button type="submit" class="btn-primary mt-3">Salva Foto Profilo</button>
-				    </form>
-				</div>
-                
-            </section>
 
             <!-- TAB 2: ANAGRAFICA E SPEDIZIONI -->
             <section id="anagrafica" class="user-tab-content">
