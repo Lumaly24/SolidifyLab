@@ -14,7 +14,6 @@ public class ConPool {
             PoolProperties p = new PoolProperties();
             
             // Parametri di connessione aggiornati per TiDB Cloud
-         // Parametri di connessione aggiornati per TiDB Cloud
             p.setUrl("jdbc:mysql://gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/solidify_studio?sslMode=VERIFY_IDENTITY&tlsVersions=TLSv1.2,TLSv1.3");
             p.setDriverClassName("com.mysql.cj.jdbc.Driver");
             
@@ -29,11 +28,20 @@ public class ConPool {
             p.setRemoveAbandonedTimeout(60); 
             p.setRemoveAbandoned(true);
             
+            // --- INIZIO RIGHE AGGIUNTE PER SALVARE LA CONNESSIONE TIDB ---
+            p.setTestOnBorrow(true);               // Testa la connessione PRIMA di usarla
+            p.setTestWhileIdle(true);              // Testa le connessioni che riposano nel pool
+            p.setValidationQuery("SELECT 1");      // La micro-query magica per il ping
+            p.setValidationInterval(30000);        // Evita di fare ping se la connessione è stata usata negli ultimi 30 sec
+            p.setTimeBetweenEvictionRunsMillis(30000); // Controlla le connessioni inattive ogni 30 sec
+            
+            // QUESTE SONO LE DUE RIGHE CHE MANCAVANO!
             datasource = new DataSource();
             datasource.setPoolProperties(p);
         }
         return datasource.getConnection();
     }
+        
 
     // Metodo opzionale ma consigliato per chiudere il pool quando Tomcat si ferma
     public static void terminate() {

@@ -22,23 +22,13 @@
         <!-- ================= SIDEBAR NAVIGAZIONE ================= -->
         <aside class="user-sidebar">
             <div class="user-profile-summary">
-                <div class="user-pfp">
-				    <c:choose>
-				    
-				        <c:when test="${empty sessionScope.utenteLoggato.pfp or sessionScope.utenteLoggato.pfp == 'default'}">
-				            
-				            <i class="fa-solid fa-user"></i>
-				        </c:when>
-				        <c:otherwise>
-				            
-				            <img src="${pageContext.request.contextPath}/images/pfps/${sessionScope.utenteLoggato.pfp}" alt="Foto Profilo">
-				        </c:otherwise>
-				    </c:choose>
-				</div>
-				
-                <h3>${sessionScope.utenteLoggato.nome} ${sessionScope.utenteLoggato.cognome}</h3>
-                <p>${sessionScope.utenteLoggato.email}</p>
-            </div>
+			    <div class="user-pfp">
+			        <i class="fa-solid fa-user"></i>
+			    </div>
+			    
+			    <h3>${sessionScope.utenteLoggato.nome} ${sessionScope.utenteLoggato.cognome}</h3>
+			    <p>${sessionScope.utenteLoggato.email}</p>
+			</div>
             
             <nav class="user-nav">
 			    <ul id="userMenu">
@@ -76,7 +66,7 @@
                         <p class="kpi-number">${sessionScope.wishlist != null ? fn:length(sessionScope.wishlist) : 0}</p>
                     </div>
                 </div>
-
+              </section>
             <!-- TAB 2: ANAGRAFICA E SPEDIZIONI -->
             <section id="anagrafica" class="user-tab-content">
                 <h2>Anagrafica e Indirizzi di Spedizione</h2>
@@ -311,21 +301,7 @@
 
         </div>
     </div>
-    
-	<script>    
-	    function selectPfp(imgElement) {
-		    const allPfps = document.querySelectorAll('.pfp-option');
-		    allPfps.forEach(img => {
-		        img.classList.remove('selected');
-		    });
-		
-		    imgElement.classList.add('selected');
-		
-		    const selectedValue = imgElement.getAttribute('data-pfp');
-		    document.getElementById('selectedPfp').value = selectedValue;
-		}
-	</script>  
-	  
+   
 </main>
 
 <script>
