@@ -314,6 +314,10 @@ body {
 	transform: scale(1.05);
 }
 
+.empty-msg .btn-primary {
+	margin-top: 40px;
+}
+
 .text-center {
     text-align: center;
 }
@@ -344,7 +348,7 @@ label:has(input[type="checkbox"]):active {
     transform: scale(1.05) !important;
 }
 
-button {
+.btn-primary, .btn-icon, .btn-wishlist, .btn-outline-small {
     padding: 10px 25px;
     background: #eb89b3;
     color: #0f0326;
@@ -355,11 +359,14 @@ button {
     transition: all 0.2s ease;
 }
 
-button:hover {
+.btn-primary:hover, .btn-icon:hover, .btn-wishlist:hover, .btn-outline-small:hover {
     background: #e04e8c;
     color: #eff1ed;
 }
 
+.btn-wishlist.text-red {
+    color: #d93838;
+}
 @media (max-width: 900px) {
     .catalog-layout {
         grid-template-columns: 1fr;
