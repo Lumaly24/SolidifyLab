@@ -379,24 +379,23 @@ label:has(input[type="checkbox"]):active {
     gap: 6px; 
 }
 
-.btn-wishlist { 
-    background: rgba(255, 255, 255, 0.9); 
-    border: 1px solid rgba(229, 99, 153, 0.5); 
-    color: #e56399; 
-    border-radius: 50%; 
-    width: 30px; 
-    height: 30px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    cursor: pointer; 
-    transition: background 0.2s; 
+.btn-wishlist {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #eff1ed;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.btn-wishlist:hover { 
-    background: #e56399; 
-    color: #0f0326; 
-    border-color: #0f0326; 
+.btn-wishlist:hover {
+    transform: scale(1.15);
+    color: #e60073;
 }
 
 .product-link { 
