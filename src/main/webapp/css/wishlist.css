@@ -22,8 +22,9 @@ body {
 }
 
 .wishlist-header {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     color: #e56399;
+    margin-top: 7px;
 }
 
 .wishlist-header h1 {
@@ -31,7 +32,9 @@ body {
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    padding-top: 10px;
+    margin-top: 15px;
     text-shadow: 1px 1px 6px #fadeea;
 }
 
