@@ -25,31 +25,28 @@
             <div class="categories-grid">
                 <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=MODELLO_3D" class="category-card">
                     <div class="card-img-container">
-                        <img src="" alt="Modelli 3D" loading="lazy">
+                        <img src="${pageContext.request.contextPath}/images/modelli-3d-sfondo.png" alt="Modelli 3D" loading="lazy">
                     </div>
                     <div class="card-info">
                         <h3>Modelli 3D</h3>
-                        <p></p>
                     </div>
                 </a>
 
                 <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=TEXTURE" class="category-card">
                     <div class="card-img-container">
-                        <img src="" alt="Textures" loading="lazy">
+                        <img src="${pageContext.request.contextPath}/images/textures-sfondo.png" alt="Textures" loading="lazy">
                     </div>
                     <div class="card-info">
                         <h3>Textures</h3>
-                        <p></p>
                     </div>
                 </a>
 
                 <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=STAMPA_3D" class="category-card">
                     <div class="card-img-container">
-                        <img src="" alt="Stampe 3D" loading="lazy">
+                        <img src="${pageContext.request.contextPath}/images/stampe3d-sfondo.png" alt="Stampe 3D" loading="lazy">
                     </div>
                     <div class="card-info">
                         <h3>Stampe 3D</h3>
-                        <p></p>
                     </div>
                 </a>
             </div>

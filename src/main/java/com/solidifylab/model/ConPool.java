@@ -35,7 +35,6 @@ public class ConPool {
             p.setValidationInterval(30000);        // Evita di fare ping se la connessione è stata usata negli ultimi 30 sec
             p.setTimeBetweenEvictionRunsMillis(30000); // Controlla le connessioni inattive ogni 30 sec
             
-            // QUESTE SONO LE DUE RIGHE CHE MANCAVANO!
             datasource = new DataSource();
             datasource.setPoolProperties(p);
         }
