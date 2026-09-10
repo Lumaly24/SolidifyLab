@@ -15,7 +15,7 @@
             
             <aside class="catalog-sidebar">
             
-                <form action="${pageContext.request.contextPath}/CatalogoServlet" method="GET">
+                <form action="${pageContext.request.contextPath}/Catalogo" method="GET">
                     
                     <div class="filter-group">
     <h3>Filtro Prezzi</h3>
@@ -98,8 +98,8 @@
                     
                     <!-- TABS SPOSTATI QUI -->
                     <div class="catalog-tabs">
-                        <a href="${pageContext.request.contextPath}/CatalogoServlet?tipo=3D" class="tab-btn active">3D MODELS</a>
-                        <a href="${pageContext.request.contextPath}/CatalogoServlet?tipo=TEXTURES" class="tab-btn">TEXTURES</a>
+                        <a href="${pageContext.request.contextPath}/Catalogo?tipo=3D" class="tab-btn active">3D MODELS</a>
+                        <a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES" class="tab-btn">TEXTURES</a>
                     </div>
 
                     <!-- REQUISITO CHECKLIST: Barra di ricerca AJAX -->
@@ -119,7 +119,7 @@
                 <!-- Modifica Header Catalogo: Flexbox per mettere il bottone Admin a destra -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <nav class="breadcrumbs" aria-label="Percorso di navigazione">
-                        <a href="${pageContext.request.contextPath}/CatalogoServlet">Libreria Modelli 3D</a> 
+                        <a href="${pageContext.request.contextPath}/Catalogo">Libreria Modelli 3D</a> 
                         <span class="separator">/</span> 
                         <span class="current-page">Tutti i prodotti</span>
                     </nav>
@@ -133,53 +133,55 @@
                 </div>
                 
                 <div class="catalog-products-grid">
-                    
-                    <!-- CICLO JSP: Mostriamo i prodotti dal Database -->
-                    <c:choose>
-                        <c:when test="${empty listaProdotti}">
-                            <p>Nessun prodotto trovato per questa ricerca.</p>
-                        </c:when>
-                        <c:otherwise>
-                            <c:forEach var="prodotto" items="${listaProdotti}">
-                                <article class="product-card">
-                                    <div class="product-badges">
-                                        
-                                        <!-- Tasto Wishlist -->
-                                        <form action="${pageContext.request.contextPath}/AggiungiWishlistServlet" method="POST" style="display:inline;">
-                                            <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-                                            <button type="submit" class="btn-wishlist" title="Aggiungi alla Wishlist">
-                                                <i class="fa-regular fa-heart"></i>
-                                            </button>
-                                        </form>
-
-                                        <!-- AGGIUNTA ADMIN: Tasto Cestino per eliminare il prodotto -->
-                                        <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.admin}">
-                                            <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="POST" style="display:inline;">
-                                                <input type="hidden" name="id" value="${prodotto.id}">
-                                                <button type="submit" class="btn-wishlist" style="color: #ff4d4d;" title="Elimina dal DB" onclick="return confirm('ATTENZIONE: Sei sicuro di voler eliminare definitivamente questo prodotto dal catalogo?');">
-                                                    <i class="fa-solid fa-trash-can"></i>
-                                                </button>
-                                            </form>
-                                        </c:if>
-
-                                    </div>
-                                    
-                                    <!-- Link al Dettaglio (Requisito Checklist) -->
-                                    <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
-                                        <div class="product-image">
-                                            <span>(IMG ${prodotto.nome})</span>
-                                        </div>
-                                        <div class="product-info-minimal">
-                                            <h4 class="product-title">${prodotto.nome}</h4>
-                                            <div class="product-price">€ <fmt:formatNumber value="${prodotto.prezzo}" pattern="#,##0.00"/></div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </c:forEach>
-                        </c:otherwise>
-                    </c:choose>
-
-                </div>
+    
+				    <!-- CICLO JSP: Mostriamo i prodotti dal Database -->
+				    <c:choose>
+				        <c:when test="${empty listaProdotti}">
+				            <p>Nessun prodotto trovato per questa ricerca.</p>
+				        </c:when>
+				        <c:otherwise>
+				            <c:forEach var="prodotto" items="${listaProdotti}">
+				                <article class="product-card">
+				                    <div class="product-badges">
+				                        
+				                        <!-- Tasto Wishlist CORRETTO -->
+				                        <form action="${pageContext.request.contextPath}/AggiungiWishlistServlet" method="POST" style="display:inline;">
+				                            <input type="hidden" name="id" value="${prodotto.id}">
+				                            <button type="submit" class="btn-wishlist" title="Aggiungi alla Wishlist">
+				                                <i class="fa-regular fa-heart"></i>
+				                            </button>
+				                        </form>
+				
+				                        <!-- AGGIUNTA ADMIN: Tasto Cestino CORRETTO -->
+				                        <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
+				                            <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="POST" style="display:inline;">
+				                                <input type="hidden" name="id" value="${prodotto.id}">
+				                                <button type="submit" class="btn-wishlist" style="color: #ff4d4d;" title="Elimina dal DB" onclick="return confirm('ATTENZIONE: Sei sicuro di voler eliminare definitivamente questo prodotto dal catalogo?');">
+				                                    <i class="fa-solid fa-trash-can"></i>
+				                                </button>
+				                            </form>
+				                        </c:if>
+				
+				                    </div>
+				                    
+				                    <!-- Link al Dettaglio (Requisito Checklist) -->
+				                    <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
+				                        <div class="product-image">
+				                            <!-- Inserimento Immagine Reale -->
+				                            <img src="${pageContext.request.contextPath}/images/prodotti/${prodotto.immagineCopertinaUrl}" alt="${prodotto.nome}" style="max-width: 100%; border-radius: 8px;">
+				                        </div>
+				                        <div class="product-info-minimal">
+				                            <h4 class="product-title">${prodotto.nome}</h4>
+				                            <!-- Correzione Prezzo -->
+				                            <div class="product-price">€ <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></div>
+				                        </div>
+				                    </a>
+				                </article>
+				            </c:forEach>
+				        </c:otherwise>
+				    </c:choose>
+				
+				</div>
             </section>
             
         </div>
