@@ -6,6 +6,11 @@
     <c:redirect url="${pageContext.request.contextPath}/login" />
 </c:if>
 
+<% 
+    request.setAttribute("titoloPagina", "Gestione Commissioni"); 
+	request.setAttribute("cssPagina", "areautente.css");
+%>
+
 <%@ include file="fragment/header.jspf" %>
 
 <div class="admin-body-wrapper">
@@ -39,35 +44,7 @@
             
             <h1>Pannello di Controllo</h1>
 
-            <!-- ================= STATISTICHE E SALES ================= -->
-            <section id="statistiche-sales" class="admin-card">
-                <h2>Andamento Vendite e Interesse</h2>
-                
-                <div class="kpi-grid">
-                    <div class="kpi-card">
-                        <h3>Totale Incassi</h3>
-                        <p> € <fmt:formatNumber value="${statistiche.totaleIncassi}" pattern="#,##0.00"/>
-                        </p>
-                    </div>
-                    
-                    <div class="kpi-card">
-                        <h3>Prodotto Più Venduto</h3>
-                        <p>${statistiche.prodottoTop.nome}</p>
-                        <span>(${statistiche.prodottoTop.vendite} unità vendute)</span>
-                    </div>
-
-                    <div class="kpi-card">
-                        <h3><i class="fa-solid fa-heart"></i> Più Desiderato</h3>
-                        <p>${statistiche.prodottoWishlist.nome}</p>
-                        <span>(In ${statistiche.prodottoWishlist.conteggio} wishlist)</span>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="salesChart"></canvas>
-                </div>
-            </section>
-
+            
             <!-- ================= GESTIONE PRODOTTI (CREATE) ================= -->
             <section id="gestione-prodotti" class="admin-card mt-4">
                 <h2>Aggiungi Nuovo Prodotto</h2>
@@ -235,6 +212,36 @@
                 </table>
             </section>
 
+			<!-- ================= STATISTICHE E SALES ================= -->
+            <section id="statistiche-sales" class="admin-card">
+                <h2>Andamento Vendite e Interesse</h2>
+                
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <h3>Totale Incassi</h3>
+                        <p> € <fmt:formatNumber value="${statistiche.totaleIncassi}" pattern="#,##0.00"/>
+                        </p>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <h3>Prodotto Più Venduto</h3>
+                        <p>${statistiche.prodottoTop.nome}</p>
+                        <span>(${statistiche.prodottoTop.vendite} unità vendute)</span>
+                    </div>
+
+                    <div class="kpi-card">
+                        <h3><i class="fa-solid fa-heart"></i> Più Desiderato</h3>
+                        <p>${statistiche.prodottoWishlist.nome}</p>
+                        <span>(In ${statistiche.prodottoWishlist.conteggio} wishlist)</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </section>
+			
+
         </main>
     </div>
 
@@ -273,6 +280,19 @@
             return isValid; // Se false, il form NON viene inviato e mostra i messaggi rossi inline
         }
     </script>
+    
+    <script>
+    // Seleziona tutti i link della sidebar che portano a un'ancora (#)
+    document.querySelectorAll('.admin-sidebar a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Rimuovi la classe 'active' da tutti i link
+            document.querySelectorAll('.admin-sidebar a').forEach(el => el.classList.remove('active'));
+            
+            // Aggiungi la classe 'active' solo a quello appena cliccato
+            this.classList.add('active');
+        });
+    });
+</script>
 
 </div> 
 

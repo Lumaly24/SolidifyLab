@@ -5,6 +5,7 @@
 
 <% 
     request.setAttribute("titoloPagina", "Gestione Commissioni"); 
+	request.setAttribute("cssPagina", "commissioni.css");
 %>
 
 <%@ include file="fragment/header.jspf" %>
