@@ -104,5 +104,13 @@ public class Prodotto {
 		this.cancellato = cancellato;
 	}
     
-    // Clicca col tasto destro qui e scatena la magia di Eclipse (Generate Getters and Setters -> Select All)
+	private int categoria; 
+
+	public int getCategoria() {
+	    return categoria;
+	}
+
+	public void setCategoria(int categoria) {
+	    this.categoria = categoria;
+	}
 }

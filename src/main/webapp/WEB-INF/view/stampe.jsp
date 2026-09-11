@@ -18,7 +18,7 @@
         
         <!-- SIDEBAR FILTRI -->
         <aside class="catalog-sidebar">
-            <form action="${pageContext.request.contextPath}/StampeServlet" method="GET">
+            <form action="${pageContext.request.contextPath}/Stampe" method="GET">
                 
                 <div class="filter-group">
                     <h3>Materiale</h3>
@@ -54,7 +54,7 @@
             
             <div class="top-nav-row">
                 <nav class="breadcrumbs" aria-label="Percorso di navigazione">
-                    <a href="${pageContext.request.contextPath}/index.jsp">Home</a> 
+                    <a href="${pageContext.request.contextPath}/Stampe">Libreria Stampe 3D</a> 
                     <span class="separator">/</span> 
                     <span class="current-page">Modelli Stampabili</span>
                 </nav>
@@ -84,7 +84,7 @@
                     </div>  
                     
                     <div class="hero-buttons">
-                        <a href="${pageContext.request.contextPath}/commissioni.jsp" class="btn"> 
+                        <a href="${pageContext.request.contextPath}/Commissioni" class="btn"> 
                             <i class="fa-solid fa-wand-magic-sparkles"></i> STAMPA UN TUO FILE 
                         </a> 
                     </div>

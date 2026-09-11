@@ -84,7 +84,7 @@
                     <div class="physical-promo mt-4">
                         <h4>Vuoi un oggetto fisico?</h4>
                         <p style="font-size: 0.9em; margin-bottom: 15px;">Scopri i nostri modelli già pronti per essere stampati e spediti a casa tua.</p>
-                        <a href="${pageContext.request.contextPath}/stampe.jsp" class="btn-outline-small w-100 text-center" style="display: block;">Vai alle Stampe 3D</a>
+                        <a href="${pageContext.request.contextPath}/Stampe" class="btn-outline-small w-100 text-center" style="display: block;">Vai alle Stampe 3D</a>
                     </div>
                     
                 </form>
@@ -118,10 +118,12 @@
                 <!-- Modifica Header Catalogo: Flexbox per mettere il bottone Admin a destra -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <nav class="breadcrumbs" aria-label="Percorso di navigazione">
-                        <a href="${pageContext.request.contextPath}/Catalogo">Libreria Modelli 3D</a> 
-                        <span class="separator">/</span> 
-                        <span class="current-page">Tutti i prodotti</span>
-                    </nav>
+					    <a href="${pageContext.request.contextPath}/Catalogo">
+					        ${param.tipo == 'TEXTURES' ? 'Libreria Texture' : 'Libreria Modelli 3D'}
+					    </a> 
+					    <span class="separator">/</span> 
+					    <span class="current-page">Tutti i prodotti</span>
+					</nav>
 
                     <!-- AGGIUNTA ADMIN: Bottone "Nuovo Prodotto" -->
                     <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">

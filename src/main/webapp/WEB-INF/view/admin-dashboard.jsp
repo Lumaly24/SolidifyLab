@@ -109,8 +109,14 @@
                             <tr>
                                 <td>${prodotto.id}</td>
                                 <td>${prodotto.nome}</td>
-                                <td>${prodotto.categoria}</td>
-                                <!-- Corretto in prezzoCorrente -->
+                                <td>
+								    <c:choose>
+								        <c:when test="${prodotto.categoriaId == 1}">Modello 3D</c:when>
+								        <c:when test="${prodotto.categoriaId == 2}">Texture</c:when>
+								        <c:when test="${prodotto.categoriaId == 3}">Stampe 3D</c:when>
+								        <c:otherwise>${prodotto.categoriaId}</c:otherwise>
+								    </c:choose>
+								</td>
                                 <td>€ <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></td>
                                 <td class="table-actions">
                                     <form action="${pageContext.request.contextPath}/EditProductServlet" method="GET">
@@ -158,12 +164,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Verrà popolato dalla Servlet -->
                         <c:forEach var="ordine" items="${listaOrdiniCompleta}">
                             <tr>
                                 <td>#${ordine.id}</td>
                                 <td>${ordine.data}</td>
-                                <!-- Corretto per mostrare nome e cognome invece di username -->
                                 <td><strong>${ordine.utente.nome} ${ordine.utente.cognome}</strong></td>
                                 <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
                                 <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
@@ -184,8 +188,8 @@
                     <thead>
                         <tr>
                             <th>ID Req.</th>
-                            <th>Utente (Email)</th>
-                            <th>Tipo (3D/Texture)</th>
+                            <th>Utente</th>
+                            <th>Tipo</th>
                             <th>Stato</th>
                             <th>Azioni</th>
                         </tr>
@@ -194,7 +198,6 @@
                         <c:forEach var="comm" items="${listaCommissioni}">
                             <tr>
                                 <td>#${comm.id}</td>
-                                <!-- Corretto per usare l'attributo email del bean Commissione -->
                                 <td>${comm.email}</td>
                                 <td>${comm.tipo}</td>
                                 <td>
