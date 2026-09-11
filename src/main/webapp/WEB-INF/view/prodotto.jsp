@@ -2,7 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<% request.setAttribute("titoloPagina", "Dettaglio Prodotto"); %>
+<% request.setAttribute("titoloPagina", "Dettaglio Prodotto"); 
+	request.setAttribute("cssPagina", "prodotto.css");
+%>
 <%@ include file="fragment/header.jspf" %>
 
     <main class="product-page-container">
@@ -12,9 +14,9 @@
                 <i class="fa-solid fa-chevron-left"></i> BACK
             </a>
             <nav class="breadcrumbs" aria-label="Percorso di navigazione">
-                <a href="${pageContext.request.contextPath}/CatalogoServlet">Libreria</a> 
+                <a href="${pageContext.request.contextPath}/Catalogo">Catalogo</a> 
                 <span class="separator">/</span> 
-                <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=${prodotto.categoria}">${prodotto.categoria}</a> 
+                <a href="${pageContext.request.contextPath}/Catalogo?categoria=${prodotto.categoria}">${prodotto.categoria}</a> 
                 <span class="separator">/</span> 
                 <span class="current-page">${prodotto.nome}</span>
             </nav>
@@ -22,7 +24,6 @@
 
         <div class="product-layout">
             
-            <!-- ================= COLONNA SINISTRA (Immagine e Carrello) ================= -->
             <aside class="product-gallery-side">
                 
                 <div class="main-product-image">
@@ -56,7 +57,6 @@
                     </div>
                 </c:if>
 
-                <!-- FORM AGGIUNTA AL CARRELLO -->
                 <form class="add-to-cart-form" action="${pageContext.request.contextPath}/AggiungiAlCarrelloServlet" method="POST">
                     
                     <input type="hidden" name="id_prodotto" value="${prodotto.id}">
@@ -89,23 +89,19 @@
                 </div>
             </aside>
 
-            <!-- ================= COLONNA DESTRA (Info e Specifiche) ================= -->
             <section class="product-info-side">
                 
                 <header class="product-info-header">
                     <h1 class="product-title">${prodotto.nome}</h1>
                     
-                    <!-- Contenitore per raggruppare i bottoni di azione (Modifica e Wishlist) -->
                     <div class="header-actions">
                         
-                        <!-- AGGIUNTA ADMIN: Tasto Modifica (Visibile solo all'admin) -->
                         <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.admin}">
                             <a href="${pageContext.request.contextPath}/EditProductServlet?id=${prodotto.id}" class="btn-icon admin-edit-btn" title="Modifica Prodotto">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
                         </c:if>
 
-                        <!-- FORM AGGIUNTA WISHLIST -->
                         <form class="wishlist-form-inline" action="${pageContext.request.contextPath}/AggiungiWishlistServlet" method="POST">
                             <input type="hidden" name="id_prodotto" value="${prodotto.id}">
                             <button type="submit" class="btn-wishlist-large" title="Aggiungi alla Wishlist">

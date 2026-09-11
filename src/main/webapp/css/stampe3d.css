@@ -384,3 +384,96 @@
     color: #374477;
     margin: 0;
 }
+
+.product-card { 
+    position: relative; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.product-card:hover { 
+    transform: translateY(-4px); 
+    border-color: #374477 !important; 
+    box-shadow: 0 8px 20px rgba(185, 193, 223, 0.5) !important; 
+}
+
+.product-badges { 
+    position: absolute; 
+    top: 8px; 
+    right: 8px; 
+    z-index: 2; 
+    display: flex; 
+    gap: 6px; 
+}
+
+.btn-wishlist {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #eff1ed;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-wishlist:hover {
+    transform: scale(1.15);
+    color: #e60073;
+}
+
+.product-link { 
+    text-decoration: none; 
+    color: inherit; 
+    display: block; 
+}
+
+.product-image { 
+    width: 100%; 
+    aspect-ratio: 1 / 1; 
+    background: rgba(15, 3, 38, 0.05); 
+    position: relative; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5); 
+}
+
+.product-info-minimal { 
+    padding: 12px 10px; 
+    background: rgba(255, 255, 255, 0.4); 
+}
+
+.product-title { 
+    font-family: 'coolveticaitalic', sans-serif; 
+    font-size: 1rem; 
+    margin: 0 0 5px 0; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    color: #374477; 
+}
+
+.product-price { 
+    font-weight: bold; 
+    color: #0f0326; 
+    font-size: 0.95rem; 
+}
+
+.catalog-products-grid { 
+    display: grid; 
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 15px; 
+}
+
+.catalog-products-grid p {
+	font-family: 'coolveticaitalic', serif;
+	font-weight: lighter;
+	grid-column: 1 / -1; 
+	color: #ffffff;
+	text-shadow: 2px 2px 3px #000000;
+}

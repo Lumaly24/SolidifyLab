@@ -129,7 +129,7 @@
                                     
                                 </div>
                                 
-                                <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
+                                <a href="${pageContext.request.contextPath}/Prodotto?id=${prodotto.id}" class="product-link">
                                     <div class="product-image">
                                         <img src="${pageContext.request.contextPath}/images/prodotti/${prodotto.immagineCopertinaUrl}" alt="${prodotto.nome}" style="max-width: 100%; border-radius: 8px;">
                                     </div>

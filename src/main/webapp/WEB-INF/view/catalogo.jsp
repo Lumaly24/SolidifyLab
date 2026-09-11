@@ -180,15 +180,14 @@
 				
 				                    </div>
 				                    
-				                    <!-- Link al Dettaglio (Requisito Checklist) -->
-				                    <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
+				                    <a href="${pageContext.request.contextPath}/Prodotto?id=${prodotto.id}" class="product-link">
 				                        <div class="product-image">
-				                            <!-- Inserimento Immagine Reale -->
+
 				                            <img src="${pageContext.request.contextPath}/images/prodotti/${prodotto.immagineCopertinaUrl}" alt="${prodotto.nome}" style="max-width: 100%; border-radius: 8px;">
 				                        </div>
 				                        <div class="product-info-minimal">
 				                            <h4 class="product-title">${prodotto.nome}</h4>
-				                            <!-- Correzione Prezzo -->
+
 				                            <div class="product-price">€ <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></div>
 				                        </div>
 				                    </a>
@@ -203,7 +202,6 @@
         </div>
     </main>
 
-    <!-- REQUISITO CHECKLIST: FETCH API con JSON -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('ajaxSearchBar');
@@ -213,11 +211,11 @@
                 let query = this.value.trim();
                 
                 if(query.length >= 2) {
-                    // Chiamata asincrona alla Servlet
+
                     fetch('${pageContext.request.contextPath}/RicercaAjaxServlet?q=' + encodeURIComponent(query))
-                        .then(response => response.json()) // Decodifica il JSON (Requisito prof)
+                        .then(response => response.json())
                         .then(data => {
-                            suggestionsBox.innerHTML = ''; // Pulisce vecchi risultati
+                            suggestionsBox.innerHTML = '';
                             
                             if(data.length > 0) {
                                 data.forEach(item => {
@@ -227,15 +225,12 @@
                                     div.style.cursor = 'pointer';
                                     div.style.transition = 'background 0.2s';
                                     
-                                    // Mostra nome e prezzo suggerito
                                     div.innerHTML = `<strong>\${item.nome}</strong> - €\${item.prezzo}`;
                                     
-                                    // Al click, vai alla pagina del prodotto
                                     div.onclick = function() {
-                                        window.location.href = '${pageContext.request.contextPath}/DettaglioProdottoServlet?id=' + item.id;
+                                        window.location.href = '${pageContext.request.contextPath}/Prodotto?id=' + item.id;
                                     };
                                     
-                                    // Hover effect adattato al dark/glass theme
                                     div.onmouseover = function() { this.style.backgroundColor = 'rgba(255,255,255,0.1)'; };
                                     div.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
                                     
