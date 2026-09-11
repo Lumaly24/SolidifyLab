@@ -152,7 +152,7 @@
                                             </c:forEach>
 					                       <c:choose>
 	                                                <c:when test="${not empty sessionScope.utenteLoggato}">
-	                                                    <form action="${pageContext.request.contextPath}/AddWishlist" method="POST" class="inline-form wishlist-form">
+	                                                    <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
 	                                                        <input type="hidden" name="id_prodotto" value="${prodotto.id}">
 	                                                        <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
 	                                                            <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>

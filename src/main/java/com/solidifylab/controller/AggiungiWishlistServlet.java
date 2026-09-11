@@ -1,7 +1,8 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.List; // Import fondamentale per gestire la lista degli ID!
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.solidifylab.model.User;
-import com.solidifylab.dao.WishlistDAO; // Assicurati di avere questo DAO!
+import com.solidifylab.dao.WishlistDAO;
 
-@WebServlet("/AggiungiWishlistServlet")
+@WebServlet("/AddtoWishlist")
 public class AggiungiWishlistServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -28,8 +29,8 @@ public class AggiungiWishlistServlet extends HttpServlet {
             return;
         }
 
-        // 2. Recupero l'ID del prodotto cliccato
-        String idProdottoStr = request.getParameter("id");
+        // 2. Recupero l'ID del prodotto cliccato (CORRETTO: ora usa "id_prodotto" come la JSP)
+        String idProdottoStr = request.getParameter("id_prodotto");
         
         if (idProdottoStr != null && !idProdottoStr.isEmpty()) {
             try {
@@ -38,16 +39,24 @@ public class AggiungiWishlistServlet extends HttpServlet {
 
                 WishlistDAO wishlistDAO = new WishlistDAO();
                 
-                // Salvo nel Database
-                wishlistDAO.aggiungiProdotto(idUtente, idProdotto);
+                // 3. EFFETTO INTERRUTTORE: Rimuove se esiste già, altrimenti aggiunge
+                if (wishlistDAO.isProdottoInWishlist(idUtente, idProdotto)) {
+                    wishlistDAO.rimuoviProdotto(idUtente, idProdotto);
+                    System.out.println("Prodotto " + idProdotto + " rimosso dalla wishlist.");
+                } else {
+                    wishlistDAO.aggiungiProdotto(idUtente, idProdotto);
+                    System.out.println("Prodotto " + idProdotto + " aggiunto alla wishlist!");
+                }
 
-                // Aggiorno la lista in sessione
-                session.setAttribute("wishlist", wishlistDAO.getWishlistByUtente(idUtente));
+                // 4. Aggiorno la lista degli ID in sessione per i cuoricini
+                List<Integer> wishlistIds = wishlistDAO.getWishlistIdsByUtente(idUtente);
+                session.setAttribute("wishlistIds", wishlistIds);
 
             } catch (NumberFormatException e) {
                 System.out.println("ID prodotto non valido per la wishlist.");
             }
-            // Il blocco catch SQLException è stato rimosso!
+        } else {
+            System.out.println("ERRORE: La Servlet non ha ricevuto l'id_prodotto dalla JSP!");
         }
 
         // 5. Rimando l'utente alla pagina da cui ha cliccato il bottone (Referer)
@@ -55,12 +64,11 @@ public class AggiungiWishlistServlet extends HttpServlet {
         if (referer != null) {
             response.sendRedirect(referer);
         } else {
-            // Fallback se il referer non è disponibile
-            response.sendRedirect(request.getContextPath() + "/catalogo.jsp");
+            // Fallback sul /Catalogo anziché sulla JSP nuda
+            response.sendRedirect(request.getContextPath() + "/Catalogo");
         }
     }
 
-    // Permettiamo anche il GET nel caso tu voglia usare un semplice tag <a> invece di un form
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }

@@ -8,9 +8,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.solidifylab.dao.ProdottoDAO;
+import com.solidifylab.dao.WishlistDAO; 
 import com.solidifylab.model.Prodotto;
+import com.solidifylab.model.User;    
 
 @WebServlet("/Catalogo") 
 public class CatalogoServlet extends HttpServlet {
@@ -26,17 +29,25 @@ public class CatalogoServlet extends HttpServlet {
         
         // 2. Filtriamo in base alla tab selezionata
         if ("TEXTURES".equals(tipo)) {
-            // Categoria ID 2 = Texture (come impostato nel tuo database)
             prodotti = prodottoDAO.doRetrieveByCategoria(2);
         } else {
-            // Default o "3D" -> Categoria ID 1 = Modelli 3D
             prodotti = prodottoDAO.doRetrieveByCategoria(1);
         }
         
         // 3. Passiamo la lista filtrata alla request
         request.setAttribute("listaProdotti", prodotti);
         
-        // 4. Forward alla JSP
+        // 4. RECUPERO DELLA WISHLIST ALLINEATO ALLA JSP
+        HttpSession session = request.getSession();
+        User utenteLoggato = (User) session.getAttribute("utenteLoggato");
+        
+        if (utenteLoggato != null) {
+            WishlistDAO wishlistDAO = new WishlistDAO();
+            List<Integer> wishlistIds = wishlistDAO.getWishlistIdsByUtente(utenteLoggato.getId());
+            session.setAttribute("wishlistIds", wishlistIds);
+        }
+        
+        // 5. Forward alla JSP
         request.getRequestDispatcher("/WEB-INF/view/catalogo.jsp").forward(request, response);
     }
 

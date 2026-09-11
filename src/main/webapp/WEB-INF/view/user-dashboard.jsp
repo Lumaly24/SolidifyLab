@@ -38,7 +38,7 @@
 			        <li><a href="#ordini" onclick="switchTab('ordini', this, event)"><i class="fa-solid fa-box-open"></i> I Miei Ordini</a></li>
 			        <li><a href="#commissioni" onclick="switchTab('commissioni', this, event)"><i class="fa-solid fa-palette"></i> Tracker Commissioni</a></li>
 			        <li><a href="#pagamenti" onclick="switchTab('pagamenti', this, event)"><i class="fa-solid fa-credit-card"></i> Metodi di Pagamento</a></li>
-			        <li><a href="#sicurezza" onclick="switchTab('sicurezza', this, event)"><i class="fa-solid fa-shield-halved"></i> Sicurezza e Privacy</a></li>
+			        <li><a href="#sicurezza" onclick="switchTab('sicurezza', this, event)"><i class="fa-solid fa-shield"></i> Sicurezza e Privacy</a></li>
 			        <li><a href="${pageContext.request.contextPath}/LogoutServlet" class="text-red"><i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnettiti</a></li>
 			    </ul>
 			</nav>
@@ -110,6 +110,7 @@
             </section>
 
             <!-- TAB 3: LIBRERIA DIGITALE -->
+            <!-- TAB 3: LIBRERIA DIGITALE -->
             <section id="libreria" class="user-tab-content">
                 <h2>La mia Libreria Digitale</h2>
                 <p>Qui trovi tutti i Modelli 3D e le Textures che hai acquistato, sempre pronti per il download.</p>
@@ -117,7 +118,8 @@
                 <div class="digital-library-grid">
                     <c:choose>
                         <c:when test="${empty sessionScope.libreriaDigitale}">
-                            <p>Non hai ancora acquistato nessun asset digitale.</p>
+                            <!-- CORREZIONE: Aggiunto grid-column per non far spezzare la frase -->
+                            <p style="grid-column: 1 / -1;">Non hai ancora acquistato nessun asset digitale.</p>
                         </c:when>
                         <c:otherwise>
                             <c:forEach var="asset" items="${sessionScope.libreriaDigitale}">

@@ -102,21 +102,40 @@
                         <c:forEach var="prodotto" items="${listaStampe}">
                             <article class="product-card">
                                 <div class="product-badges">
-                                    <form action="${pageContext.request.contextPath}/AggiungiWishlistServlet" method="POST" style="display:inline;">
-                                        <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-                                        <button type="submit" class="btn-wishlist" title="Aggiungi alla Wishlist">
-                                            <i class="fa-regular fa-heart"></i>
-                                        </button>
-                                    </form>
+                                    
+                                    <!-- LOGICA WISHLIST (INTERRUTTORE) -->
+                                    <c:set var="inWishlist" value="false" />
+                                    <c:forEach var="wId" items="${sessionScope.wishlistIds}">
+                                        <c:if test="${wId == prodotto.id}">
+                                            <c:set var="inWishlist" value="true" />
+                                        </c:if>
+                                    </c:forEach>
+                                    
+                                    <c:choose>
+                                        <c:when test="${not empty sessionScope.utenteLoggato}">
+                                            <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" style="display:inline;">
+                                                <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+                                                <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
+                                                    <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
+                                                </button>
+                                            </form>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="alert('Devi effettuare il login per usare la Wishlist!'); window.location.href='${pageContext.request.contextPath}/Login';">
+                                                <i class="fa-regular fa-heart"></i>
+                                            </button>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    
                                 </div>
                                 
                                 <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
                                     <div class="product-image">
-                                        <span>(IMG ${prodotto.nome})</span>
+                                        <img src="${pageContext.request.contextPath}/images/prodotti/${prodotto.immagineCopertinaUrl}" alt="${prodotto.nome}" style="max-width: 100%; border-radius: 8px;">
                                     </div>
                                     <div class="product-info-minimal">
                                         <h4 class="product-title">${prodotto.nome}</h4>
-                                        <div class="product-price">€ <fmt:formatNumber value="${prodotto.prezzo}" pattern="#,##0.00"/></div>
+                                        <div class="product-price">€ <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></div>
                                     </div>
                                 </a>
                             </article>
@@ -141,22 +160,19 @@
             const max = parseFloat(slider.max) || 300;
             const val = parseFloat(slider.value) || 0;
             
-            // 1. Calcola la percentuale
             const pct = ((val - min) / (max - min)) * 100;
 
-            // 2. Aggiorna il testo del prezzo
             if (priceDisplay) {
                 priceDisplay.innerText = val + '€';
             }
 
-            // 3. Inietta la percentuale direttamente nella variabile CSS del custom slider
             slider.style.setProperty('--slider-pct', pct + '%');
         }
 
         if (slider) {
             slider.addEventListener('input', updateSlider);
             slider.addEventListener('change', updateSlider);
-            updateSlider(); // Esecuzione al primo caricamento
+            updateSlider();
         }
     });
 </script>

@@ -64,7 +64,8 @@
                             <i class="fa-regular fa-heart" style="font-size: 3em; color: #e56299;"></i>
                             <h3>La tua wishlist è vuota.</h3>
                             <p>Esplora il catalogo e salva qui i tuoi progetti preferiti!</p>
-                            <a href="${pageContext.request.contextPath}/CatalogoServlet" class="btn-primary mt-3">Vai al Catalogo</a>
+                            <!-- Corretto: punta a /Catalogo -->
+                            <a href="${pageContext.request.contextPath}/Catalogo" class="btn-primary mt-3">Vai al Catalogo</a>
                         </div>
                     </c:when>
                     
@@ -77,28 +78,29 @@
                                         <button type="button" class="btn-icon" title="Sposta in una raccolta"><i class="fa-solid fa-folder-plus"></i></button>
                                     </div>
                                     
-                                    <!-- FORM RIMOZIONE (Con avviso CHECKLIST) -->
-                                    <form action="${pageContext.request.contextPath}/RemoveWishlistServlet" method="POST" class="inline-form">
-                                        <input type="hidden" name="id_prodotto" value="${item.prodotto.id}">
+                                    <!-- FORM RIMOZIONE: Ora punta ad AddtoWishlist che fa da interruttore! -->
+                                    <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form">
+                                        <input type="hidden" name="id_prodotto" value="${item.id}">
                                         <button type="submit" class="btn-wishlist text-red" title="Rimuovi" onclick="return confirm('Vuoi davvero rimuovere questo prodotto dalla tua wishlist?');">
-                                            <i class="fa-solid fa-trash-can"></i>
+                                            <i class="fa-solid fa-trash-can" style="color: #ff4d4d;"></i>
                                         </button>
                                     </form>
                                 </div>
                                 
-                                <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${item.prodotto.id}" class="product-link">
+                                <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${item.id}" class="product-link">
                                     <div class="product-image">
-                                        <span>(IMG ${item.prodotto.nome})</span>
+                                        <!-- IMMAGINE REALE INSERITA QUI -->
+                                        <img src="${pageContext.request.contextPath}/images/prodotti/${item.immagineCopertinaUrl}" alt="${item.nome}" style="max-width: 100%; border-radius: 8px;">
                                     </div>
                                     <div class="product-info-minimal">
-                                        <h4 class="product-title">${item.prodotto.nome}</h4>
-                                        <div class="product-price">€ <fmt:formatNumber value="${item.prodotto.prezzo}" pattern="#,##0.00"/></div>
+                                        <h4 class="product-title">${item.nome}</h4>
+                                        <div class="product-price">€ <fmt:formatNumber value="${item.prezzoCorrente}" pattern="#,##0.00"/></div>
                                     </div>
                                 </a>
                                 
                                 <!-- FORM AGGIUNTA AL CARRELLO DALLA WISHLIST -->
                                 <form action="${pageContext.request.contextPath}/AggiungiAlCarrelloServlet" method="POST">
-                                    <input type="hidden" name="id_prodotto" value="${item.prodotto.id}">
+                                    <input type="hidden" name="id_prodotto" value="${item.id}">
                                     <input type="hidden" name="quantita" value="1">
                                     <button type="submit" class="btn-primary w-100 btn-bottom-rounded">
                                         <i class="fa-solid fa-cart-plus"></i> AL CARRELLO

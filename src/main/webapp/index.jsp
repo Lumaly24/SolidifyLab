@@ -12,7 +12,7 @@
             <div class="hero-content">
                 <h1>ESPLORA<br>LA LIBRERIA</h1>
                 <div class="hero-buttons">
-                    <a href="${pageContext.request.contextPath}/CatalogoServlet" class="btn"> ESPLORA LA LIBRERIA <i class="fa-solid fa-arrow-right"></i> </a> 
+                    <a href="${pageContext.request.contextPath}/Catalogo" class="btn"> ESPLORA LA LIBRERIA <i class="fa-solid fa-arrow-right"></i> </a> 
                     <a href="#" class="btn"> SCOPRI DI PIÙ <i class="fa-solid fa-arrow-right"></i></a> 
                 </div>
             </div>
@@ -23,7 +23,8 @@
             <h2>CATEGORIE PRINCIPALI</h2>
             
             <div class="categories-grid">
-                <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=MODELLO_3D" class="category-card">
+                <!-- 1. Modelli 3D: Punta al Catalogo con tipo=3D (o default) -->
+                <a href="${pageContext.request.contextPath}/Catalogo?tipo=3D" class="category-card">
                     <div class="card-img-container">
                         <img src="${pageContext.request.contextPath}/images/modelli-3d-sfondo.png" alt="Modelli 3D" loading="lazy">
                     </div>
@@ -32,7 +33,8 @@
                     </div>
                 </a>
 
-                <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=TEXTURE" class="category-card">
+                <!-- 2. Textures: Punta al Catalogo filtrato per le textures -->
+                <a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES" class="category-card">
                     <div class="card-img-container">
                         <img src="${pageContext.request.contextPath}/images/textures-sfondo.png" alt="Textures" loading="lazy">
                     </div>
@@ -41,7 +43,8 @@
                     </div>
                 </a>
 
-                <a href="${pageContext.request.contextPath}/CatalogoServlet?categoria=STAMPA_3D" class="category-card">
+                <!-- 3. Stampe 3D: Se la servlet delle stampe ti dà ancora 404, puntiamo temporaneamente alla jsp o correggiamo la rotta -->
+                <a href="${pageContext.request.contextPath}/Stampe" class="category-card">
                     <div class="card-img-container">
                         <img src="${pageContext.request.contextPath}/images/stampe3d-sfondo.png" alt="Stampe 3D" loading="lazy">
                     </div>
@@ -92,7 +95,7 @@
                                             <!-- GESTIONE CLICK WISHLIST -->
                                             <c:choose>
                                                 <c:when test="${not empty sessionScope.utenteLoggato}">
-                                                    <form action="${pageContext.request.contextPath}/AddWishlist" method="POST" class="inline-form wishlist-form">
+                                                    <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
                                                         <input type="hidden" name="id_prodotto" value="${prodotto.id}">
                                                         <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
                                                             <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
@@ -145,7 +148,7 @@
                                 </c:if>
                                 <c:if test="${sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
                                     <a href="${pageContext.request.contextPath}/UserDashboard" class="btn-login">IL MIO PROFILO</a>
-                                    <a href="${pageContext.request.contextPath}/wishlist" class="btn-signup">VAI ALLA WISHLIST</a>
+                                    <a href="${pageContext.request.contextPath}/Wishlist" class="btn-signup">VAI ALLA WISHLIST</a>
                                 </c:if>
                             </div>
                         </c:when>

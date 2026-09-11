@@ -19,7 +19,7 @@
                     <i class="fa-solid fa-cart-arrow-down"></i>
                     <h2>Il tuo carrello è vuoto.</h2>
                     <p>Non hai ancora aggiunto nessun modello o texture.</p>
-                    <a href="${pageContext.request.contextPath}/CatalogoServlet" class="btn-primary mt-3">VAI AL CATALOGO</a>
+                    <a href="${pageContext.request.contextPath}/Catalogo" class="btn-primary mt-3">VAI AL CATALOGO</a>
                 </div>
             </c:when>
             
