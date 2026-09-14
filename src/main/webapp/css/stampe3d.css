@@ -11,6 +11,25 @@
     background-position: center;
 }
 
+.nuova-stampa {
+	background: rgba(185, 193, 223, 0.55); 
+    border: 1px solid #374477; 
+    border-radius: 10px;
+    color: #374477; 
+    padding: 10px 20px 10px; 
+    cursor: pointer; 
+    text-decoration: none;
+	font-family: 'coolveticaitalic', serif;
+	font-weight: 300;
+}
+
+.nuova-stampa:hover {
+	background: #374477; 
+    color: #b9c1df; 
+    box-shadow: 0 0 15px rgba(55, 68, 119, 0.4); 
+    border: 1px solid #374477;
+}
+
 .bg-video-overlay {
     position: absolute;
     top: 0;
