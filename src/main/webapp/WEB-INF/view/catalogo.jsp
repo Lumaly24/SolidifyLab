@@ -238,7 +238,6 @@
                                                 </c:if>
                                             </c:forEach>
                                             
-                                           <!-- GESTIONE CLICK WISHLIST -->
                                             <c:choose>
                                                 <c:when test="${not empty sessionScope.utenteLoggato}">
                                                     <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
