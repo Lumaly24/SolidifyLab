@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.solidifylab.dao.ProdottoDAO;
-import com.solidifylab.dao.WishlistDAO; 
+import com.solidifylab.dao.WishlistDAO;
 import com.solidifylab.model.Prodotto;
-import com.solidifylab.model.User;    
+import com.solidifylab.model.User;
 
-@WebServlet("/Catalogo") 
+@WebServlet("/Catalogo")
 public class CatalogoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -24,20 +24,27 @@ public class CatalogoServlet extends HttpServlet {
         ProdottoDAO prodottoDAO = new ProdottoDAO();
         List<Prodotto> prodotti;
         
-        // 1. Leggiamo il parametro 'tipo' dai tab in alto nella pagina
         String tipo = request.getParameter("tipo");
         
-        // 2. Filtriamo in base alla tab selezionata
-        if ("TEXTURES".equals(tipo)) {
-            prodotti = prodottoDAO.doRetrieveByCategoria(2);
-        } else {
-            prodotti = prodottoDAO.doRetrieveByCategoria(1);
+        String maxPriceStr = request.getParameter("max_price");
+        String[] tags = request.getParameterValues("tag"); 
+        
+        int categoriaId = "TEXTURES".equals(tipo) ? 2 : 1;
+        
+        double maxPrice = 9999.99; 
+        if (maxPriceStr != null && !maxPriceStr.trim().isEmpty()) {
+            try {
+                maxPrice = Double.parseDouble(maxPriceStr);
+            } catch (NumberFormatException e) {
+            }
         }
         
-        // 3. Passiamo la lista filtrata alla request
+        prodotti = prodottoDAO.doRetrieveByFilters(categoriaId, maxPrice, tags);
+        
         request.setAttribute("listaProdotti", prodotti);
         
-        // 4. RECUPERO DELLA WISHLIST ALLINEATO ALLA JSP
+        request.setAttribute("selectedTags", tags);
+        
         HttpSession session = request.getSession();
         User utenteLoggato = (User) session.getAttribute("utenteLoggato");
         
@@ -47,7 +54,6 @@ public class CatalogoServlet extends HttpServlet {
             session.setAttribute("wishlistIds", wishlistIds);
         }
         
-        // 5. Forward alla JSP
         request.getRequestDispatcher("/WEB-INF/view/catalogo.jsp").forward(request, response);
     }
 

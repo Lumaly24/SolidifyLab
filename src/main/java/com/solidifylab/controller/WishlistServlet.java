@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.solidifylab.model.User;
 import com.solidifylab.dao.WishlistDAO;
 import com.solidifylab.model.Prodotto;
+import com.solidifylab.model.User;
 
 @WebServlet("/Wishlist") 
 public class WishlistServlet extends HttpServlet {

@@ -28,20 +28,20 @@
 		                <div class="dropdown-column">
 		                    <h4><a href="${pageContext.request.contextPath}/Catalogo">Modelli 3D</a></h4>
 		                    <ul>
-		                        <li><a href="#">Personaggi</a></li>
 		                        <li><a href="#">Ambienti</a></li>
-		                        <li><a href="#">Oggetti</a></li>
-		                        <li><a href="#">Veicoli</a></li>
+		                        <li><a href="#">Creature</a></li>
+		                        <li><a href="#">Personaggi</a></li>
+		                        <li><a href="#">Props</a></li>
 		                    </ul>
 		                </div>
 
 		                <div class="dropdown-column">
 		                	<h4><a href="${pageContext.request.contextPath}/Catalogo">Textures</a></h4>
 		                    <ul>
-		                        <li><a href="#">Metalli PBR</a></li>
-		                        <li><a href="#">Legno</a></li>
+		                        <li><a href="#">Architettura</a></li>
+		                        <li><a href="#">Metalli</a></li>
+		                        <li><a href="#">Tessuti</a></li>
 		                        <li><a href="#">Organico</a></li>
-		                        <li><a href="#">Inorganico</a></li>
 		                    </ul>
 		                </div>
 		                

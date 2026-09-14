@@ -41,9 +41,7 @@ public class UserDAO {
         return null; // Utente non trovato o credenziali errate
     }
 
-    /**
-     * Registra un nuovo utente nel database (per la Signup)
-     */
+    
     public boolean doSave(User user) {
         // AGGIORNATA: Inseriamo l'username, nome e cognome prenderanno il valore NULL di default
         String query = "INSERT INTO utente (email, password_hash, username, ruolo) VALUES (?, ?, ?, 'CLIENTE')";

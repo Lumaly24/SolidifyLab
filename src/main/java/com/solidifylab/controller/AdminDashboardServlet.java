@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.solidifylab.model.User;
-import com.solidifylab.model.Prodotto;
-import com.solidifylab.model.Commissione;
-import com.solidifylab.dao.ProdottoDAO;
 import com.solidifylab.dao.CommissioneDAO;
-import com.solidifylab.model.Ordine;
 import com.solidifylab.dao.OrdineDAO;
+import com.solidifylab.dao.ProdottoDAO;
+import com.solidifylab.model.Commissione;
+import com.solidifylab.model.Ordine;
+import com.solidifylab.model.Prodotto;
+import com.solidifylab.model.User;
 
 @WebServlet("/AdminDashboard")
 public class AdminDashboardServlet extends HttpServlet {
@@ -26,15 +26,12 @@ public class AdminDashboardServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         User utente = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
         
-        // 1. Controllo di sicurezza: l'utente deve essere loggato ed essere ADMIN
         if (utente != null && "ADMIN".equalsIgnoreCase(utente.getRuolo())) {
             
-            // 2. Recupero dei Prodotti per la tabella "Prodotti in Catalogo"
             ProdottoDAO prodottoDAO = new ProdottoDAO();
             List<Prodotto> listaProdotti = prodottoDAO.doRetrieveAll();
             request.setAttribute("listaProdotti", listaProdotti);
             
-            // 3. Recupero delle Commissioni per la tabella "Richieste di Commissione"
             CommissioneDAO commissioneDAO = new CommissioneDAO();
             List<Commissione> listaCommissioni = commissioneDAO.getAllCommissioni();
             request.setAttribute("listaCommissioni", listaCommissioni);

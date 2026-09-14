@@ -20,7 +20,7 @@ public class IndexServlet extends HttpServlet {
         
         ProdottoDAO prodottoDAO = new ProdottoDAO();
         
-        List<Prodotto> listaProdotti = prodottoDAO.doRetrieveAll();
+        List<Prodotto> listaProdotti = prodottoDAO.doRetrieveInEvidenza(7);
         
         request.setAttribute("prodottiInEvidenza", listaProdotti);
         

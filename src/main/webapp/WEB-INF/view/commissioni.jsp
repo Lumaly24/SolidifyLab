@@ -264,7 +264,7 @@
         const modal = document.getElementById('successModal');
         if (modal) {
             modal.style.display = 'none';
-            window.location.href = "${pageContext.request.contextPath}/index.jsp";
+            window.location.href = "${pageContext.request.contextPath}/Home";
         }
     }
 

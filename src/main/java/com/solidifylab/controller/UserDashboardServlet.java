@@ -2,6 +2,7 @@ package com.solidifylab.controller;
 
 import java.io.IOException;
 import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.solidifylab.model.User;
-import com.solidifylab.model.Commissione;
 import com.solidifylab.dao.CommissioneDAO;
+import com.solidifylab.model.Commissione;
+import com.solidifylab.model.User;
 
 @WebServlet("/UserDashboard")
 public class UserDashboardServlet extends HttpServlet {

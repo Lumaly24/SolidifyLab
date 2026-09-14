@@ -34,7 +34,7 @@
                     <li><a href="#gestione-ordini"><i class="fa-solid fa-receipt"></i> Ordini</a></li>
                     <li><a href="#gestione-commissioni"><i class="fa-solid fa-palette"></i> Commissioni</a></li>
                     <li><a href="#statistiche-sales"><i class="fa-solid fa-chart-line"></i> Statistiche | Sales</a></li>
-                    <li><a href="${pageContext.request.contextPath}/index.jsp"><i class="fa-solid fa-house"></i> Torna al Sito</a></li>
+                    <li><a href="${pageContext.request.contextPath}/Home"><i class="fa-solid fa-house"></i> Torna al Sito</a></li>
                 </ul>
             </nav>
         </aside>
