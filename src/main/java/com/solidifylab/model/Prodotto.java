@@ -11,7 +11,7 @@ public class Prodotto {
     private int quantitaDisponibile;
     private String formatoFile;
     private String immagineCopertinaUrl;
-    private String dataInserimento; // Lo teniamo come String per stamparlo facilmente sulle JSP
+    private String dataInserimento; 
     private boolean cancellato;
 
     public Prodotto() {}

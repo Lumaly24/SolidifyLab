@@ -26,29 +26,28 @@
 		            <div class="dropdown-menu full-menu">
 
 		                <div class="dropdown-column">
-		                    <h4><a href="${pageContext.request.contextPath}/Catalogo">Modelli 3D</a></h4>
+		                    <h4><a href="${pageContext.request.contextPath}/Catalogo?tipo=3D">Modelli 3D</a></h4>
 		                    <ul>
-		                        <li><a href="#">Ambienti</a></li>
-		                        <li><a href="#">Creature</a></li>
-		                        <li><a href="#">Personaggi</a></li>
-		                        <li><a href="#">Props</a></li>
+		                        <li><a href="${pageContext.request.contextPath}/Catalogo?tipo=3D&tag=ambienti">Ambienti</a></li>
+		                        <li><a href="${pageContext.request.contextPath}/Catalogo?tipo=3D&tag=creature">Creature</a></li>
+		                        <li><a href="${pageContext.request.contextPath}/Catalogo?tipo=3D&tag=personaggi">Personaggi</a></li>
+		                        <li><a href="${pageContext.request.contextPath}/Catalogo?tipo=3D&tag=props">Props</a></li>
 		                    </ul>
 		                </div>
 
 		                <div class="dropdown-column">
-		                	<h4><a href="${pageContext.request.contextPath}/Catalogo">Textures</a></h4>
+		                	<h4><a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES">Textures</a></h4>
 		                    <ul>
-		                        <li><a href="#">Architettura</a></li>
-		                        <li><a href="#">Metalli</a></li>
-		                        <li><a href="#">Tessuti</a></li>
-		                        <li><a href="#">Organico</a></li>
+		                        <li><a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES&tag=architettura">Architettura</a></li>
+		                        <li><a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES&tag=metalli">Metalli</a></li>
+		                        <li><a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES&tag=tessuti">Tessuti</a></li>
+		                        <li><a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES&tag=organiche">Organiche</a></li>
 		                    </ul>
 		                </div>
 		                
 		            </div>
 		        </li>
 		        
-		        <!-- CONTROLLO DINAMICO SUL LINK COMMISSIONI -->
 		        <li>
 		            <c:choose>
 		                <c:when test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
@@ -59,7 +58,6 @@
 		                </c:otherwise>
 		            </c:choose>
 		        </li>
-		        <!-- FINE CONTROLLO DINAMICO -->
 		        
 		        <li><a href="${pageContext.request.contextPath}/Stampe">Stampe 3D</a></li>
 		    </ul>
@@ -92,7 +90,6 @@
 		    </a>	
 		    
 		    <div class="dropdown profile-dropdown">
-                <!-- CONTROLLO DINAMICO SUL LINK DELL'ICONA -->
                 <c:choose>
                     <c:when test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
                         <a href="${pageContext.request.contextPath}/AdminDashboard">

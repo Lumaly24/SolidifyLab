@@ -53,29 +53,15 @@
         
         <!-- ================= SIDEBAR ================= -->
         <aside class="catalog-sidebar">
-            
-            <div class="filter-group">
-                <h3>Le mie Raccolte</h3>
-                <ul class="collections-list">
-                    <li><a href="#" class="active"><i class="fa-solid fa-border-all"></i> Tutti i salvataggi</a></li>
-                    <li><a href="#"><i class="fa-regular fa-folder"></i> Progetto Sci-Fi</a></li>
-                    <li><a href="#"><i class="fa-regular fa-folder"></i> Personaggi Fantasy</a></li>
-                </ul>
-                <button type="button" class="btn-outline-small w-100 mt-2" onclick="prompt('Nome nuova raccolta:');">
-                    <i class="fa-solid fa-plus"></i> Crea Raccolta
-                </button>
-            </div>
-
-            <hr class="sidebar-divider">
-
+        
             <div class="filter-group">
                 <h3>Filtra per Categoria</h3>
                 <form action="${pageContext.request.contextPath}/WishlistServlet" method="GET">
                     <ul class="filter-list">
-                        <li><label><input type="checkbox" name="cat" value="MODELLO_3D"> Modelli 3D</label></li>
-                        <li><label><input type="checkbox" name="cat" value="TEXTURE"> Textures</label></li>
-                        <li><label><input type="checkbox" name="cat" value="STAMPA_3D"> Stampe 3D</label></li>
-                    </ul>
+					    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=3D">Modelli 3D</a></li>
+					    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=TEXTURES">Textures</a></li>
+					    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=STAMPE">Stampe 3D</a></li>
+					</ul>
                     <button type="submit" class="btn-primary w-100 mt-2">Filtra</button>
                 </form>
             </div>
@@ -86,7 +72,6 @@
         <section class="catalog-main-content">
             <div class="collection-title">
                 <h2>Tutti i salvataggi</h2>
-                <!-- Conteggio dinamico degli elementi -->
                 <p>Hai ${fn:length(listaWishlist)} elementi salvati in questa vista.</p>
             </div>
 
