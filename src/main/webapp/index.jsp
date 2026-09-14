@@ -79,12 +79,10 @@
                                         
                                         <div class="product-badges">
                                             
-                                            <!-- LOGICA DEL "NEW" -->
                                             <c:if test="${status.index < 3}">
                                                 <img src="${pageContext.request.contextPath}/images/new-button.png" alt="New" class="new-button-img" loading="lazy">
                                             </c:if>
                                             
-                                            <!-- VERIFICA PRE-ESISTENZA IN WISHLIST -->
                                             <c:set var="inWishlist" value="false" />
                                             <c:forEach var="wId" items="${sessionScope.wishlistIds}">
                                                 <c:if test="${wId == prodotto.id}">
@@ -93,21 +91,21 @@
                                             </c:forEach>
 
                                             <!-- GESTIONE CLICK WISHLIST -->
-                                            <c:choose>
-                                                <c:when test="${not empty sessionScope.utenteLoggato}">
-                                                    <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
-                                                        <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-                                                        <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
-                                                            <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
-                                                        </button>
-                                                    </form>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="alert('Devi effettuare il login per usare la Wishlist!'); window.location.href='${pageContext.request.contextPath}/Login';">
-                                                        <i class="fa-regular fa-heart"></i>
-                                                    </button>
-                                                </c:otherwise>
-                                            </c:choose>
+											<c:choose>
+											    <c:when test="${not empty sessionScope.utenteLoggato}">
+											        <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
+											            <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+											            <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
+											                <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
+											            </button>
+											        </form>
+											    </c:when>
+											    <c:otherwise>
+											        <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="showLoginAlert('${pageContext.request.contextPath}/Login')">
+											            <i class="fa-regular fa-heart"></i>
+											        </button>
+											    </c:otherwise>
+											</c:choose>
                                             
                                         </div>
                                         
@@ -180,6 +178,37 @@
         </div>
 
     </main>
+
+<div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+    <div style="background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 380px; width: 85%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);">
+        <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #e56399; margin-bottom: 15px;"></i>
+        <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 10px; color: #e56399;">Attenzione!</h3>
+        <p id="customAlertText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 20px; color: #333;">Messaggio di errore</p>
+        <button type="button" class="btn-primary auth-btn" onclick="closeCustomAlert()">Okay</button>
+    </div>
+</div>
+
+
+<div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+    <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 40px 30px; max-width: 400px; width: 85%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+        <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: #2ecc71; margin-bottom: 20px;"></i>
+        <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 15px; color: #333;">Evviva!</h3>
+        <p id="successModalText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 25px; color: #555; font-size: 1.1rem; line-height: 1.4;">
+            Operazione completata con successo!
+        </p>
+        
+        <button type="button" class="btn-primary auth-btn" onclick="closeSuccessModal()" style="width: 100%;">Okay</button>
+    </div>
+</div>
+
+<style>
+    .input-error {
+        border: 2px solid #e56399 !important;
+        box-shadow: 0 0 8px rgba(229, 99, 153, 0.4) !important;
+        transition: all 0.3s ease;
+    }
+</style>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -273,3 +302,70 @@
         });
     });
 </script>
+
+<!-- custom alert index -->
+
+<script>
+    function clearErrors() {
+        document.querySelectorAll('.error-msg').forEach(el => el.innerText = '');
+        document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    }
+
+    function showLoginAlert(loginUrl) {
+        const modal = document.getElementById('customAlert');
+        const modalText = document.getElementById('customAlertText');
+        const okayBtn = modal.querySelector('.auth-btn');
+
+        if (modal && modalText) {
+            modalText.innerText = 'Devi effettuare il login per usare la Wishlist!';
+            modal.style.display = 'flex';
+            
+            okayBtn.onclick = function() {
+                window.location.href = loginUrl;
+            };
+        }
+    }
+    
+    function showCustomAlert(message) {
+        const modal = document.getElementById('customAlert');
+        const modalText = document.getElementById('customAlertText');
+        if (modal && modalText) {
+            modalText.innerText = message;
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeCustomAlert() {
+        const modal = document.getElementById('customAlert');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function showSuccessModal(customMessage) {
+        const modal = document.getElementById('successModal');
+        const modalText = document.getElementById('successModalText');
+        if (modal) {
+            if(customMessage && customMessage.trim() !== '') {
+                modalText.innerText = customMessage;
+            }
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeSuccessModal() {
+        const modal = document.getElementById('successModal');
+        if (modal) {
+            modal.style.display = 'none';
+            window.location.href = "${pageContext.request.contextPath}/Home";
+        }
+    }
+</script>
+
+<c:if test="${not empty requestScope.successMessage}">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            showSuccessModal("${requestScope.successMessage}");
+        });
+    </script>
+</c:if>

@@ -7,6 +7,21 @@ body {
     padding: 0;
 }
 
+.auth-btn {
+    padding: 10px 25px;
+    background: #e56399;
+    color: #0f0326;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-btn:hover {
+    background: #f7ccde;
+}
+
 .glass-panel, .catalog-sidebar, .catalog-tabs, .ajax-search-container input, .product-card, #searchSuggestions {
     background: rgba(255, 255, 255, 0.55) !important;
     backdrop-filter: blur(12px) !important;

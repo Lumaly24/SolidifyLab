@@ -11,6 +11,36 @@
 
     <main class="catalog-page">
         
+	    <div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+	    	<div style="background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 380px; width: 85%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);">
+		        <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #e56399; margin-bottom: 15px;"></i>
+		        <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 10px; color: #e56399;">Attenzione!</h3>
+		        <p id="customAlertText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 20px; color: #333;">Messaggio di errore</p>
+		        <button type="button" class="btn-primary auth-btn" onclick="closeCustomAlert()">Okay</button>
+	    	</div>
+		</div>
+	
+	
+		<div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+		    <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 40px 30px; max-width: 400px; width: 85%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+		        <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: #2ecc71; margin-bottom: 20px;"></i>
+		        <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 15px; color: #333;">Evviva!</h3>
+		        <p id="successModalText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 25px; color: #555; font-size: 1.1rem; line-height: 1.4;">
+		            Operazione completata con successo!
+		        </p>
+		        
+		        <button type="button" class="btn-primary auth-btn" onclick="closeSuccessModal()" style="width: 100%;">Okay</button>
+		    </div>
+		</div>
+	
+	<style>
+	    .input-error {
+	        border: 2px solid #e56399 !important;
+	        box-shadow: 0 0 8px rgba(229, 99, 153, 0.4) !important;
+	        transition: all 0.3s ease;
+	    }
+	</style>    
+	        
         <div class="catalog-layout">
             
             <aside class="catalog-sidebar">
@@ -19,6 +49,7 @@
                     
                     <div class="filter-group">
     <h3>Filtro Prezzi</h3>
+    
     <div class="price-slider">
         <input type="range" id="priceRange" name="max_price" min="0" max="200" step="5" value="${not empty param.max_price ? param.max_price : 100}">
         <div class="price-labels">
@@ -34,18 +65,15 @@
         const priceVal = document.getElementById('priceVal');
         
         function updateSlider() {
-            // Calcola la percentuale di riempimento (es. da 0 a 100)
             const percentage = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
-            // Invia la percentuale al CSS creando una variabile personalizzata --val
+
             slider.style.setProperty('--val', percentage + '%');
-            // Aggiorna il testo del prezzo
+
             priceVal.innerText = slider.value + '€';
         }
         
-        // Esegue la funzione al caricamento della pagina per impostare il rosa iniziale
         updateSlider();
         
-        // Esegue la funzione ogni volta che muovi la stellina
         slider.addEventListener('input', updateSlider);
     });
 </script>
@@ -93,29 +121,27 @@
             <!-- ================= MAIN CONTENT ================= -->
             <section class="catalog-main-content">
                 
-                <!-- NUOVO CONTENITORE: Tabs e Ricerca in linea -->
                 <div class="top-controls-inline">
                     
-                    <!-- TABS SPOSTATI QUI -->
                     <div class="catalog-tabs">
 					    <a href="${pageContext.request.contextPath}/Catalogo?tipo=3D" class="tab-btn ${param.tipo == 'TEXTURES' ? '' : 'active'}">3D MODELS</a>
 					    <a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES" class="tab-btn ${param.tipo == 'TEXTURES' ? 'active' : ''}">TEXTURES</a>
 					</div>
-                    <!-- REQUISITO CHECKLIST: Barra di ricerca AJAX -->
+                 
                     <div class="ajax-search-container">
                         <div class="search-input-wrapper">
                             <input type="text" id="ajaxSearchBar" placeholder="Cerca un modello 3D o una texture..." autocomplete="off">
                             <button type="button" class="btn-primary btn-search"><i class="fa-solid fa-search"></i></button>
                         </div>
-                        <!-- Qui appariranno i suggerimenti via JS -->
+                 
                         <div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; max-height: 200px; overflow-y: auto;">
-                            <!-- Riempito dinamicamente da JS -->
+                  
                         </div>
                     </div>
                     
                 </div>
 
-                <!-- Modifica Header Catalogo: Flexbox per mettere il bottone Admin a destra -->
+                
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <nav class="breadcrumbs" aria-label="Percorso di navigazione">
 					    <a href="${pageContext.request.contextPath}/Catalogo">
@@ -125,7 +151,6 @@
 					    <span class="current-page">Tutti i prodotti</span>
 					</nav>
 
-                    <!-- AGGIUNTA ADMIN: Bottone "Nuovo Prodotto" -->
                     <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
                         <a href="${pageContext.request.contextPath}/admin.jsp#gestione-prodotti" class="btn-primary" style="padding: 5px 15px; font-size: 0.9em;">
                             <i class="fa-solid fa-plus"></i> Nuovo Prodotto
@@ -135,7 +160,6 @@
                 
                 <div class="catalog-products-grid">
     
-				    <!-- CICLO JSP: Mostriamo i prodotti dal Database -->
 				    <c:choose>
 				        <c:when test="${empty listaProdotti}">
 				            <p>Nessun prodotto trovato per questa ricerca.</p>
@@ -145,30 +169,30 @@
 				                <article class="product-card">
 				                    <div class="product-badges">
 				                        
-				                        <!-- Tasto Wishlist CORRETTO -->
 				                        <c:set var="inWishlist" value="false" />
                                             <c:forEach var="wId" items="${sessionScope.wishlistIds}">
                                                 <c:if test="${wId == prodotto.id}">
                                                     <c:set var="inWishlist" value="true" />
                                                 </c:if>
                                             </c:forEach>
-					                       <c:choose>
-	                                                <c:when test="${not empty sessionScope.utenteLoggato}">
-	                                                    <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
-	                                                        <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-	                                                        <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
-	                                                            <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
-	                                                        </button>
-	                                                    </form>
-	                                                </c:when>
-	                                                <c:otherwise>
-	                                                    <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="alert('Devi effettuare il login per usare la Wishlist!'); window.location.href='${pageContext.request.contextPath}/Login';">
-	                                                        <i class="fa-regular fa-heart"></i>
-	                                                    </button>
-	                                                </c:otherwise>
-                                            </c:choose>
+                                            
+					                       <!-- GESTIONE CLICK WISHLIST -->
+											<c:choose>
+											    <c:when test="${not empty sessionScope.utenteLoggato}">
+											        <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
+											            <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+											            <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
+											                <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
+											            </button>
+											        </form>
+											    </c:when>
+											    <c:otherwise>
+											        <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="showLoginAlert('${pageContext.request.contextPath}/Login')">
+											            <i class="fa-regular fa-heart"></i>
+											        </button>
+											    </c:otherwise>
+											</c:choose>
 				
-				                        <!-- AGGIUNTA ADMIN: Tasto Cestino CORRETTO -->
 				                        <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
 				                            <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="POST" style="display:inline;">
 				                                <input type="hidden" name="id" value="${prodotto.id}">
@@ -256,5 +280,72 @@
             });
         });
     </script>
+
+<!-- custom alert index -->
+
+<script>
+    function clearErrors() {
+        document.querySelectorAll('.error-msg').forEach(el => el.innerText = '');
+        document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    }
+
+    function showLoginAlert(loginUrl) {
+        const modal = document.getElementById('customAlert');
+        const modalText = document.getElementById('customAlertText');
+        const okayBtn = modal.querySelector('.auth-btn');
+
+        if (modal && modalText) {
+            modalText.innerText = 'Devi effettuare il login per usare la Wishlist!';
+            modal.style.display = 'flex';
+            
+            okayBtn.onclick = function() {
+                window.location.href = loginUrl;
+            };
+        }
+    }
+    
+    function showCustomAlert(message) {
+        const modal = document.getElementById('customAlert');
+        const modalText = document.getElementById('customAlertText');
+        if (modal && modalText) {
+            modalText.innerText = message;
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeCustomAlert() {
+        const modal = document.getElementById('customAlert');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function showSuccessModal(customMessage) {
+        const modal = document.getElementById('successModal');
+        const modalText = document.getElementById('successModalText');
+        if (modal) {
+            if(customMessage && customMessage.trim() !== '') {
+                modalText.innerText = customMessage;
+            }
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeSuccessModal() {
+        const modal = document.getElementById('successModal');
+        if (modal) {
+            modal.style.display = 'none';
+            window.location.href = "${pageContext.request.contextPath}/Home";
+        }
+    }
+</script>
+
+<c:if test="${not empty requestScope.successMessage}">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            showSuccessModal("${requestScope.successMessage}");
+        });
+    </script>
+</c:if>
 
 <%@ include file="fragment/footer.jspf" %>

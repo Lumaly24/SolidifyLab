@@ -19,17 +19,15 @@ public class AggiungiWishlistServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        // 1. Controllo se l'utente è loggato
         HttpSession session = request.getSession();
         User utenteLoggato = (User) session.getAttribute("utenteLoggato");
 
         if (utenteLoggato == null) {
-            // Se non è loggato, lo rimandiamo alla pagina di login
+
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
-        // 2. Recupero l'ID del prodotto cliccato (CORRETTO: ora usa "id_prodotto" come la JSP)
         String idProdottoStr = request.getParameter("id_prodotto");
         
         if (idProdottoStr != null && !idProdottoStr.isEmpty()) {
@@ -39,7 +37,6 @@ public class AggiungiWishlistServlet extends HttpServlet {
 
                 WishlistDAO wishlistDAO = new WishlistDAO();
                 
-                // 3. EFFETTO INTERRUTTORE: Rimuove se esiste già, altrimenti aggiunge
                 if (wishlistDAO.isProdottoInWishlist(idUtente, idProdotto)) {
                     wishlistDAO.rimuoviProdotto(idUtente, idProdotto);
                     System.out.println("Prodotto " + idProdotto + " rimosso dalla wishlist.");
@@ -48,7 +45,6 @@ public class AggiungiWishlistServlet extends HttpServlet {
                     System.out.println("Prodotto " + idProdotto + " aggiunto alla wishlist!");
                 }
 
-                // 4. Aggiorno la lista degli ID in sessione per i cuoricini
                 List<Integer> wishlistIds = wishlistDAO.getWishlistIdsByUtente(idUtente);
                 session.setAttribute("wishlistIds", wishlistIds);
 
@@ -59,12 +55,11 @@ public class AggiungiWishlistServlet extends HttpServlet {
             System.out.println("ERRORE: La Servlet non ha ricevuto l'id_prodotto dalla JSP!");
         }
 
-        // 5. Rimando l'utente alla pagina da cui ha cliccato il bottone (Referer)
         String referer = request.getHeader("Referer");
         if (referer != null) {
             response.sendRedirect(referer);
         } else {
-            // Fallback sul /Catalogo anziché sulla JSP nuda
+
             response.sendRedirect(request.getContextPath() + "/Catalogo");
         }
     }

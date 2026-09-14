@@ -61,6 +61,21 @@ main > section::before {
     z-index: -1;
 }
 
+.auth-btn {
+    padding: 10px 25px;
+    background: #e56399;
+    color: #0f0326;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-btn:hover {
+    background: #f7ccde;
+}
+
 /* Backgrounds delle Sezioni Integrali */
 main > section:nth-of-type(1)::before {
     background-image: linear-gradient(rgba(15, 3, 38, 0.25), rgba(15, 3, 38, 0.25)), 

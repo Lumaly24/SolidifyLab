@@ -8,6 +8,38 @@ body {
     padding: 0;
 }
 
+.btn-secondary {
+    padding: 10px 25px;
+    background: #e56399;
+    color: #eff1ed;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: #f7ccde;
+    color: #0f0326;
+}
+
+.auth-btn {
+    padding: 10px 25px;
+    background: #f7ccde;
+    color: #0f0326;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-btn:hover {
+    background: #e56399;
+    color: #eff1ed;
+}
+
 .wishlist-page-container {
     position: relative;
     z-index: 1;
@@ -172,7 +204,6 @@ body {
 	font-weight: lighter;
 	grid-column: 1 / -1; 
 	color: #ffffff;
-	text-shadow: 2px 2px 3px #000000;
 }
 
 .product-card { 
