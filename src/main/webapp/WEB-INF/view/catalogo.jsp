@@ -13,13 +13,19 @@
     <main class="catalog-page">
         
         <div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
-            <div style="background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 380px; width: 85%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);">
-                <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #e56399; margin-bottom: 15px;"></i>
-                <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 10px; color: #e56399;">Attenzione!</h3>
-                <p id="customAlertText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 20px; color: #333;">Messaggio di errore</p>
-                <button type="button" class="btn-primary auth-btn" onclick="closeCustomAlert()">Okay</button>
-            </div>
-        </div>
+		    <div style="background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 380px; width: 85%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);">
+		        <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #e56399; margin-bottom: 15px;"></i>
+		        <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 10px; color: #e56399;">Attenzione!</h3>
+		        <p id="customAlertText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 20px; color: #333;">Messaggio</p>
+		        
+		        <button type="button" class="btn-primary auth-btn" id="customAlertSingleBtn" onclick="closeCustomAlert()" style="width: 100%;">Okay</button>
+		        
+		        <div id="customAlertDoubleBtns" style="display: none; gap: 15px; justify-content: center; align-items: center;">
+				    <button type="button" class="btn-secondary" onclick="closeCustomAlert()" style="margin: 0; border-radius: 50px; padding: 10px 25px;">Annulla</button>
+				    <button type="button" class="auth-btn" id="customAlertConfirmBtn" style="margin: 0; border-radius: 50px; padding: 10px 25px; background: #ff4d4d;">Elimina</button>
+				</div>
+		    </div>
+		</div>
     
         <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
             <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 40px 30px; max-width: 400px; width: 85%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
@@ -193,32 +199,32 @@
                 </div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <nav class="breadcrumbs" aria-label="Percorso di navigazione">
-                        <a href="${pageContext.request.contextPath}/Catalogo?tipo=${not empty param.tipo ? param.tipo : '3D'}">
-                            ${param.tipo == 'TEXTURES' ? 'Libreria Texture' : 'Libreria Modelli 3D'}
-                        </a> 
-                        <span class="separator">/</span> 
-                        <span class="current-page">
-                            <c:choose>
-                                <c:when test="${not empty paramValues.tag}">
-                                    Filtri:
-                                    <c:forEach var="t" items="${paramValues.tag}" varStatus="loop">
-                                        <span style="text-transform: capitalize;">${fn:replace(t, '_', ' ')}</span><c:if test="${!loop.last}"> / </c:if>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    Tutti i prodotti
-                                </c:otherwise>
-                            </c:choose>
-                        </span>
-                    </nav>
-
-                    <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
-                        <a href="${pageContext.request.contextPath}/admin.jsp#gestione-prodotti" class="btn-primary" style="padding: 5px 15px; font-size: 0.9em;">
-                            <i class="fa-solid fa-plus"></i> Nuovo Prodotto
-                        </a>
-                    </c:if>
-                </div>
+				    <nav class="breadcrumbs" aria-label="Percorso di navigazione">
+				        <a href="${pageContext.request.contextPath}/Catalogo?tipo=${not empty param.tipo ? param.tipo : '3D'}">
+				            ${param.tipo == 'TEXTURES' ? 'Libreria Texture' : 'Libreria Modelli 3D'}
+				        </a> 
+				        <span class="separator">/</span> 
+				        <span class="current-page">
+				            <c:choose>
+				                <c:when test="${not empty paramValues.tag}">
+				                    Filtri:
+				                    <c:forEach var="t" items="${paramValues.tag}" varStatus="loop">
+				                        <span style="text-transform: capitalize;">${fn:replace(t, '_', ' ')}</span><c:if test="${!loop.last}"> / </c:if>
+				                    </c:forEach>
+				                </c:when>
+				                <c:otherwise>
+				                    Tutti i prodotti
+				                </c:otherwise>
+				            </c:choose>
+				        </span>
+				    </nav>
+				
+				    <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
+				        <a href="${pageContext.request.contextPath}/admin.jsp#gestione-prodotti" class="btn-primary nuovo-prodotto" style="padding: 5px 15px; font-size: 0.9em;">
+				            <i class="fa-solid fa-plus"></i> Nuovo Prodotto
+				        </a>
+				    </c:if>
+				</div>
                 
                 <div class="catalog-products-grid">
     
@@ -255,20 +261,22 @@
                                             </c:choose>
                 
                                         <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
-                                            <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="POST" style="display:inline;">
-                                                <input type="hidden" name="id" value="${prodotto.id}">
-                                                <button type="submit" class="btn-wishlist" style="color: #ff4d4d;" title="Elimina dal DB" onclick="return confirm('ATTENZIONE: Sei sicuro di voler eliminare definitivamente questo prodotto dal catalogo?');">
-                                                    <i class="fa-solid fa-trash-can"></i>
-                                                </button>
-                                            </form>
-                                        </c:if>
+										    <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="POST" style="display:inline;" id="delete-form-${prodotto.id}">
+										        <input type="hidden" name="id" value="${prodotto.id}">
+										        <button type="button" class="btn-wishlist" title="Elimina dal DB" onclick="showDeleteConfirmAlert('Sei sicuro di voler eliminare definitivamente questo prodotto dal catalogo?', 'delete-form-${prodotto.id}')">
+										            <i class="fa-solid fa-trash-can" style="color: #ff4d4d;"></i>
+										        </button>
+										    </form>
+										</c:if>
                 
                                     </div>
                                     
                                     <a href="${pageContext.request.contextPath}/Prodotto?id=${prodotto.id}" class="product-link">
                                         <div class="product-image">
+                                        
                                             <img src="${pageContext.request.contextPath}/images/prodotti/${prodotto.immagineCopertinaUrl}" alt="${prodotto.nome}" style="max-width: 100%; border-radius: 8px;">
                                         </div>
+                                        
                                         <div class="product-info-minimal">
                                             <h4 class="product-title">${prodotto.nome}</h4>
                                             <div class="product-price">€ <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></div>
@@ -330,7 +338,6 @@
                 }
             });
 
-            // Chiudi tendina se clicchi fuori
             document.addEventListener('click', function(e) {
                 if(!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
                     suggestionsBox.style.display = 'none';
@@ -350,9 +357,12 @@
     function showLoginAlert(loginUrl) {
         const modal = document.getElementById('customAlert');
         const modalText = document.getElementById('customAlertText');
-        const okayBtn = modal.querySelector('.auth-btn');
+        const okayBtn = document.getElementById('customAlertSingleBtn');
 
         if (modal && modalText) {
+            document.getElementById('customAlertSingleBtn').style.display = 'block';
+            document.getElementById('customAlertDoubleBtns').style.display = 'none';
+            
             modalText.innerText = 'Devi effettuare il login per usare la Wishlist!';
             modal.style.display = 'flex';
             
@@ -365,9 +375,33 @@
     function showCustomAlert(message) {
         const modal = document.getElementById('customAlert');
         const modalText = document.getElementById('customAlertText');
+        const okayBtn = document.getElementById('customAlertSingleBtn');
+        
         if (modal && modalText) {
+            document.getElementById('customAlertSingleBtn').style.display = 'block';
+            document.getElementById('customAlertDoubleBtns').style.display = 'none';
+            
             modalText.innerText = message;
             modal.style.display = 'flex';
+            okayBtn.onclick = closeCustomAlert;
+        }
+    }
+
+    function showDeleteConfirmAlert(message, formId) {
+        const modal = document.getElementById('customAlert');
+        const modalText = document.getElementById('customAlertText');
+        const confirmBtn = document.getElementById('customAlertConfirmBtn');
+
+        if (modal && modalText && confirmBtn) {
+            document.getElementById('customAlertSingleBtn').style.display = 'none';
+            document.getElementById('customAlertDoubleBtns').style.display = 'flex';
+            
+            modalText.innerText = message;
+            modal.style.display = 'flex';
+            
+            confirmBtn.onclick = function() {
+                document.getElementById(formId).submit();
+            };
         }
     }
 

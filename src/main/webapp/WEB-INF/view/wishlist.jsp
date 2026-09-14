@@ -217,6 +217,4 @@
     </script>
 </c:if>
 
-
-
 <%@ include file="fragment/footer.jspf" %>
