@@ -108,10 +108,11 @@
                         <c:choose>
                             <c:when test="${param.tipo == 'TEXTURES'}">
                                 <ul class="filter-list">
-                                    <li><label><input type="checkbox" name="tag" value="organiche"> Organiche</label></li>
-                                    <li><label><input type="checkbox" name="tag" value="metalli"> Metalli</label></li>
-                                    <li><label><input type="checkbox" name="tag" value="tessuti"> Tessuti</label></li>
-                                    <li><label><input type="checkbox" name="tag" value="architettura"> Architettura</label></li>
+                                	<li><label><input type="checkbox" name="tag" value="architettura"> Architettura</label></li>
+                                	<li><label><input type="checkbox" name="tag" value="metalli"> Metalli</label></li>
+									<li><label><input type="checkbox" name="tag" value="tessuti"> Tessuti</label></li>
+									<li><label><input type="checkbox" name="tag" value="organiche"> Organiche</label></li>
+                                    
                                 </ul>
                     
                                 <h3 style="font-size: 1.1em; color: #e56399; margin-top: 15px; margin-bottom: 10px;">Specifiche Tecniche</h3>
@@ -345,8 +346,6 @@
             });
         });
     </script>
-
-<!-- custom alert index -->
 
 <script>
     function clearErrors() {
