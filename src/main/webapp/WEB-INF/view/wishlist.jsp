@@ -53,19 +53,14 @@
         
         <!-- ================= SIDEBAR ================= -->
         <aside class="catalog-sidebar">
-        
             <div class="filter-group">
                 <h3>Filtra per Categoria</h3>
-                <form action="${pageContext.request.contextPath}/WishlistServlet" method="GET">
-                    <ul class="filter-list">
-					    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=3D">Modelli 3D</a></li>
-					    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=TEXTURES">Textures</a></li>
-					    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=STAMPE">Stampe 3D</a></li>
-					</ul>
-                    <button type="submit" class="btn-primary w-100 mt-2">Filtra</button>
-                </form>
+                <ul class="filter-list">
+                    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=3D" class="${param.tipo == '3D' ? 'active' : ''}">Modelli 3D</a></li>
+                    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=TEXTURES" class="${param.tipo == 'TEXTURES' ? 'active' : ''}">Textures</a></li>
+                    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=STAMPE" class="${param.tipo == 'STAMPE' ? 'active' : ''}">Stampe 3D</a></li>
+                </ul>
             </div>
-            
         </aside>
 
         <!-- ================= MAIN CONTENT ================= -->
@@ -135,8 +130,6 @@
     </div>
 </main>
 
-<!-- custom alert index -->
-
 <script>
     function clearErrors() {
         document.querySelectorAll('.error-msg').forEach(el => el.innerText = '');
@@ -201,7 +194,5 @@
         });
     </script>
 </c:if>
-
-
 
 <%@ include file="fragment/footer.jspf" %>

@@ -2,12 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<!-- CONTROLLO DI SICUREZZA: Solo l'admin può stare qui -->
 <c:if test="${empty sessionScope.utenteLoggato or !sessionScope.utenteLoggato.admin}">
     <c:redirect url="login.jsp" />
 </c:if>
 
-<!-- Sicurezza 2: Se manca l'oggetto prodotto, rimanda alla dashboard -->
 <c:if test="${empty prodotto}">
     <c:redirect url="admin.jsp" />
 </c:if>
@@ -17,7 +15,6 @@
 
 <div class="admin-layout">
     
-    <!-- SIDEBAR ADMIN (Semplificata o uguale a quella dell'admin) -->
     <aside class="admin-sidebar">
         <nav>
             <ul>
@@ -33,23 +30,21 @@
         <section class="admin-card">
             <h2>Dettagli Prodotto</h2>
             
-            <!-- Il form invia i dati alla Servlet di Update. Manteniamo multipart/form-data per l'immagine -->
             <form action="${pageContext.request.contextPath}/UpdateProductServlet" method="POST" enctype="multipart/form-data" class="admin-form mt-3" onsubmit="return validaModificaProdotto()">
                 
-                <!-- FONDAMENTALE: l'ID nascosto -->
                 <input type="hidden" name="id" value="${prodotto.id}">
 
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="modNome">Nome Prodotto</label>
-                        <!-- value precompilato -->
+
                         <input type="text" id="modNome" name="nome" value="${prodotto.nome}">
                         <span class="error-msg" id="err-mod-nome"></span>
                     </div>
                     
                     <div class="form-group half-width">
                         <label for="modPrezzo">Prezzo (€)</label>
-                        <!-- Rimuoviamo la virgola per i campi number, usiamo il punto per compatibilità HTML -->
+
                         <input type="number" id="modPrezzo" name="prezzo" step="0.01" min="0" value="${prodotto.prezzo}">
                         <span class="error-msg" id="err-mod-prezzo"></span>
                     </div>
@@ -59,7 +54,7 @@
                     <div class="form-group half-width">
                         <label for="modCat">Categoria</label>
                         <select id="modCat" name="categoria" required>
-                            <!-- Seleziona dinamicamente l'option giusta in base al dato del DB -->
+
                             <option value="MODELLO_3D" ${prodotto.categoria == 'MODELLO_3D' ? 'selected' : ''}>Modello 3D</option>
                             <option value="TEXTURE" ${prodotto.categoria == 'TEXTURE' ? 'selected' : ''}>Texture</option>
                             <option value="STAMPA_3D" ${prodotto.categoria == 'STAMPA_3D' ? 'selected' : ''}>Stampa 3D</option>
@@ -68,7 +63,7 @@
                     
                     <div class="form-group half-width">
                         <label for="modImg">Nuova Immagine (Opzionale)</label>
-                        <!-- Non è required! Se l'admin non mette nulla, la servlet manterrà l'immagine vecchia -->
+
                         <input type="file" id="modImg" name="immagine" accept="image/*">
                         <span class="note text-muted">Lascia vuoto per mantenere l'immagine attuale.</span>
                     </div>
@@ -76,7 +71,7 @@
 
                 <div class="form-group">
                     <label for="modDesc">Descrizione</label>
-                    <!-- Nelle textarea il value si mette in mezzo ai tag! -->
+
                     <textarea id="modDesc" name="descrizione" rows="5">${prodotto.descrizione}</textarea>
                     <span class="error-msg" id="err-mod-desc"></span>
                 </div>
@@ -91,7 +86,6 @@
     </main>
 </div>
 
-<!-- CHECKLIST: JS Validazione (Come per l'inserimento) -->
 <script>
     function validaModificaProdotto() {
         let isValid = true;

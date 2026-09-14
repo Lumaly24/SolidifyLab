@@ -110,7 +110,6 @@
             </section>
 
             <!-- TAB 3: LIBRERIA DIGITALE -->
-            <!-- TAB 3: LIBRERIA DIGITALE -->
             <section id="libreria" class="user-tab-content">
                 <h2>La mia Libreria Digitale</h2>
                 <p>Qui trovi tutti i Modelli 3D e le Textures che hai acquistato, sempre pronti per il download.</p>
@@ -118,7 +117,7 @@
                 <div class="digital-library-grid">
                     <c:choose>
                         <c:when test="${empty sessionScope.libreriaDigitale}">
-                            <!-- CORREZIONE: Aggiunto grid-column per non far spezzare la frase -->
+
                             <p style="grid-column: 1 / -1;">Non hai ancora acquistato nessun asset digitale.</p>
                         </c:when>
                         <c:otherwise>

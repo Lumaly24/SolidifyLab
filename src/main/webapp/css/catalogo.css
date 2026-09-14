@@ -9,6 +9,22 @@ body {
 
 .auth-btn {
     padding: 10px 25px;
+    background: #ff302b;
+    color: #eff1ed;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-btn:hover {
+    background: #ff8888;
+    color: #0f0326;
+}
+
+.btn-secondary {
+	padding: 10px 25px;
     background: #e56399;
     color: #0f0326;
     border: none;
@@ -18,8 +34,10 @@ body {
     transition: all 0.2s ease;
 }
 
-.auth-btn:hover {
-    background: #f7ccde;
+.btn-secondary:hover {
+	background: #c12065;
+    color: #eff1ed;
+
 }
 
 .glass-panel, .catalog-sidebar, .catalog-tabs, .ajax-search-container input, .product-card, #searchSuggestions {
@@ -34,7 +52,7 @@ body {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
-    margin-top: 50px;
+    margin-top: 95px;
     margin-bottom: 50px;
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -45,7 +63,7 @@ body {
 .catalog-layout { 
     display: grid !important; 
     grid-template-columns: 280px 1fr !important; 
-    gap: 30px !important; 
+    gap: 50px !important; 
     width: 100% !important;
 }
 
@@ -245,7 +263,7 @@ body {
 
 .ajax-search-container { 
     flex: 1; 
-    max-width: 880px;
+    max-width: 855px;
     position: relative; 
 }
 
@@ -481,6 +499,27 @@ label:has(input[type="checkbox"]):active {
     background: #e56399; 
     color: #0f0326; 
     box-shadow: 0 0 15px rgba(229, 99, 153, 0.4); 
+}
+
+.btn-search, .nuovo-prodotto {
+	background: rgba(255, 196, 221, 0.55); 
+    border: 1px solid #eff1ed; 
+    color: #d1236d; 
+    padding: 10px 20px 10px; 
+    cursor: pointer; 
+}
+
+.btn-search:hover, .nuovo-prodotto:hover {
+	background: #e56399; 
+    color: #0f0326; 
+    box-shadow: 0 0 15px rgba(229, 99, 153, 0.4); 
+    border: 1px solid #e56399;
+}
+
+.nuovo-prodotto {
+	text-decoration: none;
+	font-family: 'coolveticaitalic', serif;
+	font-weight: 300;
 }
 
 .btn-outline-small { 

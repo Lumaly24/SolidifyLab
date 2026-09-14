@@ -30,7 +30,8 @@
         <aside class="admin-sidebar">
             <nav>
                 <ul>
-                    <li><a href="#gestione-prodotti" class="active"><i class="fa-solid fa-box"></i> Prodotti</a></li>
+                	<li><a href="#aggiunta-prodotti" class="active"><i class="fa-solid fa-plus"></i> Aggiungi Prodotti</a></li>
+                    <li><a href="#gestione-prodotti"><i class="fa-solid fa-box"></i> Gestisci Prodotti</a></li>
                     <li><a href="#gestione-ordini"><i class="fa-solid fa-receipt"></i> Ordini</a></li>
                     <li><a href="#gestione-commissioni"><i class="fa-solid fa-palette"></i> Commissioni</a></li>
                     <li><a href="#statistiche-sales"><i class="fa-solid fa-chart-line"></i> Statistiche | Sales</a></li>
@@ -40,22 +41,17 @@
         </aside>
 
         <!-- ================= MAIN CONTENT ================= -->
-        <main class="admin-main-content">
+        <main class="admin-main-content" style="display: block !important; padding: 0 !important; margin: 0 !important;">
             
-            <h1>Pannello di Controllo</h1>
-
-            
-            <!-- ================= GESTIONE PRODOTTI (CREATE) ================= -->
-            <section id="gestione-prodotti" class="admin-card mt-4">
+            <section id="aggiunta-prodotti" class="admin-card" style="margin-top: 0 !important;">
                 <h2>Aggiungi Nuovo Prodotto</h2>
                 
-                <!-- CHECKLIST: onsubmit per la validazione JS -->
                 <form action="${pageContext.request.contextPath}/AddProductServlet" method="POST" enctype="multipart/form-data" class="admin-form mt-3" onsubmit="return validaFormProdotto()">
                     <div class="form-row">
                         <div class="form-group half-width">
                             <label for="nomeProd">Nome Prodotto</label>
                             <input type="text" id="nomeProd" name="nome">
-                            <!-- CHECKLIST: Messaggi errore inline -->
+
                             <span class="error-msg" id="err-nome"></span>
                         </div>
                         <div class="form-group half-width">
@@ -90,8 +86,7 @@
                 </form>
             </section>
 
-            <!-- ================= TABELLA PRODOTTI (READ, UPDATE, DELETE) ================= -->
-            <section class="admin-card mt-4">
+            <section id="gestione-prodotti" class="admin-card" style="margin-top: 0 !important;">
                 <h2>Prodotti in Catalogo</h2>
                 
                 <table class="admin-table mt-3">
@@ -134,11 +129,9 @@
                 </table>
             </section>
 
-            <!-- ================= GESTIONE ORDINI E FILTRO CLIENTE ================= -->
-            <section id="gestione-ordini" class="admin-card mt-4">
+            <section id="gestione-ordini" class="admin-card" style="margin-top: 0 !important;">
                 <h2>Gestione Ordini</h2>
                 
-                <!-- CHECKLIST: Filtro ordini per cliente (aggiornato a email) -->
                 <div class="filter-bar">
                     <form action="${pageContext.request.contextPath}/FiltraOrdiniAdminServlet" method="GET">
                         <div class="form-group">
@@ -181,7 +174,7 @@
             </section>
 
             <!-- ================= GESTIONE COMMISSIONI ================= -->
-            <section id="gestione-commissioni" class="admin-card mt-4">
+            <section id="gestione-commissioni" class="admin-card" style="margin-top: 0 !important;">
                 <h2>Richieste di Commissione</h2>
                 
                 <table class="admin-table mt-3">
@@ -216,7 +209,7 @@
             </section>
 
 			<!-- ================= STATISTICHE E SALES ================= -->
-            <section id="statistiche-sales" class="admin-card">
+            <section id="statistiche-sales" class="admin-card" style="margin-top: 0 !important;">
                 <h2>Andamento Vendite e Interesse</h2>
                 
                 <div class="kpi-grid">
@@ -248,17 +241,14 @@
         </main>
     </div>
 
-    <!-- SCRIPT PER VALIDAZIONE FORM E REGEX (Richiesto dalla Checklist) -->
     <script>
         function validaFormProdotto() {
             let isValid = true;
             
-            // Svuota i messaggi di errore precedenti
             document.getElementById('err-nome').innerText = "";
             document.getElementById('err-prezzo').innerText = "";
             document.getElementById('err-desc').innerText = "";
 
-            // 1. Validazione Nome con Regex (Minimo 3 caratteri, lettere e numeri)
             let nome = document.getElementById('nomeProd').value.trim();
             let regexNome = /^[a-zA-Z0-9\s\-_]{3,50}$/;
             if (!regexNome.test(nome)) {
@@ -266,36 +256,55 @@
                 isValid = false;
             }
 
-            // 2. Validazione Prezzo (Maggiore di 0)
             let prezzo = document.getElementById('prezzoProd').value;
             if (prezzo === "" || isNaN(prezzo) || parseFloat(prezzo) <= 0) {
                 document.getElementById('err-prezzo').innerText = "Inserisci un prezzo valido maggiore di 0.";
                 isValid = false;
             }
 
-            // 3. Validazione Descrizione (Non vuota)
             let desc = document.getElementById('descProd').value.trim();
             if (desc.length < 10) {
                 document.getElementById('err-desc').innerText = "La descrizione deve contenere almeno 10 caratteri.";
                 isValid = false;
             }
 
-            return isValid; // Se false, il form NON viene inviato e mostra i messaggi rossi inline
+            return isValid; 
         }
     </script>
-    
-    <script>
-    // Seleziona tutti i link della sidebar che portano a un'ancora (#)
-    document.querySelectorAll('.admin-sidebar a[href^="#"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Rimuovi la classe 'active' da tutti i link
-            document.querySelectorAll('.admin-sidebar a').forEach(el => el.classList.remove('active'));
-            
-            // Aggiungi la classe 'active' solo a quello appena cliccato
-            this.classList.add('active');
-        });
-    });
-</script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+		    const sezioni = document.querySelectorAll('.admin-main-content section');
+		    
+		    sezioni.forEach((sec, index) => {
+		        sec.classList.add('admin-tab-content');
+		        if (index === 0) {
+		            sec.classList.add('active-tab'); 
+		        }
+		    });
+		
+		    document.querySelectorAll('.admin-sidebar a[href^="#"]').forEach(link => {
+		        link.addEventListener('click', function(e) {
+		            e.preventDefault(); 
+		
+		            document.querySelectorAll('.admin-sidebar a').forEach(el => el.classList.remove('active'));
+		            this.classList.add('active');
+		
+		            sezioni.forEach(sec => {
+		                sec.classList.remove('active-tab');
+		            });
+		
+		            const targetId = this.getAttribute('href');
+		            const activeSection = document.querySelector(targetId);
+		            if (activeSection) {
+		                activeSection.classList.add('active-tab');
+		            }
+		
+		            window.scrollTo(0, 0);
+		        });
+		    });
+		});
+	</script>
 
 </div> 
 
