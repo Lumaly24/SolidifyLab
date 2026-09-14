@@ -15,7 +15,8 @@
 		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer.css">
 		<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/icons8-star-16.png?v=2" type="image/png">
 	</head>
-<body>
+	
+<body class="${not empty isHome ? 'snap-page' : ''}">
 
     <header class="main-header">
        

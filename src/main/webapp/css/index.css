@@ -1,9 +1,47 @@
 html, body {
-    height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
     color: #eff1ed;
+}
+
+body.snap-page {
+    height: 100%;
+    overflow: hidden;
+}
+
+body.snap-page main {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    margin-top: 0;
+    position: relative;
+    z-index: 1;
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+
+body.snap-page main::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+body.snap-page main > section {
+    min-height: 100vh;
+    height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
 }
 
 main {

@@ -5,6 +5,9 @@
 <% request.setAttribute("titoloPagina", "Home"); %>
 <%@ include file="/WEB-INF/view/fragment/header.jspf" %>
 
+<% request.setAttribute("isHome", true); %>
+<%@ include file="/WEB-INF/view/fragment/header.jspf"%>
+
     <main>
          
         <!-- HERO SECTION -->

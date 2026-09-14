@@ -56,10 +56,22 @@
             <div class="filter-group">
                 <h3>Filtra per Categoria</h3>
                 <ul class="filter-list">
-                    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=3D" class="${param.tipo == '3D' ? 'active' : ''}">Modelli 3D</a></li>
-                    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=TEXTURES" class="${param.tipo == 'TEXTURES' ? 'active' : ''}">Textures</a></li>
-                    <li><a href="${pageContext.request.contextPath}/Wishlist?tipo=STAMPE" class="${param.tipo == 'STAMPE' ? 'active' : ''}">Stampe 3D</a></li>
-                </ul>
+				    <li>
+				        <label>
+				            <input type="checkbox" name="tipo" value="3D" ${param.tipo == '3D' ? 'checked' : ''} onchange="window.location.href='${pageContext.request.contextPath}/Wishlist?tipo=3D'">Modelli 3D
+				        </label>
+				    </li>
+				    <li>
+				        <label>
+				            <input type="checkbox" name="tipo" value="TEXTURES" ${param.tipo == 'TEXTURES' ? 'checked' : ''} onchange="window.location.href='${pageContext.request.contextPath}/Wishlist?tipo=TEXTURES'">Textures
+				        </label>
+				    </li>
+				    <li>
+				        <label>
+				            <input type="checkbox" name="tipo" value="STAMPE" ${param.tipo == 'STAMPE' ? 'checked' : ''} onchange="window.location.href='${pageContext.request.contextPath}/Wishlist?tipo=STAMPE'">Stampe 3D
+				        </label>
+				    </li>
+				</ul>
             </div>
         </aside>
 
@@ -88,10 +100,6 @@
                             <article class="product-card">
                                 
                                 <div class="product-badges">
-                                    <div class="move-collection-dropdown">
-                                        <button type="button" class="btn-icon" title="Sposta in una raccolta"><i class="fa-solid fa-folder-plus"></i></button>
-                                    </div>
-                                    
                                     <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form" id="remove-form-${item.id}">
 									    <input type="hidden" name="id_prodotto" value="${item.id}">
 									    <button type="button" class="btn-wishlist text-red" title="Rimuovi" onclick="showConfirmAlert('Vuoi davvero rimuovere questo prodotto dalla tua wishlist?', 'remove-form-${item.id}')">
