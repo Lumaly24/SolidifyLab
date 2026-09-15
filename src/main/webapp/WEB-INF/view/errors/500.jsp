@@ -30,7 +30,7 @@
     		z-index: 1;">
 		</div>
 
-        <a href="${pageContext.request.contextPath}/index.jsp" style="
+        <a href="${pageContext.request.contextPath}/Home" style="
             position: relative; 
             z-index: 2; 
             display: flex; 

@@ -32,6 +32,28 @@ public class ProdottoDAO {
         return prodotti;
     }
 
+    public Prodotto doRetrieveById(int id) {
+        Prodotto prodotto = null;
+        String query = "SELECT * FROM prodotto WHERE id = ?";
+
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setInt(1, id);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    prodotto = mapRowToProdotto(rs);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore durante l'estrazione del prodotto per ID:");
+            e.printStackTrace();
+        }
+        
+        return prodotto;
+    }
+    
     public List<Prodotto> doRetrieveByCategoria(int categoriaId) {
         List<Prodotto> prodotti = new ArrayList<>();
         String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id = ?";

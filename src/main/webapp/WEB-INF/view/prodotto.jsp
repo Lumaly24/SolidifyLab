@@ -16,7 +16,7 @@
             <nav class="breadcrumbs" aria-label="Percorso di navigazione">
                 <a href="${pageContext.request.contextPath}/Catalogo">Catalogo</a> 
                 <span class="separator">/</span> 
-                <a href="${pageContext.request.contextPath}/Catalogo?categoria=${prodotto.categoria}">${prodotto.categoria}</a> 
+                <a href="${pageContext.request.contextPath}/Catalogo?categoria=${catNome}">${catNome}</a> 
                 <span class="separator">/</span> 
                 <span class="current-page">${prodotto.nome}</span>
             </nav>
@@ -28,14 +28,14 @@
                 
                 <div class="main-product-image">
                     <span class="img-placeholder">(IMG ${prodotto.nome})</span>
-                    <c:if test="${prodotto.categoria == 'MODELLO_3D'}">
+                    <c:if test="${catCodice == 'MODELLO_3D'}">
                         <div class="icon-360" title="Visualizza modello a 360 gradi">
                             <i class="fa-solid fa-arrows-rotate"></i> <span>360°</span>
                         </div>
                     </c:if>
                 </div>
 
-                <c:if test="${prodotto.categoria == 'MODELLO_3D'}">
+                <c:if test="${catCodice == 'MODELLO_3D'}">
                     <div class="polycount-indicator">
                         <p><strong>Livello di Dettaglio:</strong></p>
                         <div class="poly-steps">
@@ -46,7 +46,7 @@
                     </div>
                 </c:if>
 
-                <c:if test="${prodotto.categoria == 'TEXTURE'}">
+                <c:if test="${catCodice == 'TEXTURE'}">
                     <div class="resolution-indicator">
                         <p><strong>Risoluzione disponibile:</strong></p>
                         <div class="resolution-steps">
@@ -56,33 +56,6 @@
                         </div>
                     </div>
                 </c:if>
-
-                <form class="add-to-cart-form" action="${pageContext.request.contextPath}/AggiungiAlCarrelloServlet" method="POST">
-                    
-                    <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-
-                    <c:if test="${prodotto.categoria == 'STAMPA_3D'}">
-                        <div class="material-selector">
-                            <p><strong>Seleziona Materiale:</strong></p>
-                            <div class="material-options">
-                                <label class="mat-radio">
-                                    <input type="radio" name="materiale" value="resina_grigia" checked>
-                                    <span>Resina Grigia (Alto Dettaglio)</span>
-                                </label>
-                                <label class="mat-radio">
-                                    <input type="radio" name="materiale" value="pla_nero">
-                                    <span>PLA Nero (Resistente)</span>
-                                </label>
-                            </div>
-                        </div>
-                    </c:if>
-
-                    <div class="product-purchase-action">
-                        <button type="submit" class="btn-primary btn-add-cart-large">
-                            <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO - € <fmt:formatNumber value="${prodotto.prezzo}" pattern="#,##0.00"/>
-                        </button>
-                    </div>
-                </form>
 
                 <div class="product-meta">
                     <p><strong>Licenza:</strong> Royalty Free (Standard)</p>
@@ -116,7 +89,7 @@
                     <p>${prodotto.descrizione}</p>
                 </div>
 
-                <c:if test="${prodotto.categoria == 'MODELLO_3D'}">
+                <c:if test="${catCodice == 'MODELLO_3D'}">
                     <div class="product-specs-box">
                         <h3>Specifiche Modello 3D</h3>
                         <hr class="box-divider">
@@ -144,7 +117,7 @@
                     </div>
                 </c:if>
 
-                <c:if test="${prodotto.categoria == 'TEXTURE'}">
+                <c:if test="${catCodice == 'TEXTURE'}">
                     <div class="product-specs-box">
                         <h3>Specifiche Texture</h3>
                         <hr class="box-divider">
@@ -161,7 +134,7 @@
                     </div>
                 </c:if>
 
-                <c:if test="${prodotto.categoria == 'STAMPA_3D'}">
+                <c:if test="${catCodice == 'STAMPA_3D'}">
                     <div class="product-shipping-box">
                         <h3>Dettagli di Stampa e Spedizione</h3>
                         <hr class="box-divider">
@@ -178,8 +151,112 @@
                     </div>
                 </c:if>
 
+                <form class="add-to-cart-form" action="${pageContext.request.contextPath}/AddtoCart" method="POST">
+                    
+                    <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+
+                    <c:if test="${catCodice == 'STAMPA_3D'}">
+                        <div class="material-selector">
+                            <p><strong>Seleziona Materiale:</strong></p>
+                            <div class="material-options">
+                                <label class="mat-radio">
+                                    <input type="radio" name="materiale" value="resina_grigia" checked>
+                                    <span>Resina Grigia (Alto Dettaglio)</span>
+                                </label>
+                                <label class="mat-radio">
+                                    <input type="radio" name="materiale" value="pla_nero">
+                                    <span>PLA Nero (Resistente)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </c:if>
+
+                    <div class="product-purchase-action">
+                        <button type="submit" class="btn-primary btn-add-cart-large">
+                            <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO - € <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/>
+                        </button>
+                    </div>
+                </form>
+
             </section>
         </div>
+        
+     <div id="custom-alert-overlay">
+	    <div class="custom-alert-box">
+	        <i id="modal-icon" class="fa-solid fa-circle-check"></i>
+	        <h3 id="modal-title">Titolo</h3>
+	        <p id="modal-msg">Messaggio</p>
+	        <button type="button" class="btn-primary alert-btn" onclick="chiudiModal()">Okay</button>
+	    </div>
+	</div>   
+
     </main>
+
+<script>
+
+    const formCarrello = document.querySelector('.add-to-cart-form');
+    const btnCarrello = formCarrello.querySelector('button[type="submit"]');
+    const modalOverlay = document.getElementById('custom-alert-overlay');
+
+    function mostraModal(titolo, messaggio, icona, coloreIcona) {
+    	
+        document.getElementById('modal-title').innerText = titolo;
+        document.getElementById('modal-msg').innerText = messaggio;
+        const iconEl = document.getElementById('modal-icon');
+        iconEl.className = icona;
+        iconEl.style.color = coloreIcona;
+        
+        modalOverlay.style.display = 'flex'; 
+    }
+    
+    function chiudiModal() {
+        modalOverlay.style.display = 'none';
+    }
+
+    formCarrello.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+
+        const datiForm = new URLSearchParams(new FormData(this));
+
+        const testoOriginale = btnCarrello.innerHTML;
+        btnCarrello.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> CARICAMENTO...';
+
+        fetch(this.action, {
+            method: 'POST',
+            body: datiForm,
+            credentials: 'same-origin' 
+        })
+        
+        .then(risposta => risposta.text())
+        .then(esito => {
+            
+            btnCarrello.innerHTML = testoOriginale; 
+
+            if(esito === 'aggiunto') {
+            	
+                mostraModal("Evviva!", "Aggiunto al carrello.", "fa-solid fa-cart-plus", "#e56399"); 
+            } 
+            
+            else if(esito === 'gia_presente') {
+            	
+                mostraModal("Attenzione", "Prodotto già aggiunto!", "fa-solid fa-triangle-exclamation", "#f39c12"); 
+                
+                btnCarrello.innerHTML = '<i class="fa-solid fa-check"></i> GIÀ NEL CARRELLO';
+                btnCarrello.style.backgroundColor = '#2c3e50'; 
+                btnCarrello.style.pointerEvents = 'none'; 
+            } 
+            
+            else {
+            	
+                mostraModal("Errore", "Si è verificato un problema tecnico.", "fa-solid fa-circle-xmark", "#e74c3c");
+            }
+        })
+        
+        .catch(error => {
+            mostraModal("Errore di Rete", "Impossibile comunicare col server.", "fa-solid fa-wifi", "#e74c3c");
+            btnCarrello.innerHTML = testoOriginale;
+        });
+    });
+</script>
 
 <%@ include file="fragment/footer.jspf" %>
