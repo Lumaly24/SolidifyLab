@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+v<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -75,10 +75,26 @@
                             </a>
                         </c:if>
 
-                        <form class="wishlist-form-inline" action="${pageContext.request.contextPath}/AggiungiWishlistServlet" method="POST">
+                        <c:set var="isFavorito" value="false" />
+                        <c:if test="${not empty sessionScope.wishlistIds}">
+                            <c:forEach var="wId" items="${sessionScope.wishlistIds}">
+                                <c:if test="${wId == prodotto.id}">
+                                    <c:set var="isFavorito" value="true" />
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+
+                        <form class="wishlist-form-inline" action="${pageContext.request.contextPath}/AddtoWishlist" method="POST">
                             <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-                            <button type="submit" class="btn-wishlist-large" title="Aggiungi alla Wishlist">
-                                <i class="fa-regular fa-heart"></i>
+                            <button type="submit" class="btn-wishlist-large" title="${isFavorito ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
+                                <c:choose>
+                                    <c:when test="${isFavorito}">
+                                        <i class="fa-solid fa-heart" style="color: #e56399;"></i>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </c:otherwise>
+                                </c:choose>
                             </button>
                         </form>
                         
@@ -172,13 +188,12 @@
                     </c:if>
 
                     <div class="product-purchase-action">
-                        <button type="submit" class="btn-primary btn-add-cart-large">
-                            <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO - € <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/>
-                        </button>
+	                        <button type="submit" class="btn-primary btn-add-cart-large">
+	                            <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO - € <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/>
+	                        </button>
                     </div>
                 </form>
-
-            </section>
+              </section>
         </div>
         
      <div id="custom-alert-overlay">
@@ -216,7 +231,7 @@
     formCarrello.addEventListener('submit', function(event) {
         event.preventDefault(); 
         const datiForm = new URLSearchParams(new FormData(this));
-
+        datiForm.append('isAjax', 'true');
         const testoAttuale = btnCarrello.innerHTML;
         btnCarrello.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> CARICAMENTO...';
 

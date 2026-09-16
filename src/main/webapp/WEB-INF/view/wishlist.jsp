@@ -58,17 +58,23 @@
                 <ul class="filter-list">
 				    <li>
 				        <label>
-				            <input type="checkbox" name="tipo" value="3D" ${param.tipo == '3D' ? 'checked' : ''} onchange="window.location.href='${pageContext.request.contextPath}/Wishlist?tipo=3D'">Modelli 3D
+				            <input type="checkbox" name="tipo" value="3D" ${param.tipo == '3D' ? 'checked' : ''} 
+				                   onchange="window.location.href = this.checked ? '${pageContext.request.contextPath}/Wishlist?tipo=3D' : '${pageContext.request.contextPath}/Wishlist'">
+				            Modelli 3D
 				        </label>
 				    </li>
 				    <li>
 				        <label>
-				            <input type="checkbox" name="tipo" value="TEXTURES" ${param.tipo == 'TEXTURES' ? 'checked' : ''} onchange="window.location.href='${pageContext.request.contextPath}/Wishlist?tipo=TEXTURES'">Textures
+				            <input type="checkbox" name="tipo" value="TEXTURES" ${param.tipo == 'TEXTURES' ? 'checked' : ''} 
+				                   onchange="window.location.href = this.checked ? '${pageContext.request.contextPath}/Wishlist?tipo=TEXTURES' : '${pageContext.request.contextPath}/Wishlist'">
+				            Textures
 				        </label>
 				    </li>
 				    <li>
 				        <label>
-				            <input type="checkbox" name="tipo" value="STAMPE" ${param.tipo == 'STAMPE' ? 'checked' : ''} onchange="window.location.href='${pageContext.request.contextPath}/Wishlist?tipo=STAMPE'">Stampe 3D
+				            <input type="checkbox" name="tipo" value="STAMPE" ${param.tipo == 'STAMPE' ? 'checked' : ''} 
+				                   onchange="window.location.href = this.checked ? '${pageContext.request.contextPath}/Wishlist?tipo=STAMPE' : '${pageContext.request.contextPath}/Wishlist'">
+				            Stampe 3D
 				        </label>
 				    </li>
 				</ul>
@@ -108,7 +114,7 @@
 									</form>
                                 </div>
                                 
-                                <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${item.id}" class="product-link">
+                                <a href="${pageContext.request.contextPath}/Prodotto?id=${item.id}" class="product-link">
                                     <div class="product-image">
                                      
                                         <img src="${pageContext.request.contextPath}/images/prodotti/${item.immagineCopertinaUrl}" alt="${item.nome}" style="max-width: 100%; border-radius: 8px;">
@@ -119,7 +125,7 @@
                                     </div>
                                 </a>
                                 
-                                <form action="${pageContext.request.contextPath}/AggiungiAlCarrelloServlet" method="POST">
+                               <form action="${pageContext.request.contextPath}/AddtoCart" method="POST">
                                     <input type="hidden" name="id_prodotto" value="${item.id}">
                                     <input type="hidden" name="quantita" value="1">
                                     <button type="submit" class="btn-primary w-100 btn-bottom-rounded">

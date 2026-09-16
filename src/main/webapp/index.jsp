@@ -26,7 +26,6 @@
             <h2>CATEGORIE PRINCIPALI</h2>
             
             <div class="categories-grid">
-                <!-- 1. Modelli 3D: Punta al Catalogo con tipo=3D (o default) -->
                 <a href="${pageContext.request.contextPath}/Catalogo?tipo=3D" class="category-card">
                     <div class="card-img-container">
                         <img src="${pageContext.request.contextPath}/images/modelli-3d-sfondo.png" alt="Modelli 3D" loading="lazy">
@@ -36,7 +35,6 @@
                     </div>
                 </a>
 
-                <!-- 2. Textures: Punta al Catalogo filtrato per le textures -->
                 <a href="${pageContext.request.contextPath}/Catalogo?tipo=TEXTURES" class="category-card">
                     <div class="card-img-container">
                         <img src="${pageContext.request.contextPath}/images/textures-sfondo.png" alt="Textures" loading="lazy">
@@ -71,7 +69,6 @@
                 <div class="carousel-mask-wrapper">
                     <div class="products-carousel" id="productsCarousel">
         
-                        <!-- CICLO JSP: Mostra dinamicamente i prodotti -->
                         <c:choose>
                             <c:when test="${empty prodottiInEvidenza}">
                                 <p class="empty-carousel-msg text-center">Nuovi prodotti in arrivo a breve!</p>
@@ -93,7 +90,6 @@
                                                 </c:if>
                                             </c:forEach>
 
-                                            <!-- GESTIONE CLICK WISHLIST -->
 											<c:choose>
 											    <c:when test="${not empty sessionScope.utenteLoggato}">
 											        <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
@@ -135,7 +131,6 @@
             </div>
         </section>
 
-        <!-- SEZIONE FINALE (CTA + FOOTER UNIFICATI) -->
         <section class="final-section">
             <div class="cta-section">
                 <div class="cta-content">
@@ -145,7 +140,7 @@
                             <div class="cta-buttons">
                                 <c:if test="${sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
                                     <a href="${pageContext.request.contextPath}/AdminDashboard" class="btn-login">PANNELLO ADMIN</a>
-                                    <a href="${pageContext.request.contextPath}/ModificaProdotto" class="btn-login">GESTISCI CATALOGO</a>
+                                    <a href="${pageContext.request.contextPath}/AdminDashboard#gestione-prodotti" class="btn-login">GESTISCI CATALOGO</a>
                                 </c:if>
                                 <c:if test="${sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
                                     <a href="${pageContext.request.contextPath}/UserDashboard" class="btn-login">IL MIO PROFILO</a>
@@ -164,11 +159,9 @@
                 </div>
             </div>
 
-            <!-- FOOTER DENTRO LA SEZIONE FINALE -->
             <%@ include file="/WEB-INF/view/fragment/footer.jspf" %>
         </section>
         
-        <!-- SCROLL PROGRESS NAV (4 PALLINI) -->
         <div class="scroll-progress-nav" id="scrollProgressNav">
             <div class="dot active" data-section="0" title="Hero"></div>
             <div class="dot" data-section="1" title="Categorie"></div>

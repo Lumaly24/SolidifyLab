@@ -57,46 +57,49 @@
                     <c:forEach var="item" items="${sessionScope.carrello.prodotti}">
                     
 					    <article class="cart-item-card">
-					    
-					        <form action="${pageContext.request.contextPath}/AddtoCart" method="POST" class="remove-form-container" id="remove-form-${item.prodotto.id}">
     
-							    <input type="hidden" name="id_prodotto" value="${item.prodotto.id}">
-							    <input type="hidden" name="azione" value="rimuovi_carrello">
-							    
-							    <button type="button" class="btn-remove-item" title="Rimuovi dal carrello" onclick="showConfirmAlert('Sei sicuro di voler rimuovere questo prodotto dal carrello?', 'remove-form-${item.prodotto.id}')">
-							        <i class="fa-solid fa-xmark"></i>
-							    </button>
-							</form>
-					        
-					        <div class="cart-item-image">
-					            <span>(IMG)</span>
-					        </div>
-					        
-					        <div class="cart-item-details">
-					            <h4><c:out value="${item.prodotto.nome}"/></h4>
-					            
-					            <div class="cart-item-actions">
-					                <span class="cart-item-price">€ <fmt:formatNumber value="${item.prodotto.prezzoCorrente}" pattern="#,##0.00"/></span>
-					                
-					                <c:choose>
-					                    <c:when test="${item.prodotto.categoriaId == 3}">
-					                        <form action="${pageContext.request.contextPath}/AggiornaQuantitaServlet" method="POST">
-					                            <input type="hidden" name="id_prodotto" value="${item.prodotto.id}">
-					                            <div class="quantity-control">
-					                                <label for="qty_${item.prodotto.id}">Qtà:</label>
-					                                <input type="number" id="qty_${item.prodotto.id}" name="quantita" min="1" value="${item.quantita}" class="qty-input" onchange="this.form.submit()">
-					                            </div>
-					                        </form>
-					                    </c:when>
-					                    <c:otherwise>
-					                        <div class="quantity-control">
-					                            <span>Qtà: 1</span>
-					                        </div>
-					                    </c:otherwise>
-					                </c:choose>
-					            </div>
-					        </div>
-					    </article>
+						    <form action="${pageContext.request.contextPath}/AddtoCart" method="POST" class="remove-form-container" id="remove-form-${item.prodotto.id}">
+						        <input type="hidden" name="id_prodotto" value="${item.prodotto.id}">
+						        <input type="hidden" name="azione" value="rimuovi_carrello">
+						        
+						        <button type="button" class="btn-remove-item" title="Rimuovi dal carrello" onclick="showConfirmAlert('Sei sicuro di voler rimuovere questo prodotto dal carrello?', 'remove-form-${item.prodotto.id}')">
+						            <i class="fa-solid fa-xmark"></i>
+						        </button>
+						    </form>
+						    
+						    <a href="${pageContext.request.contextPath}/Prodotto?id=${item.prodotto.id}" style="text-decoration: none; color: inherit; display: block;">
+						        <div class="cart-item-image">
+						            <span>(IMG)</span>
+						        </div>
+						    </a>
+						    
+						    <div class="cart-item-details">
+						        <a href="${pageContext.request.contextPath}/Prodotto?id=${item.prodotto.id}" style="text-decoration: none; color: inherit;">
+						            <h4 style="margin: 0;"><c:out value="${item.prodotto.nome}"/></h4>
+						        </a>
+						        
+						        <div class="cart-item-actions">
+						            <span class="cart-item-price">€ <fmt:formatNumber value="${item.prodotto.prezzoCorrente}" pattern="#,##0.00"/></span>
+						            
+						            <c:choose>
+						                <c:when test="${item.prodotto.categoriaId == 3}">
+						                    <form action="${pageContext.request.contextPath}/AggiornaQuantitaServlet" method="POST">
+						                        <input type="hidden" name="id_prodotto" value="${item.prodotto.id}">
+						                        <div class="quantity-control">
+						                            <label for="qty_${item.prodotto.id}">Qtà:</label>
+						                            <input type="number" id="qty_${item.prodotto.id}" name="quantita" min="1" value="${item.quantita}" class="qty-input" onchange="this.form.submit()">
+						                        </div>
+						                    </form>
+						                </c:when>
+						                <c:otherwise>
+						                    <div class="quantity-control">
+						                        <span>Qtà: 1</span>
+						                    </div>
+						                </c:otherwise>
+						            </c:choose>
+						        </div>
+						    </div>
+					</article>
 					</c:forEach>
 
                 </section>

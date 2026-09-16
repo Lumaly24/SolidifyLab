@@ -51,7 +51,6 @@
                         <div class="form-group half-width">
                             <label for="nomeProd">Nome Prodotto</label>
                             <input type="text" id="nomeProd" name="nome">
-
                             <span class="error-msg" id="err-nome"></span>
                         </div>
                         <div class="form-group half-width">
@@ -64,16 +63,25 @@
                     <div class="form-row">
                         <div class="form-group half-width">
                             <label for="catProd">Categoria</label>
-                            <select id="catProd" name="categoria" required>
+                            <select id="catProd" name="categoria" required onchange="aggiornaTags()">
+                                <option value="" disabled selected>-- Seleziona --</option>
                                 <option value="MODELLO_3D">Modello 3D</option>
                                 <option value="TEXTURE">Texture</option>
                                 <option value="STAMPA_3D">Stampa 3D</option>
                             </select>
                         </div>
+                        
                         <div class="form-group half-width">
-                            <label for="imgProd">Immagine Prodotto (JPEG/PNG)</label>
-                            <input type="file" id="imgProd" name="immagine" accept="image/*" required>
+                            <label for="tagProd">Tag Principale</label>
+                            <select id="tagProd" name="tag" required disabled>
+                                <option value="" disabled selected>Prima scegli la categoria</option>
+                            </select>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imgProd">Immagine Prodotto (JPEG/PNG)</label>
+                        <input type="file" id="imgProd" name="immagine" accept="image/*" required>
                     </div>
 
                     <div class="form-group">
@@ -241,6 +249,41 @@
         </main>
     </div>
 
+    <!-- SCRIPT GESTIONE TAG DINAMICI -->
+    <script>
+        const tagsPerCategoria = {
+            "MODELLO_3D": ["Fantasy", "Sci-Fi", "Props", "Personaggi", "Veicoli", "Environment"],
+            "TEXTURE": ["Seamless", "PBR", "Metallo", "Legno", "Pietra", "Tessuto"],
+            "STAMPA_3D": ["Miniature", "Cosplay", "Utilità", "Figure", "Decorazioni"]
+        };
+
+        function aggiornaTags() {
+            const catSelect = document.getElementById("catProd");
+            const tagSelect = document.getElementById("tagProd");
+            const categoriaSelezionata = catSelect.value;
+
+            // Reset iniziale del select dei tag
+            tagSelect.innerHTML = '<option value="" disabled selected>Seleziona un tag...</option>';
+
+            if (categoriaSelezionata && tagsPerCategoria[categoriaSelezionata]) {
+                // Abilita la select e popola le opzioni
+                tagSelect.disabled = false;
+                tagsPerCategoria[categoriaSelezionata].forEach(tag => {
+                    const option = document.createElement("option");
+                    // Formatta il value (es: "Sci-Fi" diventa "SCI_FI") per il backend
+                    option.value = tag.toUpperCase().replace(/[-\s]+/g, '_'); 
+                    option.textContent = tag;
+                    tagSelect.appendChild(option);
+                });
+            } else {
+                // Disabilita se non c'è una categoria valida
+                tagSelect.disabled = true;
+                tagSelect.innerHTML = '<option value="" disabled selected>Prima scegli la categoria</option>';
+            }
+        }
+    </script>
+
+    <!-- SCRIPT VALIDAZIONE FORM -->
     <script>
         function validaFormProdotto() {
             let isValid = true;
@@ -272,38 +315,67 @@
         }
     </script>
 
+    <!-- SCRIPT TABS NAVIGAZIONE ADMIN -->
 	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-		    const sezioni = document.querySelectorAll('.admin-main-content section');
-		    
-		    sezioni.forEach((sec, index) => {
-		        sec.classList.add('admin-tab-content');
-		        if (index === 0) {
-		            sec.classList.add('active-tab'); 
-		        }
-		    });
-		
-		    document.querySelectorAll('.admin-sidebar a[href^="#"]').forEach(link => {
-		        link.addEventListener('click', function(e) {
-		            e.preventDefault(); 
-		
-		            document.querySelectorAll('.admin-sidebar a').forEach(el => el.classList.remove('active'));
-		            this.classList.add('active');
-		
-		            sezioni.forEach(sec => {
-		                sec.classList.remove('active-tab');
-		            });
-		
-		            const targetId = this.getAttribute('href');
-		            const activeSection = document.querySelector(targetId);
-		            if (activeSection) {
-		                activeSection.classList.add('active-tab');
-		            }
-		
-		            window.scrollTo(0, 0);
-		        });
-		    });
-		});
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            const sezioni = document.querySelectorAll('.admin-main-content section');
+            sezioni.forEach((sec) => {
+                sec.setAttribute('data-target', '#' + sec.id); 
+                
+                sec.removeAttribute('id'); 
+                
+                sec.classList.add('admin-tab-content');
+                sec.classList.remove('active-tab'); 
+            });
+
+            const hash = window.location.hash.split('?')[0]; 
+            let activeSection = null;
+            let activeLink = null;
+
+            if (hash) {
+                activeSection = document.querySelector('section[data-target="' + hash + '"]');
+                activeLink = document.querySelector('.admin-sidebar a[href$="' + hash + '"]');
+            }
+
+            if (!activeSection) {
+                activeSection = sezioni[0];
+                activeLink = document.querySelector('.admin-sidebar a[href="#aggiunta-prodotti"]');
+            }
+
+            // 3. MOSTRIAMO LA SCHEDA
+            if (activeSection) {
+                activeSection.classList.add('active-tab');
+            }
+            document.querySelectorAll('.admin-sidebar a').forEach(el => el.classList.remove('active'));
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            // Forziamo la visuale in alto per massima sicurezza
+            setTimeout(() => window.scrollTo(0, 0), 10);
+
+            // 4. GESTIONE CLICK SUL MENU LATERALE
+            document.querySelectorAll('.admin-sidebar a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault(); 
+
+                    document.querySelectorAll('.admin-sidebar a').forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+
+                    sezioni.forEach(sec => sec.classList.remove('active-tab'));
+
+                    const targetHash = this.getAttribute('href');
+                    const targetSection = document.querySelector('section[data-target="' + targetHash + '"]');
+                    if (targetSection) {
+                        targetSection.classList.add('active-tab');
+                    }
+                    
+                    history.replaceState(null, null, targetHash);
+                    window.scrollTo(0, 0);
+                });
+            });
+        });
 	</script>
 
 </div> 

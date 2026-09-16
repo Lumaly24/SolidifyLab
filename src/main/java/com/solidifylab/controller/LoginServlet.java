@@ -1,6 +1,7 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
+import java.util.List; // Aggiunto import per la lista
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.solidifylab.dao.UserDAO;
-import com.solidifylab.model.User; // <-- Import corretto puntato a User
+import com.solidifylab.dao.WishlistDAO; 
+import com.solidifylab.model.User;
 
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
@@ -18,24 +20,30 @@ public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        // 1. Leggiamo email e password inviate dal form di login
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         
         UserDAO userDAO = new UserDAO();
         
-        // 2. Cerchiamo l'utente nel database (usando l'istanza userDAO e il tipo User)
         User utente = userDAO.doRetrieveByEmailAndPassword(email, password);
         
         if (utente != null) {
-            // Utente trovato! Creiamo una sessione per ricordarci che è loggato
             HttpSession session = request.getSession();
+            
             session.setAttribute("utenteLoggato", utente);
             
-            // Reindirizziamo l'utente alla Home
+            try {
+                WishlistDAO wishlistDAO = new WishlistDAO();
+                List<Integer> wishlistIds = wishlistDAO.getWishlistIdsByUtente(utente.getId());
+                session.setAttribute("wishlistIds", wishlistIds);
+                
+                System.out.println("Wishlist caricata al login per l'utente: " + utente.getId());
+            } catch (Exception e) {
+                System.out.println("Errore durante il caricamento della wishlist al login: " + e.getMessage());
+            }
+            
             response.sendRedirect(request.getContextPath() + "/Home");
         } else {
-            // Credenziali errate: rimandiamo al login con un errore
             request.setAttribute("erroreLogin", "Email o password errati!");
             request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
         }
