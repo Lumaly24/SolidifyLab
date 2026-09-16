@@ -110,8 +110,12 @@
                                         
                                         <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
                                             <div class="product-image">
-                                                <span>(IMG ${prodotto.nome})</span>
+                                            
+                                                <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" 
+												     alt="${prodotto.nome}" />
+														    
                                             </div>
+                                            
                                             <div class="product-price">
                                                 <span>&euro; <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></span>
                                             </div>

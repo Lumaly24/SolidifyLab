@@ -27,12 +27,10 @@ v<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="U
             <aside class="product-gallery-side">
                 
                 <div class="main-product-image">
-                    <span class="img-placeholder">(IMG ${prodotto.nome})</span>
-                    <c:if test="${catCodice == 'MODELLO_3D'}">
-                        <div class="icon-360" title="Visualizza modello a 360 gradi">
-                            <i class="fa-solid fa-arrows-rotate"></i> <span>360°</span>
-                        </div>
-                    </c:if>
+                
+                    <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" alt="{prodotto.nome}" 
+					     style="width: 100%; border-radius: 8px; object-fit: cover;" />
+                    
                 </div>
 
                 <c:if test="${catCodice == 'MODELLO_3D'}">

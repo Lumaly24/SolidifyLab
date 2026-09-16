@@ -69,7 +69,11 @@
 						    
 						    <a href="${pageContext.request.contextPath}/Prodotto?id=${item.prodotto.id}" style="text-decoration: none; color: inherit; display: block;">
 						        <div class="cart-item-image">
-						            <span>(IMG)</span>
+						        
+						            <img src="${pageContext.request.contextPath}/product_images/${item.prodotto.immagineCopertinaUrl}" 
+									     alt="${item.prodotto.nome}" 
+									     style="width: 100%; border-radius: 8px; object-fit: cover;" />
+									         
 						        </div>
 						    </a>
 						    

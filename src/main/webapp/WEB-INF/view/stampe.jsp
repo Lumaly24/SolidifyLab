@@ -131,8 +131,13 @@
                                 
                                 <a href="${pageContext.request.contextPath}/Prodotto?id=${prodotto.id}" class="product-link">
                                     <div class="product-image">
-                                        <img src="${pageContext.request.contextPath}/images/prodotti/${prodotto.immagineCopertinaUrl}" alt="${prodotto.nome}" style="max-width: 100%; border-radius: 8px;">
+
+                                        <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" 
+										     alt="${prodotto.nome}" 
+										     style="width: 100%; aspect-ratio: 1 / 1; border-radius: 8px; object-fit: cover;" />
+                                    
                                     </div>
+                                    
                                     <div class="product-info-minimal">
                                         <h4 class="product-title">${prodotto.nome}</h4>
                                         <div class="product-price">€ <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></div>
