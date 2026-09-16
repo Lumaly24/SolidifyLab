@@ -36,15 +36,21 @@
             </c:when>
             
             <c:otherwise>
+            
                 <div class="cart-header-actions">
                     <h1>Il tuo Carrello</h1>
                     
-                    <form action="${pageContext.request.contextPath}/SvuotaCarrelloServlet" method="POST" id="empty-cart-form">
+                    <form action="${pageContext.request.contextPath}/AddtoCart" method="POST" id="empty-cart-form">
+                    
+					    <input type="hidden" name="azione" value="svuota_carrello">
+					    
 					    <button type="button" class="btn-outline-small" onclick="showConfirmAlert('Sei sicuro di voler svuotare completamente il carrello?', 'empty-cart-form')">
 					        <i class="fa-solid fa-trash-can"></i> Svuota Carrello
 					    </button>
+					    
 					</form>
-					                </div>
+					
+				</div>
 
                 <section class="cart-items-container">
                     
@@ -52,8 +58,11 @@
                     
 					    <article class="cart-item-card">
 					    
-					        <form action="${pageContext.request.contextPath}/RimuoviDalCarrelloServlet" method="POST" class="remove-form-container" id="remove-form-${item.prodotto.id}">
+					        <form action="${pageContext.request.contextPath}/AddtoCart" method="POST" class="remove-form-container" id="remove-form-${item.prodotto.id}">
+    
 							    <input type="hidden" name="id_prodotto" value="${item.prodotto.id}">
+							    <input type="hidden" name="azione" value="rimuovi_carrello">
+							    
 							    <button type="button" class="btn-remove-item" title="Rimuovi dal carrello" onclick="showConfirmAlert('Sei sicuro di voler rimuovere questo prodotto dal carrello?', 'remove-form-${item.prodotto.id}')">
 							        <i class="fa-solid fa-xmark"></i>
 							    </button>
@@ -128,14 +137,14 @@
                             <p>Tasse (IVA 22% incl.): <span>€ <fmt:formatNumber value="${sessionScope.carrello.tasse}" pattern="#,##0.00"/></span></p>
                         </div>
 
-                        <form action="${pageContext.request.contextPath}/checkout.jsp" method="GET" class="checkout-form">
-                            <div class="form-group">
-                                <label for="checkoutEmail">Indirizzo Mail (per ricevuta e asset):</label>
-                                <input type="email" id="checkoutEmail" name="email" value="${sessionScope.utenteLoggato.email}" required>
-                            </div>
-
-                            <button type="submit" class="btn-primary btn-checkout">CONFERMA ORDINE <i class="fa-solid fa-arrow-right"></i></button>
-                        </form>
+						<form action="${pageContext.request.contextPath}/Checkout" method="GET" class="checkout-form">
+						    <div class="form-group">
+						        <label for="checkoutEmail">Indirizzo Mail (per ricevuta e asset):</label>
+						        <input type="email" id="checkoutEmail" name="email" value="${sessionScope.utenteLoggato.email}" required>
+						    </div>
+						
+						    <button type="submit" class="btn-primary btn-checkout">CONFERMA ORDINE <i class="fa-solid fa-arrow-right"></i></button>
+						</form>
 
                     </div>
                     
@@ -145,6 +154,7 @@
         </c:choose>
         
         <script>
+        
         function showConfirmAlert(message, formId) {
             const modal = document.getElementById('customAlert');
             const modalText = document.getElementById('customAlertText');

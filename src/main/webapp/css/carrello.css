@@ -407,6 +407,11 @@ html, body {
     font-size: 0.85rem;
 }
 
+.summary-details {
+	font-family: 'coolveticarg', serif;
+	font-weight: 300;
+}
+
 .summary-details p {
     display: flex;
     justify-content: space-between;
@@ -427,4 +432,49 @@ html, body {
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(229, 99, 153, 0.3);
     margin-top: 8px;
+}
+
+/* PER LA PAGINA DI CHECKOUT */
+
+.checkout-header-title {
+    justify-content: center !important;
+}
+
+.checkout-lock-icon {
+    font-size: 1.5rem;
+    color: #e56399;
+    margin-left: 10px;
+}
+
+.checkout-layout {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.checkout-total-box h2 {
+    font-size: 1.5rem;
+}
+
+.checkout-total-box .total-amount {
+    font-size: 2.5rem;
+    display: block;
+    margin-top: 10px;
+}
+
+.checkout-methods-box {
+    margin-top: 20px;
+}
+
+.card-details-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.card-details-col {
+    flex: 1;
+}
+
+.btn-checkout-submit {
+    margin-top: 25px;
 }

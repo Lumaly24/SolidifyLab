@@ -197,15 +197,15 @@
     const formCarrello = document.querySelector('.add-to-cart-form');
     const btnCarrello = formCarrello.querySelector('button[type="submit"]');
     const modalOverlay = document.getElementById('custom-alert-overlay');
+    
+    const testoOriginale = btnCarrello.innerHTML;
 
     function mostraModal(titolo, messaggio, icona, coloreIcona) {
-    	
         document.getElementById('modal-title').innerText = titolo;
         document.getElementById('modal-msg').innerText = messaggio;
         const iconEl = document.getElementById('modal-icon');
         iconEl.className = icona;
         iconEl.style.color = coloreIcona;
-        
         modalOverlay.style.display = 'flex'; 
     }
     
@@ -215,10 +215,9 @@
 
     formCarrello.addEventListener('submit', function(event) {
         event.preventDefault(); 
-
         const datiForm = new URLSearchParams(new FormData(this));
 
-        const testoOriginale = btnCarrello.innerHTML;
+        const testoAttuale = btnCarrello.innerHTML;
         btnCarrello.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> CARICAMENTO...';
 
         fetch(this.action, {
@@ -226,35 +225,36 @@
             body: datiForm,
             credentials: 'same-origin' 
         })
-        
         .then(risposta => risposta.text())
         .then(esito => {
             
-            btnCarrello.innerHTML = testoOriginale; 
-
-            if(esito === 'aggiunto') {
+            if(esito === 'aggiunto_fisico') {
             	
+                btnCarrello.innerHTML = testoOriginale; 
                 mostraModal("Evviva!", "Aggiunto al carrello.", "fa-solid fa-cart-plus", "#e56399"); 
             } 
-            
-            else if(esito === 'gia_presente') {
-            	
-                mostraModal("Attenzione", "Prodotto già aggiunto!", "fa-solid fa-triangle-exclamation", "#f39c12"); 
-                
-                btnCarrello.innerHTML = '<i class="fa-solid fa-check"></i> GIÀ NEL CARRELLO';
-                btnCarrello.style.backgroundColor = '#2c3e50'; 
-                btnCarrello.style.pointerEvents = 'none'; 
+            else if(esito === 'aggiunto_digitale') {
+
+                btnCarrello.innerHTML = '<i class="fa-solid fa-trash-can"></i> RIMUOVI DAL CARRELLO';
+                btnCarrello.style.backgroundColor = '#e74c3c'; 
+                btnCarrello.style.borderColor = '#c0392b';
+                mostraModal("Evviva!", "Licenza digitale aggiunta al carrello.", "fa-solid fa-cart-plus", "#e56399"); 
             } 
-            
+            else if(esito === 'rimosso_digitale') {
+
+                btnCarrello.innerHTML = testoOriginale;
+                btnCarrello.style.backgroundColor = ''; 
+                btnCarrello.style.borderColor = '';
+                mostraModal("Rimosso", "Il prodotto è stato rimosso dal carrello.", "fa-solid fa-trash-can", "#2c3e50"); 
+            } 
             else {
-            	
+                btnCarrello.innerHTML = testoAttuale; 
                 mostraModal("Errore", "Si è verificato un problema tecnico.", "fa-solid fa-circle-xmark", "#e74c3c");
             }
         })
-        
         .catch(error => {
             mostraModal("Errore di Rete", "Impossibile comunicare col server.", "fa-solid fa-wifi", "#e74c3c");
-            btnCarrello.innerHTML = testoOriginale;
+            btnCarrello.innerHTML = testoAttuale;
         });
     });
 </script>

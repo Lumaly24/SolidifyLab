@@ -1,6 +1,6 @@
 package com.solidifylab.controller;
-import java.io.IOException;
 
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +20,21 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         String idProdottoStr = request.getParameter("id_prodotto");
+        String azione = request.getParameter("azione"); 
+        
+        HttpSession session = request.getSession();
+        Carrello carrello = (Carrello) session.getAttribute("carrello");
+        
+        if (carrello == null) {
+            carrello = new Carrello();
+            session.setAttribute("carrello", carrello);
+        }
+
+        if ("svuota_carrello".equals(azione)) {
+            carrello.getProdotti().clear(); 
+            response.sendRedirect(request.getContextPath() + "/Carrello"); 
+            return; 
+        }
         
         if (idProdottoStr != null && !idProdottoStr.isEmpty()) {
             int idProdotto = Integer.parseInt(idProdottoStr);
@@ -28,53 +43,58 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
             Prodotto prodottoTrovato = prodottoDAO.doRetrieveById(idProdotto);
             
             if (prodottoTrovato != null) {
-            	
-            	HttpSession session = request.getSession();
-            	
-            	Carrello carrello = (Carrello) session.getAttribute("carrello");
-            	
-            	if (carrello == null) {
-            		carrello = new Carrello();
-            		session.setAttribute("carrello", carrello);
-            	}
-            	
-            	boolean giaPresente = false;
-            	boolean quantitaAumentata = false;
-            	
-            	for (ItemCarrello item : carrello.getProdotti()) {
-            		if (item.getProdotto().getId() == idProdotto) {
-            			
-            			if (item.getProdotto().getCategoriaId() == 3) { //controllo se è una stampa 3d allora puoi aumentare la quantità
-            				item.setQuantita(item.getQuantita() + 1);
-            				quantitaAumentata = true;
-            			}
-            			
-            			giaPresente = true;
-            			break;
-            		}
-            	}
-            	
-            	if (!giaPresente) {
+                
+                boolean giaPresente = false;
+                boolean quantitaAumentata = false;
+                ItemCarrello itemDaRimuovere = null;
+                
+                for (ItemCarrello item : carrello.getProdotti()) {
+                    if (item.getProdotto().getId() == idProdotto) {
+                        
+                        giaPresente = true;
+                        
+                        if ("rimuovi_carrello".equals(azione)) {
+                            itemDaRimuovere = item;
+                        } 
+                        else if (item.getProdotto().getCategoriaId() == 3) { 
+                            item.setQuantita(item.getQuantita() + 1);
+                            quantitaAumentata = true;
+                        } 
+                        else {
+                            itemDaRimuovere = item;
+                        }
+                        
+                        break;
+                    }
+                }
+                
+                if (itemDaRimuovere != null) {
+                    carrello.getProdotti().remove(itemDaRimuovere);
+                } else if (!giaPresente) {
                     ItemCarrello nuovoItem = new ItemCarrello(prodottoTrovato, 1);
                     carrello.getProdotti().add(nuovoItem);
-                    
-                    response.setContentType("text/plain");
-                    response.getWriter().write("aggiunto");
-                    
-            	} else if (quantitaAumentata) {
-            		
-                    response.setContentType("text/plain");
-                    response.getWriter().write("aggiunto");
-                    
-                } else {
-                	
-                    response.setContentType("text/plain");
-                    response.getWriter().write("gia_presente");
+                }
+                
+                if ("rimuovi_carrello".equals(azione)) {
+                    response.sendRedirect(request.getContextPath() + "/Carrello");
+                    return; 
+                }
+                
+                response.setContentType("text/plain");
+                
+                if (!giaPresente) {
+                    if (prodottoTrovato.getCategoriaId() == 3) {
+                        response.getWriter().write("aggiunto_fisico");
+                    } else {
+                        response.getWriter().write("aggiunto_digitale");
+                    }
+                } else if (itemDaRimuovere != null) {
+                    response.getWriter().write("rimosso_digitale");
+                } else if (quantitaAumentata) {
+                    response.getWriter().write("aggiunto_fisico");
                 }
             }
-            
         } else {
-        	
             response.setContentType("text/plain");
             response.getWriter().write("errore");
         }
