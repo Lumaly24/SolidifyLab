@@ -13,7 +13,6 @@ import com.solidifylab.model.User;
 
 public class OrdineDAO {
 
-    
     public List<Ordine> doRetrieveAll() {
         List<Ordine> ordini = new ArrayList<>();
         
@@ -51,4 +50,35 @@ public class OrdineDAO {
 
         return ordini;
     }
+    
+    public boolean doSave(Ordine ordine) {
+    	
+    	String query = "INSERT INTO ordine (data_ordine, totale, stato, utente_id) VALUES (?, ?, ?, ?)";
+    	
+    	try (Connection con = ConPool.getConnection();
+    			PreparedStatement ps = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+    		
+    			ps.setString(1, ordine.getData());
+    			ps.setDouble(2, ordine.getTotale());
+    			ps.setString(3, ordine.getStato());
+    			ps.setInt(4, ordine.getUtente().getId());
+    			
+    			int affectedRows = ps.executeUpdate();
+    			
+    			if (affectedRows > 0) {
+    				try (ResultSet rs = ps.getGeneratedKeys()) {
+    					
+    					if (rs.next()) {
+    						ordine.setId(rs.getInt(1));
+    					}
+    				}
+    				return true;
+    			}	
+    	} catch (SQLException e) {
+    		System.out.println("Errore durante il salvataggio dell'ordine: ");
+    		e.printStackTrace();
+    	}
+    	return false;
+    }
+    
 }

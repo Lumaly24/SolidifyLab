@@ -6,7 +6,7 @@ public class Ordine {
     private String data;
     private double totale;
     private String stato;
-    private User utente; // Per poter fare ${ordine.utente.nome} nella JSP
+    private User utente;
 
     public Ordine() {}
 

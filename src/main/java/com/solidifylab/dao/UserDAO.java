@@ -10,9 +10,6 @@ import com.solidifylab.model.User;
 
 public class UserDAO {
 
-    /**
-     * Cerca un utente nel database in base a email e password (per il Login)
-     */
     public User doRetrieveByEmailAndPassword(String email, String passwordHash) {
         String query = "SELECT * FROM utente WHERE email = ? AND password_hash = ?";
         
@@ -28,22 +25,21 @@ public class UserDAO {
                     u.setId(rs.getInt("id"));
                     u.setEmail(rs.getString("email"));
                     u.setPasswordHash(rs.getString("password_hash"));
-                    u.setUsername(rs.getString("username")); // <-- AGGIUNTO
+                    u.setUsername(rs.getString("username")); 
                     u.setNome(rs.getString("nome"));
                     u.setCognome(rs.getString("cognome"));
                     u.setRuolo(rs.getString("ruolo"));
-                    return u; // Utente trovato!
+                    return u; 
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Utente non trovato o credenziali errate
+        return null; 
     }
 
-    
     public boolean doSave(User user) {
-        // AGGIORNATA: Inseriamo l'username, nome e cognome prenderanno il valore NULL di default
+        
         String query = "INSERT INTO utente (email, password_hash, username, ruolo) VALUES (?, ?, ?, 'CLIENTE')";
         
         try (Connection con = ConPool.getConnection();
@@ -51,10 +47,10 @@ public class UserDAO {
             
             ps.setString(1, user.getEmail());
             ps.setString(2, user.getPasswordHash());
-            ps.setString(3, user.getUsername()); // <-- AGGIUNTO
+            ps.setString(3, user.getUsername()); 
             
             int righeInserite = ps.executeUpdate();
-            return righeInserite > 0; // Restituisce true se l'inserimento è andato a buon fine
+            return righeInserite > 0; 
             
         } catch (SQLException e) {
             e.printStackTrace();

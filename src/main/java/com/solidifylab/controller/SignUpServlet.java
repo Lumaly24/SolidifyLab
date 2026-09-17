@@ -17,26 +17,24 @@ public class SignUpServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        // 1. Leggiamo i parametri inviati dal form di registrazione
-        String username = request.getParameter("username"); // Sostituisce nome e cognome
+        String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         
-        // 2. Creiamo un oggetto User con i dati ricevuti
         User nuovoUser = new User();
-        nuovoUser.setUsername(username); // Nuovo campo
+        nuovoUser.setUsername(username); 
         nuovoUser.setEmail(email);
         nuovoUser.setPasswordHash(password);
         
-        // 3. Salviamo l'utente tramite il DAO
         UserDAO userDAO = new UserDAO();
         boolean registrato = userDAO.doSave(nuovoUser);
         
         if (registrato) {
-            // Registrazione riuscita! Reindirizziamo al login
+        	
             response.sendRedirect(request.getContextPath() + "/login.jsp?registrazione=successo");
+            
         } else {
-            // Qualcosa è andato storto (es. email o username già esistenti)
+        	
             request.setAttribute("erroreSignup", "Errore durante la registrazione. L'email o l'username potrebbero essere già in uso.");
             request.getRequestDispatcher("/WEB-INF/view/signup.jsp").forward(request, response);
         }

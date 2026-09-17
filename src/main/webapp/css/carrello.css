@@ -17,7 +17,12 @@ html, body {
     overflow-x: hidden;
 }
 
-.btn-secondary {
+.btn-primary {
+	font-family: 'Afterglow', serif;
+	font-weight: 300;
+}
+
+.btn-secondary, .btn-primary {
     padding: 10px 25px;
     background: #e56399;
     color: #eff1ed;
@@ -28,7 +33,7 @@ html, body {
     transition: all 0.2s ease;
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover, .btn-primary:hover {
     background: #f7ccde;
     color: #0f0326;
 }
@@ -437,6 +442,8 @@ html, body {
 /* PER LA PAGINA DI CHECKOUT */
 
 .checkout-header-title {
+	color: #eff1ed;
+	text-shadow: 2px 2px 5px #eff1ed;
     justify-content: center !important;
 }
 
@@ -477,4 +484,88 @@ html, body {
 
 .btn-checkout-submit {
     margin-top: 25px;
+}
+
+.invoice-page {
+    text-align: center;
+    padding: 60px 20px;
+    justify-content: center;
+}
+
+.success-icon i {
+    font-size: 4.5rem;
+    color: #2ecc71;
+    margin-bottom: 10px;
+    text-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+}
+
+.invoice-title {
+    font-family: 'Elephant', serif;
+    font-size: 2.5rem;
+    color: #0f0326;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px 5px #eff1ed;
+}
+
+.invoice-subtitle {
+    font-family: 'coolveticarg', sans-serif;
+    font-size: 1.1rem;
+    color: #0f0326;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 5px #eff1ed;
+}
+
+.invoice-glass-box {
+    max-width: 450px;
+    width: 100%;
+    margin: 0 auto 30px auto;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 12px 40px rgba(15, 3, 38, 0.15);
+    text-align: left;
+}
+
+.invoice-glass-box h3 {
+    font-family: 'Elephant', serif;
+    font-size: 1.4rem;
+    color: #0f0326;
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+.invoice-details {
+    font-family: 'coolveticarg', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.invoice-details p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    font-size: 1.1rem;
+    color: #0f0326;
+}
+
+.invoice-details strong {
+    font-family: 'coolveticaitalic', sans-serif;
+    color: #e56399;
+}
+
+.status-success {
+    color: #27ae60; 
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.invoice-actions {
+    margin-top: 20px;
 }
