@@ -102,6 +102,7 @@
                     </c:when>
                     
                     <c:otherwise>
+                    
                         <c:forEach var="item" items="${listaWishlist}">
                             <article class="product-card">
                                 
@@ -130,17 +131,51 @@
                                     </div>
                                 </a>
                                 
-                               <form action="${pageContext.request.contextPath}/AddtoCart" method="POST">
-                                    <input type="hidden" name="id_prodotto" value="${item.id}">
-                                    <input type="hidden" name="quantita" value="1">
-                                    <button type="submit" class="btn-primary w-100 btn-bottom-rounded">
-                                        <i class="fa-solid fa-cart-plus"></i> AL CARRELLO
-                                    </button>
-                                </form>
+                               <form action="${pageContext.request.contextPath}/AddtoCart" method="POST" class="add-to-cart-form" style="width: 100%;">
+								    
+								    <input type="hidden" name="id_prodotto" value="${item.id}">
+								    
+								    <c:choose>
+								    
+								        <c:when test="${item.categoriaId == 3}">
+								        
+								            <div class="cart-action-group">
+								            
+								                <div class="quantity-control">
+								                
+								                    <button type="button" class="qty-btn" onclick="updateQty(this, -1)">-</button>
+								                    <input type="number" name="quantita" value="1" min="1" max="99" readonly class="qty-input">
+								                    <button type="button" class="qty-btn" onclick="updateQty(this, 1)">+</button>
+								                </div>
+								                
+								                <button type="submit" class="btn-primary btn-add-stampe" title="Aggiungi al carrello">
+								                    <i class="fa-solid fa-cart-plus"></i>
+								                </button>
+								                
+								            </div>
+								            
+								        </c:when>
+								        
+								        <c:otherwise>
+								        
+								            <input type="hidden" name="quantita" value="1">
+								            
+								            <button type="submit" class="btn-bottom-rounded">
+								                <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO
+								            </button>
+								            
+								        </c:otherwise>
+								        
+								    </c:choose>
+								    
+								</form>
                                 
                             </article>
+                            
                         </c:forEach>
+                        
                     </c:otherwise>
+                    
                 </c:choose>
                 
             </div>
@@ -201,17 +236,40 @@
         const modal = document.getElementById('successModal');
         if (modal) {
             modal.style.display = 'none';
-            window.location.href = "${pageContext.request.contextPath}/Home";
         }
     }
 </script>
 
-<c:if test="${not empty requestScope.successMessage}">
+<c:if test="${not empty sessionScope.successMessage}">
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            showSuccessModal("${requestScope.successMessage}");
+            showSuccessModal("${sessionScope.successMessage}");
         });
     </script>
+    <c:remove var="successMessage" scope="session" />
 </c:if>
+
+<c:if test="${not empty sessionScope.errorMessage}">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            showCustomAlert("${sessionScope.errorMessage}");
+        });
+    </script>
+    <c:remove var="errorMessage" scope="session" />
+</c:if>
+
+<script>
+	function updateQty(button, change) {
+	    const container = button.closest('.quantity-control');
+	    const input = container.querySelector('.qty-input');
+	    
+	    let currentVal = parseInt(input.value) || 1;
+	    let newVal = currentVal + change;
+	    
+	    if (newVal >= 1 && newVal <= 99) {
+	        input.value = newVal;
+	    }
+	}
+</script>
 
 <%@ include file="fragment/footer.jspf" %>

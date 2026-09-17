@@ -21,18 +21,22 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
         
         String idProdottoStr = request.getParameter("id_prodotto");
         String azione = request.getParameter("azione"); 
-        
         String isAjax = request.getParameter("isAjax"); 
+        
+        String quantitaStr = request.getParameter("quantita");
+        int quantitaDaAggiungere = (quantitaStr != null && !quantitaStr.isEmpty()) ? Integer.parseInt(quantitaStr) : 1;
         
         HttpSession session = request.getSession();
         Carrello carrello = (Carrello) session.getAttribute("carrello");
         
         if (carrello == null) {
+        	
             carrello = new Carrello();
             session.setAttribute("carrello", carrello);
         }
 
         if ("svuota_carrello".equals(azione)) {
+        	
             carrello.getProdotti().clear(); 
             session.setAttribute("carrello", carrello); 
             response.sendRedirect(request.getContextPath() + "/Carrello"); 
@@ -40,76 +44,105 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
         }
         
         if (idProdottoStr != null && !idProdottoStr.isEmpty()) {
+        	
             int idProdotto = Integer.parseInt(idProdottoStr);
 
             ProdottoDAO prodottoDAO = new ProdottoDAO();
             Prodotto prodottoTrovato = prodottoDAO.doRetrieveById(idProdotto);
             
             if (prodottoTrovato != null) {
-                
+            	
                 boolean giaPresente = false;
-                boolean quantitaAumentata = false;
-                ItemCarrello itemDaRimuovere = null;
+                ItemCarrello itemTrovato = null;
                 
                 for (ItemCarrello item : carrello.getProdotti()) {
+                	
                     if (item.getProdotto().getId() == idProdotto) {
-                        
                         giaPresente = true;
-                        
-                        if ("rimuovi_carrello".equals(azione)) {
-                            itemDaRimuovere = item;
-                        } 
-                        else if (item.getProdotto().getCategoriaId() == 3) { 
-                            item.setQuantita(item.getQuantita() + 1);
-                            quantitaAumentata = true;
-                        } 
-                        else {
-                            itemDaRimuovere = item;
-                        }
-                        
+                        itemTrovato = item;
                         break;
                     }
                 }
                 
-                if (itemDaRimuovere != null) {
-                    carrello.getProdotti().remove(itemDaRimuovere);
-                } else if (!giaPresente) {
-                    ItemCarrello nuovoItem = new ItemCarrello(prodottoTrovato, 1);
-                    carrello.getProdotti().add(nuovoItem);
+                boolean isDigitale = (prodottoTrovato.getCategoriaId() != 3); 
+                boolean duplicateError = false;
+
+                if ("rimuovi_carrello".equals(azione)) {
+                	
+                    if (itemTrovato != null) carrello.getProdotti().remove(itemTrovato);
+                    
+                } else {
+                	
+                    if (giaPresente) {
+                    	
+                        if (isDigitale) {
+                        	
+                            duplicateError = true;
+                            
+                        } else {
+                        	
+                            itemTrovato.setQuantita(itemTrovato.getQuantita() + quantitaDaAggiungere);
+                        }
+                    } else {
+                    	
+                        ItemCarrello nuovoItem = new ItemCarrello(prodottoTrovato, quantitaDaAggiungere);
+                        carrello.getProdotti().add(nuovoItem);
+                    }
                 }
                 
                 session.setAttribute("carrello", carrello);
                 
                 if ("true".equals(isAjax)) {
+
                     response.setContentType("text/plain");
-                    if (!giaPresente) {
-                        if (prodottoTrovato.getCategoriaId() == 3) {
-                            response.getWriter().write("aggiunto_fisico");
-                        } else {
-                            response.getWriter().write("aggiunto_digitale");
-                        }
-                    } else if (itemDaRimuovere != null) {
-                        response.getWriter().write("rimosso_digitale");
-                    } else if (quantitaAumentata) {
+                    
+                    if (duplicateError) {
+                    	
+                        response.getWriter().write("gia_presente");
+                        
+                    } else if (isDigitale) {
+                    	
+                        response.getWriter().write("aggiunto_digitale");
+                        
+                    } else {
+                    	
                         response.getWriter().write("aggiunto_fisico");
                     }
+                    
                 } else {
+
                     if ("rimuovi_carrello".equals(azione)) {
+                    	
                         response.sendRedirect(request.getContextPath() + "/Carrello");
                         return; 
                     }
                     
-                    String referer = request.getHeader("referer");
-                    if (referer != null) {
-                        response.sendRedirect(referer);
+                    if (duplicateError) {
+                    	
+                        session.setAttribute("errorMessage", "Questo elemento è già nel tuo carrello!");
+                        
                     } else {
+                    	
+                        session.setAttribute("successMessage", "Aggiunto al carrello con successo!");
+                    }
+                    
+                    String referer = request.getHeader("referer");
+                    
+                    if (referer != null) {
+                    	
+                        response.sendRedirect(referer);
+                        
+                    } else {
+                    	
                         response.sendRedirect(request.getContextPath() + "/Carrello");
                     }
                 }
                 return;
             }
+            
         } else {
+        	
+        }
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID Prodotto mancante");
         }
     }
-}

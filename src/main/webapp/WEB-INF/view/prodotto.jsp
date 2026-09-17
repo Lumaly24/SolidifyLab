@@ -166,41 +166,68 @@ v<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="U
                 </c:if>
 
                 <form class="add-to-cart-form" action="${pageContext.request.contextPath}/AddtoCart" method="POST">
-                    
-                    <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-
-                    <c:if test="${catCodice == 'STAMPA_3D'}">
-                        <div class="material-selector">
-                            <p><strong>Seleziona Materiale:</strong></p>
-                            <div class="material-options">
-                                <label class="mat-radio">
-                                    <input type="radio" name="materiale" value="resina_grigia" checked>
-                                    <span>Resina Grigia (Alto Dettaglio)</span>
-                                </label>
-                                <label class="mat-radio">
-                                    <input type="radio" name="materiale" value="pla_nero">
-                                    <span>PLA Nero (Resistente)</span>
-                                </label>
-                            </div>
-                        </div>
-                    </c:if>
-
-                    <div class="product-purchase-action">
-	                        <button type="submit" class="btn-primary btn-add-cart-large">
-	                            <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO - € <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/>
-	                        </button>
-                    </div>
-                </form>
+                
+				    <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+				
+				    <c:if test="${catCodice == 'STAMPA_3D'}">
+				    
+				        <div class="material-selector">
+				        
+				            <p><strong>Seleziona Materiale:</strong></p>
+				            <div class="material-options">
+				            
+				                <label class="mat-radio">
+				                    <input type="radio" name="materiale" value="resina_grigia" checked>
+				                    <span>Resina Grigia (Alto Dettaglio)</span>
+				                </label>
+				                
+				                <label class="mat-radio">
+				                    <input type="radio" name="materiale" value="pla_nero">
+				                    <span>PLA Nero (Resistente)</span>
+				                </label>
+				            </div>
+				            
+				        </div>
+				
+				        <div class="quantity-selector-large" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+				            <p style="margin: 0;"><strong>Quantità:</strong></p>
+				            
+				            <div class="quantity-control" style="display: flex; align-items: center; background: rgba(255,255,255,0.4); border: 1px solid rgba(229, 99, 153, 0.3); border-radius: 8px; width: 120px; padding: 5px;">
+				                <button type="button" class="qty-btn" onclick="updateQty(this, -1)" style="border:none; background:none; color:#e56399; font-size:1.2rem; cursor:pointer; width: 30px;">-</button>
+				                <input type="number" name="quantita" value="1" min="1" max="99" readonly class="qty-input" style="width: 100%; border:none; background:transparent; text-align:center; font-family:'coolveticarg', sans-serif; font-size:1.1rem; color:#0f0326; pointer-events:none;">
+				                <button type="button" class="qty-btn" onclick="updateQty(this, 1)" style="border:none; background:none; color:#e56399; font-size:1.2rem; cursor:pointer; width: 30px;">+</button>
+				            
+				            </div>
+				            
+				        </div>
+				    </c:if>
+				
+				    <c:if test="${catCodice != 'STAMPA_3D'}">
+				        <input type="hidden" name="quantita" value="1">
+				    </c:if>
+				
+				    <div class="product-purchase-action">
+				        <button type="submit" class="btn-primary btn-add-cart-large">
+				            <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO - € <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/>
+				        </button>
+				    </div>
+				</form>
+                
               </section>
+              
         </div>
         
      <div id="custom-alert-overlay">
+     
 	    <div class="custom-alert-box">
+	    
 	        <i id="modal-icon" class="fa-solid fa-circle-check"></i>
 	        <h3 id="modal-title">Titolo</h3>
 	        <p id="modal-msg">Messaggio</p>
 	        <button type="button" class="btn-primary alert-btn" onclick="chiudiModal()">Okay</button>
+	        
 	    </div>
+	    
 	</div>   
 
     </main>
@@ -270,6 +297,20 @@ v<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="U
             btnCarrello.innerHTML = testoAttuale;
         });
     });
+</script>
+
+<script>
+	function updateQty(button, change) {
+	    const container = button.closest('.quantity-control');
+	    const input = container.querySelector('.qty-input');
+	    
+	    let currentVal = parseInt(input.value) || 1;
+	    let newVal = currentVal + change;
+	    
+	    if (newVal >= 1 && newVal <= 99) {
+	        input.value = newVal;
+	    }
+	}
 </script>
 
 <%@ include file="fragment/footer.jspf" %>

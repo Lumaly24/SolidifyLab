@@ -75,57 +75,79 @@
                             </c:when>
                             <c:otherwise>
                                 <c:forEach var="prodotto" items="${prodottiInEvidenza}" varStatus="status">
+                                
                                     <article class="product-card">
-                                        
-                                        <div class="product-badges">
-                                            
-                                            <c:if test="${status.index < 3}">
-                                                <img src="${pageContext.request.contextPath}/images/new-button.png" alt="New" class="new-button-img" loading="lazy">
-                                            </c:if>
-                                            
-                                            <c:set var="inWishlist" value="false" />
-                                            <c:forEach var="wId" items="${sessionScope.wishlistIds}">
-                                                <c:if test="${wId == prodotto.id}">
-                                                    <c:set var="inWishlist" value="true" />
-                                                </c:if>
-                                            </c:forEach>
-
-											<c:choose>
-											    <c:when test="${not empty sessionScope.utenteLoggato}">
-											        <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
-											            <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-											            <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
-											                <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
-											            </button>
-											        </form>
-											    </c:when>
-											    <c:otherwise>
-											        <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="showLoginAlert('${pageContext.request.contextPath}/Login')">
-											            <i class="fa-regular fa-heart"></i>
-											        </button>
-											    </c:otherwise>
-											</c:choose>
-                                            
-                                        </div>
-                                        
-                                        <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
-                                            <div class="product-image">
-                                            
-                                                <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" 
-												     alt="${prodotto.nome}" />
-														    
-                                            </div>
-                                            
-                                            <div class="product-price">
-                                                <span>&euro; <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></span>
-                                            </div>
-                                        </a>
-                                    </article>
+    
+									    <div class="product-badges">
+									    
+									        <c:if test="${status.index < 3}">
+									            <img src="${pageContext.request.contextPath}/images/new-button.png" alt="New" class="new-button-img" loading="lazy">
+									        
+									        </c:if>
+									        
+									        <c:set var="inWishlist" value="false"/>
+									        
+									        <c:forEach var="wId" items="${sessionScope.wishlistIds}">
+									        
+									            <c:if test="${wId == prodotto.id}">
+									                <c:set var="inWishlist" value="true" />
+									            </c:if>
+									        
+									        </c:forEach>
+									
+									        <c:choose>
+									        
+									            <c:when test="${not empty sessionScope.utenteLoggato}">
+									            
+									                <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
+									                    <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+									                    <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
+									                        <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
+									                    </button>
+									                </form>
+									                
+									            </c:when>
+									            
+									            <c:otherwise>
+									            
+									                <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="showLoginAlert('${pageContext.request.contextPath}/Login')">
+									                    <i class="fa-regular fa-heart"></i>
+									                </button>
+									                
+									            </c:otherwise>
+									            
+									        </c:choose>
+									        
+									    </div>
+									    
+									    <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
+									        
+									        <div class="product-image">
+									            <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" 
+									                 alt="${prodotto.nome}" />
+									        </div>
+									        
+									        <div class="product-info-minimal">
+									        
+									            <h4 class="product-title">${prodotto.nome}</h4>
+									            <div class="product-price">
+									                <span>&euro; <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></span>
+									            </div>
+									            
+									        </div>
+									        
+									    </a>
+									    
+									</article>
+                                    
                                 </c:forEach>
+                                
                             </c:otherwise>
+                            
                         </c:choose>
             
                     </div>
+                    
                 </div>
 
                 <button type="button" class="carousel-arrow next-btn" id="nextBtn" aria-label="Successivo">

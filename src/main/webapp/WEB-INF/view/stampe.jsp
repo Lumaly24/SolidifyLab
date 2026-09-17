@@ -134,7 +134,7 @@
 
                                         <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" 
 										     alt="${prodotto.nome}" 
-										     style="width: 100%; aspect-ratio: 1 / 1; border-radius: 8px; object-fit: cover;" />
+										     style="width: 100%; max-width: 100%; height: auto; aspect-ratio: 1 / 1; border-radius: 8px; object-fit: contain; display: block;" />
                                     
                                     </div>
                                     
