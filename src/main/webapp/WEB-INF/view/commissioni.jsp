@@ -57,7 +57,7 @@
             <div class="step-dot" id="dot-3">3</div>
         </div>
         
-        <form id="commissionForm" action="${pageContext.request.contextPath}/RichiestaCommissioneServlet" method="POST" enctype="multipart/form-data" onsubmit="return validaCommissione()" novalidate style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+        <form id="commissionForm" action="${pageContext.request.contextPath}/Request" method="POST" enctype="multipart/form-data" onsubmit="return validaCommissione()" novalidate style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
             
             <div class="commission-form-scroll-area">
                 

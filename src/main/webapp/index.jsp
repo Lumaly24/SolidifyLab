@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <% request.setAttribute("titoloPagina", "Home"); %>
-<%@ include file="/WEB-INF/view/fragment/header.jspf" %>
 
 <% request.setAttribute("isHome", true); %>
 <%@ include file="/WEB-INF/view/fragment/header.jspf"%>
@@ -44,7 +43,6 @@
                     </div>
                 </a>
 
-                <!-- 3. Stampe 3D: Se la servlet delle stampe ti dà ancora 404, puntiamo temporaneamente alla jsp o correggiamo la rotta -->
                 <a href="${pageContext.request.contextPath}/Stampe" class="category-card">
                     <div class="card-img-container">
                         <img src="${pageContext.request.contextPath}/images/stampe3d-sfondo.png" alt="Stampe 3D" loading="lazy">
@@ -63,8 +61,8 @@
             <div class="carousel-outer-container">
             
                 <button type="button" class="carousel-arrow prev-btn hidden" id="prevBtn" aria-label="Precedente">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
+				    <i class="fa-solid fa-chevron-left"></i>
+				</button>
 
                 <div class="carousel-mask-wrapper">
                     <div class="products-carousel" id="productsCarousel">
@@ -120,7 +118,7 @@
 									        
 									    </div>
 									    
-									    <a href="${pageContext.request.contextPath}/DettaglioProdottoServlet?id=${prodotto.id}" class="product-link">
+									    <a href="${pageContext.request.contextPath}/Prodotto?id=${prodotto.id}" class="product-link">
 									        
 									        <div class="product-image">
 									            <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" 
@@ -234,25 +232,52 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // --- SCRIPT 1: CAROSELLO ---
+        
+    	// --- SCRIPT 1: CAROSELLO ---
         const carousel = document.getElementById('productsCarousel');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
         if (carousel && prevBtn && nextBtn) {
+            
             function updateArrows() {
                 const scrollLeft = Math.ceil(carousel.scrollLeft);
                 const maxScroll = Math.floor(carousel.scrollWidth - carousel.clientWidth);
                 
-                prevBtn.classList.toggle('hidden', scrollLeft <= 10);
-                nextBtn.classList.toggle('hidden', scrollLeft >= maxScroll - 10);
+                if (scrollLeft <= 40) {
+                    prevBtn.style.opacity = '0';
+                    prevBtn.style.pointerEvents = 'none';
+                } else {
+                	prevBtn.classList.remove('hidden');
+                    prevBtn.style.opacity = '1';
+                    prevBtn.style.pointerEvents = 'auto';
+                }
+
+                if (scrollLeft >= maxScroll - 50) {
+                    nextBtn.style.opacity = '0';
+                    nextBtn.style.pointerEvents = 'none';
+                } else {
+                	prevBtn.classList.remove('hidden');
+                    nextBtn.style.opacity = '1';
+                    nextBtn.style.pointerEvents = 'auto';
+                }
             }
 
-            nextBtn.addEventListener('click', () => carousel.scrollBy({ left: 220, behavior: 'smooth' }));
-            prevBtn.addEventListener('click', () => carousel.scrollBy({ left: -220, behavior: 'smooth' }));
+            function getScrollAmount() {
+                const card = carousel.querySelector('.product-card');
+                if (!card) return 240; 
+                const gap = parseFloat(window.getComputedStyle(carousel).gap) || 20;
+                return card.offsetWidth + gap;
+            }
+
+            nextBtn.addEventListener('click', () => carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' }));
+            prevBtn.addEventListener('click', () => carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' }));
+            
             carousel.addEventListener('scroll', updateArrows);
             window.addEventListener('resize', updateArrows);
+            
             updateArrows();
+            setTimeout(updateArrows, 150); 
         }
 
         // --- SCRIPT 2: SCROLL SPY CON OBSERVER (PRECISO AL 100%) ---
@@ -322,6 +347,7 @@
                 .catch(err => console.error('Errore Wishlist:', err));
             });
         });
+        
     });
 </script>
 

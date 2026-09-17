@@ -21,7 +21,6 @@ public class GestioneCommissioniServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        // 1. CONTROLLO DI SICUREZZA (Solo ADMIN)
         HttpSession session = request.getSession(false);
         User utente = null;
         
@@ -29,27 +28,22 @@ public class GestioneCommissioniServlet extends HttpServlet {
             utente = (User) session.getAttribute("utenteLoggato");
         }
 
-        // Se l'utente non è loggato o non è ADMIN, viene rimandato alla home
         if (utente == null || !"ADMIN".equals(utente.getRuolo())) {
-            response.sendRedirect(request.getContextPath() + "/IndexServlet"); 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
             return;
         }
 
-        // 2. RECUPERO DATI DAL DATABASE
         CommissioneDAO commissioneDAO = new CommissioneDAO();
         List<Commissione> listaCommissioni = commissioneDAO.getAllCommissioni();
         
-        // 3. PASSAGGIO DEI DATI ALLA JSP
         request.setAttribute("commissioniList", listaCommissioni);
         
-        // PATH AGGIORNATO ALLA CARTELLA VIEW
         request.getRequestDispatcher("/WEB-INF/view/admin_commissioni.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        // 1. CONTROLLO DI SICUREZZA SUL POST
         HttpSession session = request.getSession(false);
         User utente = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
         
@@ -58,8 +52,7 @@ public class GestioneCommissioniServlet extends HttpServlet {
             return;
         }
 
-        // 2. LETTURA DEI PARAMETRI INVIATI DA JAVASCRIPT (AJAX)
-        String action = request.getParameter("action"); // 'accetta', 'rifiuta' o 'visiona'
+        String action = request.getParameter("action");
         String idParam = request.getParameter("id");
         
         if (action != null && idParam != null) {
@@ -67,7 +60,6 @@ public class GestioneCommissioniServlet extends HttpServlet {
                 int commissioneId = Integer.parseInt(idParam);
                 CommissioneDAO commissioneDAO = new CommissioneDAO();
                 
-                // 3. ESECUZIONE DELL'AZIONE SUL DATABASE
                 switch (action) {
                     case "accetta":
                         commissioneDAO.updateStato(commissioneId, "ACCETTATA");
@@ -80,14 +72,13 @@ public class GestioneCommissioniServlet extends HttpServlet {
                         break;
                 }
                 
-                // Risposta di successo per il JavaScript
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write("Operazione completata con successo");
                 
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID non valido");
             } catch (Exception e) {
-                e.printStackTrace(); // Utile per vedere l'errore nella console di Eclipse
+                e.printStackTrace(); 
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore del database");
             }
         } else {

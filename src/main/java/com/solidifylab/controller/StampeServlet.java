@@ -1,6 +1,8 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,18 +20,41 @@ public class StampeServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        // 1. Chiamiamo il DAO per interrogare il database
         ProdottoDAO prodottoDAO = new ProdottoDAO();
-        
-        // 2. Recuperiamo i prodotti della categoria Stampe 3D. 
-        // Assicurati che '3' sia l'ID corretto della categoria Stampe nel tuo Database!
         int idCategoriaStampe = 3; 
-        List<Prodotto> stampe = prodottoDAO.doRetrieveByCategoria(idCategoriaStampe);
         
-        // 3. Passiamo la lista alla JSP usando l'esatto nome che si aspetta: "listaStampe"
+        String maxPriceParam = request.getParameter("max_price");
+        
+        String[] categorie = request.getParameterValues("categoria");
+        String[] materiali = request.getParameterValues("materiale");
+        String[] finiture = request.getParameterValues("finitura");
+        
+        List<String> tuttiITags = new ArrayList<>();
+        if (categorie != null) tuttiITags.addAll(Arrays.asList(categorie));
+        if (materiali != null) tuttiITags.addAll(Arrays.asList(materiali));
+        if (finiture != null) tuttiITags.addAll(Arrays.asList(finiture));
+        
+        String[] tagsArray = tuttiITags.isEmpty() ? null : tuttiITags.toArray(new String[0]);
+        
+        double maxPrice = 300.0;
+        if (maxPriceParam != null && !maxPriceParam.isEmpty()) {
+            try {
+                maxPrice = Double.parseDouble(maxPriceParam);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        List<Prodotto> stampe;
+        
+        if ((maxPriceParam != null) || (tagsArray != null)) {
+            stampe = prodottoDAO.doRetrieveByFilters(idCategoriaStampe, maxPrice, tagsArray);
+        } else {
+            stampe = prodottoDAO.doRetrieveByCategoria(idCategoriaStampe);
+        }
+        
         request.setAttribute("listaStampe", stampe);
         
-        // 4. Facciamo il forward al nome corretto della pagina JSP
         request.getRequestDispatcher("/WEB-INF/view/stampe.jsp").forward(request, response);
     }
 

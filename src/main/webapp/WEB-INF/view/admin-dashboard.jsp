@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <c:if test="${empty sessionScope.utenteLoggato or sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
     <c:redirect url="${pageContext.request.contextPath}/login" />
@@ -200,14 +201,16 @@
                             <tr>
                                 <td>#${comm.id}</td>
                                 <td>${comm.email}</td>
-                                <td>${comm.tipo}</td>
+                                <td>${comm.tipi}</td>
                                 <td>
-                                    <span class="status-badge status-${comm.stato.toLowerCase().replace(' ', '-')}">${comm.stato}</span>
-                                </td>
+					                <span class="status-badge status-${fn:toLowerCase(fn:replace(comm.stato, '_', '-'))}">
+					                    ${fn:replace(comm.stato, '_', ' ')}
+					                </span>
+					            </td>
                                 <td class="table-actions">
-                                    <form action="${pageContext.request.contextPath}/GestisciCommissioneServlet" method="GET">
+                                    <form action="${pageContext.request.contextPath}/GestioneCommissioni" method="GET">
                                         <input type="hidden" name="id" value="${comm.id}">
-                                        <button type="submit" class="btn-outline-small">Gestisci</button>
+                                        <button type="submit" class="btn-icon blue text-blue"><i class="fa-solid fa-gear"></i></button>
                                     </form>
                                 </td>
                             </tr>

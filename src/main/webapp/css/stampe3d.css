@@ -78,10 +78,35 @@
 }
 
 .filter-group h3 {
+    font-family: 'coolveticaitalic', sans-serif;
     font-size: 1.1rem;
-    color: #0f0326;
+    color: #374477;
     margin-top: 0;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(55, 68, 119, 0.3); 
+    padding-bottom: 6px;
+}
+
+.filter-group details {
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.filter-group details summary {
+    font-family: 'coolveticarg', serif;
+    font-weight: 700;
+    cursor: pointer; 
+    color: #374477; 
+    font-size: 0.95rem; 
+    margin-bottom: 10px;
+    outline: none; 
+}
+
+.sidebar-divider { 
+    border: none; 
+    height: 1px; 
+    background: rgba(15, 3, 38, 0.15); 
+    margin: 10px 0 12px 0; 
 }
 
 .filter-list {

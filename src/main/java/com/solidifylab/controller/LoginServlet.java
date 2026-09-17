@@ -1,7 +1,7 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
-import java.util.List; // Aggiunto import per la lista
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.solidifylab.dao.UserDAO;
-import com.solidifylab.dao.WishlistDAO; 
+import com.solidifylab.dao.WishlistDAO;
+import com.solidifylab.dao.CarrelloDAO; 
 import com.solidifylab.model.User;
+import com.solidifylab.model.Carrello; 
 
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
@@ -24,7 +26,6 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         
         UserDAO userDAO = new UserDAO();
-        
         User utente = userDAO.doRetrieveByEmailAndPassword(email, password);
         
         if (utente != null) {
@@ -37,9 +38,14 @@ public class LoginServlet extends HttpServlet {
                 List<Integer> wishlistIds = wishlistDAO.getWishlistIdsByUtente(utente.getId());
                 session.setAttribute("wishlistIds", wishlistIds);
                 
-                System.out.println("Wishlist caricata al login per l'utente: " + utente.getId());
+                CarrelloDAO carrelloDAO = new CarrelloDAO();
+                Carrello carrelloDb = carrelloDAO.getCarrelloByUtente(utente.getId());
+                session.setAttribute("carrello", carrelloDb);
+                
+                System.out.println("Wishlist e Carrello caricati al login per l'utente: " + utente.getId());
+                
             } catch (Exception e) {
-                System.out.println("Errore durante il caricamento della wishlist al login: " + e.getMessage());
+                System.out.println("Errore durante il caricamento dei dati utente al login: " + e.getMessage());
             }
             
             response.sendRedirect(request.getContextPath() + "/Home");

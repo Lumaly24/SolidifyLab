@@ -635,17 +635,24 @@ html {
 
 /* PANNELLO DI AMMINISTRAZIONE (ADMIN) */
 
+body main.admin-main-content {
+    min-height: auto !important;
+}
+
 .admin-body-wrapper {
     position: relative;
     z-index: 1;
     padding-top: 130px;
-    padding-bottom: 140px;
+    padding-bottom: 50px !important;
     padding-left: 20px;
     padding-right: 20px;
     width: 95%;
     max-width: 1400px;
     margin: 0 auto;
-    min-height: 100vh;
+    min-height: auto !important;
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
 }
 
 .admin-header {
@@ -882,6 +889,7 @@ html {
 .form-group input[type="file"] {
     padding: 6px 14px; 
 }
+
 
 @media (max-width: 900px) {
     .admin-layout {

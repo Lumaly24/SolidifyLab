@@ -12,39 +12,40 @@ import com.solidifylab.model.ConPool;
 
 public class CommissioneDAO {
 
-    // =================================================================
-    // 1. LATO CLIENTE: SALVATAGGIO NUOVA RICHIESTA
-    // =================================================================
-    public synchronized void doSave(Commissione commissione) throws SQLException {
+	public synchronized void doSave(Commissione commissione) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         String insertSQL = "INSERT INTO commissione "
-                + "(email_contatto, richiede_stampa_3d, richiede_modello_3d, richiede_texture, descrizione_principale, indirizzo_spedizione) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+                + "(utente_id, email_contatto, richiede_stampa_3d, richiede_modello_3d, richiede_texture, descrizione_principale, indirizzo_spedizione) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try { 
             connection = ConPool.getConnection();
             preparedStatement = connection.prepareStatement(insertSQL);
 
-            // 1. Email
-            preparedStatement.setString(1, commissione.getEmail());
+            if ( commissione.getId() > 0) {
+                preparedStatement.setInt(1, commissione.getId());
+            } else {
+                preparedStatement.setNull(1, java.sql.Types.INTEGER);
+            }
+
+            preparedStatement.setString(2, commissione.getEmail());
             
-            // 2, 3, 4. Trasformiamo la stringa "tipi" nei boolean del DB
             String tipi = commissione.getTipi() != null ? commissione.getTipi().toLowerCase() : "";
-            preparedStatement.setBoolean(2, tipi.contains("stampa_3d"));
-            preparedStatement.setBoolean(3, tipi.contains("modello_3d"));
-            preparedStatement.setBoolean(4, tipi.contains("texture"));
+            preparedStatement.setBoolean(3, tipi.contains("stampa 3d") || tipi.contains("stampa_3d"));
+            preparedStatement.setBoolean(4, tipi.contains("modello 3d") || tipi.contains("modello_3d"));
+            preparedStatement.setBoolean(5, tipi.contains("texture"));
             
-            // 5. Descrizione
-            preparedStatement.setString(5, commissione.getDescrizione());
+            preparedStatement.setString(6, commissione.getDescrizione());
             
-            // 6. Formattazione Indirizzo (solo se è stata richiesta una stampa fisica)
             String indirizzoCompleto = null;
             if (commissione.getVia() != null && !commissione.getVia().trim().isEmpty()) {
-                indirizzoCompleto = commissione.getVia() + ", " + commissione.getCap() + " " + commissione.getCitta();
+                indirizzoCompleto = commissione.getVia() + ", " + 
+                                  (commissione.getCitta() != null ? commissione.getCitta() : "") + " " + 
+                                  (commissione.getCap() != null ? commissione.getCap() : "");
             }
-            preparedStatement.setString(6, indirizzoCompleto);
+            preparedStatement.setString(7, indirizzoCompleto);
 
             preparedStatement.executeUpdate();
 
@@ -52,16 +53,11 @@ public class CommissioneDAO {
             try {
                 if (preparedStatement != null) preparedStatement.close();
             } finally {
-                if (connection != null) connection.close(); // Rimette la connessione nel pool
+                if (connection != null) connection.close();
             }
         }
     }
 
-    // =================================================================
-    // 2. LATO ADMIN: GESTIONE DASHBOARD
-    // =================================================================
-
-    // RECUPERA TUTTE LE COMMISSIONI (Ordinate dalle più recenti)
     public List<Commissione> getAllCommissioni() {
         List<Commissione> list = new ArrayList<>();
         String query = "SELECT * FROM commissione ORDER BY data_richiesta DESC";
@@ -78,12 +74,12 @@ public class CommissioneDAO {
                 c.setDescrizione(rs.getString("descrizione_principale"));
                 c.setIndirizzoSpedizione(rs.getString("indirizzo_spedizione"));
                 
-                // Ricostruiamo la stringa "tipi" per stamparla comoda nella JSP dell'admin
-                StringBuilder tipiBuilder = new StringBuilder();
-                if (rs.getBoolean("richiede_stampa_3d")) tipiBuilder.append("Stampa 3D ");
-                if (rs.getBoolean("richiede_modello_3d")) tipiBuilder.append("Modello 3D ");
-                if (rs.getBoolean("richiede_texture")) tipiBuilder.append("Texture ");
-                c.setTipi(tipiBuilder.toString().trim().replace(" ", ", "));
+                List<String> tipiList = new java.util.ArrayList<>();
+                if (rs.getBoolean("richiede_stampa_3d")) tipiList.add("Stampa 3D");
+                if (rs.getBoolean("richiede_modello_3d")) tipiList.add("Modello 3D");
+                if (rs.getBoolean("richiede_texture")) tipiList.add("Texture");
+
+                c.setTipi(String.join(", ", tipiList));
                 
                 c.setStato(rs.getString("stato")); 
                 c.setVisionata(rs.getBoolean("visionata"));
@@ -98,7 +94,6 @@ public class CommissioneDAO {
         return list;
     }
 
-    // AGGIORNA LO STATO (Accetta/Rifiuta)
     public void updateStato(int id, String nuovoStato) {
         String query = "UPDATE commissione SET stato = ?, data_aggiornamento = CURRENT_TIMESTAMP WHERE id = ?";
         
@@ -115,7 +110,6 @@ public class CommissioneDAO {
         }
     }
 
-    // SEGNA LA CARD COME VISIONATA (Sblocca i bottoni)
     public void segnaComeVisionata(int id) {
         String query = "UPDATE commissione SET visionata = TRUE WHERE id = ?";
         
@@ -131,9 +125,6 @@ public class CommissioneDAO {
         }
     }
 
-    // =================================================================
-    // 3. LATO UTENTE: RECUPERA COMMISSIONI PER EMAIL (PER IL TRACKER)
-    // =================================================================
     public List<Commissione> getCommissioniByEmail(String email) {
         List<Commissione> list = new ArrayList<>();
         String query = "SELECT * FROM commissione WHERE email_contatto = ? ORDER BY data_richiesta DESC";
@@ -152,12 +143,12 @@ public class CommissioneDAO {
                     c.setDescrizione(rs.getString("descrizione_principale"));
                     c.setIndirizzoSpedizione(rs.getString("indirizzo_spedizione"));
                     
-                    // Ricostruiamo la stringa dei tipi anche qui
-                    StringBuilder tipiBuilder = new StringBuilder();
-                    if (rs.getBoolean("richiede_stampa_3d")) tipiBuilder.append("Stampa 3D ");
-                    if (rs.getBoolean("richiede_modello_3d")) tipiBuilder.append("Modello 3D ");
-                    if (rs.getBoolean("richiede_texture")) tipiBuilder.append("Texture ");
-                    c.setTipi(tipiBuilder.toString().trim().replace(" ", ", "));
+                    List<String> tipiList = new java.util.ArrayList<>();
+                    if (rs.getBoolean("richiede_stampa_3d")) tipiList.add("Stampa 3D");
+                    if (rs.getBoolean("richiede_modello_3d")) tipiList.add("Modello 3D");
+                    if (rs.getBoolean("richiede_texture")) tipiList.add("Texture");
+
+                    c.setTipi(String.join(", ", tipiList));
                     
                     c.setStato(rs.getString("stato")); 
                     c.setVisionata(rs.getBoolean("visionata"));

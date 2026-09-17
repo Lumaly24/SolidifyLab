@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 
 public class Commissione {
     
-    // Attributi privati originali (lato cliente)
     private int id; 
     private String email;
     private String tipi;
@@ -12,18 +11,13 @@ public class Commissione {
     private String via;
     private String citta;
     private String cap;
-
-    // Nuovi attributi (lato Admin Dashboard / Database)
     private String stato;
     private boolean visionata;
     private Timestamp dataRichiesta;
-    private String indirizzoSpedizione; // Utile per leggere l'indirizzo unito dal DB
+    private String indirizzoSpedizione;
 
-    // Costruttore vuoto (obbligatorio per le regole dei Java Bean)
     public Commissione() {
     }
-
-    // --- GETTER E SETTER ---
 
     public int getId() {
         return id;

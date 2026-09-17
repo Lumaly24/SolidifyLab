@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <% 
     request.setAttribute("titoloPagina", "Stampe 3D");
@@ -16,40 +17,119 @@
 <main class="catalog-page">
     <div class="catalog-layout">
         
-        <!-- SIDEBAR FILTRI -->
+        <!-- ================= SIDEBAR FILTRI ================= -->
         <aside class="catalog-sidebar">
             <form action="${pageContext.request.contextPath}/Stampe" method="GET">
                 
-                <div class="filter-group">
-                    <h3>Materiale</h3>
-                    <ul class="filter-list">
-                        <li><label><input type="checkbox" name="materiale" value="resina"> Resina 8K</label></li>
-                        <li><label><input type="checkbox" name="materiale" value="pla"> PLA Tough</label></li>
-                    </ul>
-                </div>
-
-                <hr class="sidebar-divider">
+                <!-- Trasformiamo gli array dei parametri in stringhe semplici per poter verificare le spunte -->
+                <c:set var="catScelte" value="${fn:join(paramValues.categoria, ',')}" />
+                <c:set var="matScelti" value="${fn:join(paramValues.materiale, ',')}" />
+                <c:set var="finScelte" value="${fn:join(paramValues.finitura, ',')}" />
                 
+                <!-- Filtro Prezzi -->
                 <div class="filter-group">
                     <h3>Filtro Prezzi</h3>
-                    
                     <div class="price-slider">
-                        <c:set var="currentVal" value="${not empty param.max_price ? param.max_price : 150}" />
+                        <!-- Default a 300 se non ci sono parametri impostati -->
+                        <c:set var="currentVal" value="${not empty param.max_price ? param.max_price : 300}" />
                         
                         <input type="range" id="priceRange" name="max_price" min="0" max="300" step="10" value="${currentVal}">
                         
                         <div class="price-labels">
-                            <span>Da 0€</span>
+                            <span>0€</span>
                             <span>Fino a: <b id="priceVal">${currentVal}€</b></span>
                         </div>
                     </div>
                 </div>
+
+                <hr class="sidebar-divider">
                 
-                <button type="submit" class="btn-primary w-100 mt-3">Applica Filtri</button>
+                <!-- Categorie (Stampe 3D) -->
+                <div class="filter-group">
+                    <h3>Stampe 3D</h3>
+                    <ul class="filter-list">
+                        <li>
+                            <label>
+                                <input type="checkbox" name="categoria" value="miniature" ${fn:contains(catScelte, 'miniature') ? 'checked' : ''}> 
+                                Miniature
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="checkbox" name="categoria" value="props" ${fn:contains(catScelte, 'props') ? 'checked' : ''}> 
+                                Props
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="checkbox" name="categoria" value="accessori" ${fn:contains(catScelte, 'accessori') ? 'checked' : ''}> 
+                                Accessori
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Specifiche Tecniche -->
+                <div class="filter-group">
+                    <h3>Specifiche tecniche</h3>
+                    
+                    <!-- Sotto-categoria: Materiali -->
+                    <details open>
+                        <summary>Materiali</summary>
+                        <ul class="filter-list">
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="materiale" value="resina" ${fn:contains(matScelti, 'resina') ? 'checked' : ''}> 
+                                    Resina
+                                </label>
+                            </li>
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="materiale" value="pla" ${fn:contains(matScelti, 'pla') ? 'checked' : ''}> 
+                                    PLA
+                                </label>
+                            </li>
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="materiale" value="petg" ${fn:contains(matScelti, 'petg') ? 'checked' : ''}> 
+                                    PETG
+                                </label>
+                            </li>
+                        </ul>
+                    </details>
+
+                    <!-- Sotto-categoria: Finitura -->
+                    <details open>
+                        <summary>Finitura</summary>
+                        <ul class="filter-list">
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="finitura" value="supporti_rimossi" ${fn:contains(finScelte, 'supporti_rimossi') ? 'checked' : ''}> 
+                                    Supporti Rimossi
+                                </label>
+                            </li>
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="finitura" value="levigatura_primer" ${fn:contains(finScelte, 'levigatura_primer') ? 'checked' : ''}> 
+                                    Levigatura + Primer Base
+                                </label>
+                            </li>
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="finitura" value="colore" ${fn:contains(finScelte, 'colore') ? 'checked' : ''}> 
+                                    Colore
+                                </label>
+                            </li>
+                        </ul>
+                    </details>
+                </div>
+                
+                <button type="submit" class="btn-primary w-100 mt-3">APPLICA FILTRI</button>
+
             </form>
         </aside>
 
-        <!-- COLONNA DI DESTRA -->
+        <!-- ================= COLONNA DI DESTRA ================= -->
         <section class="catalog-main-content">
             
             <div class="top-nav-row">
@@ -71,7 +151,7 @@
                     <h1>SERVIZIO STAMPA <span>3</span>D</h1>
                     <p>
                         Scegli tra i nostri modelli ottimizzati per la stampa o richiedi un preventivo personalizzato. 
-                        Garantiamo altissima risoluzione in Resina 8K e massima resistenza in PLA.
+                        Garantiamo altissima risoluzione in Resina 8K e massima resistenza in PLA e PETG.
                     </p>
                     
                     <div class="file-upload-wrapper">
@@ -84,7 +164,7 @@
                     </div>  
                     
                     <div class="hero-buttons">
-                        <a href="${pageContext.request.contextPath}/Commissioni" class="btn"> 
+                        <a href="${pageContext.request.contextPath}/Commissioni"> 
                             <i class="fa-solid fa-wand-magic-sparkles"></i> STAMPA UN TUO FILE 
                         </a> 
                     </div>
@@ -103,7 +183,7 @@
                             <article class="product-card">
                                 <div class="product-badges">
                                     
-                                    <!-- LOGICA WISHLIST (INTERRUTTORE) -->
+                                    <!-- LOGICA WISHLIST -->
                                     <c:set var="inWishlist" value="false" />
                                     <c:forEach var="wId" items="${sessionScope.wishlistIds}">
                                         <c:if test="${wId == prodotto.id}">
@@ -131,11 +211,9 @@
                                 
                                 <a href="${pageContext.request.contextPath}/Prodotto?id=${prodotto.id}" class="product-link">
                                     <div class="product-image">
-
                                         <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" 
 										     alt="${prodotto.nome}" 
 										     style="width: 100%; max-width: 100%; height: auto; aspect-ratio: 1 / 1; border-radius: 8px; object-fit: contain; display: block;" />
-                                    
                                     </div>
                                     
                                     <div class="product-info-minimal">
