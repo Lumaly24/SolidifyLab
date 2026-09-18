@@ -1,4 +1,5 @@
 package com.solidifylab.model;
+import java.sql.Timestamp;
 
 public class Ordine {
     
@@ -7,6 +8,7 @@ public class Ordine {
     private double totale;
     private String stato;
     private User utente;
+    private Timestamp dataOrdine;
 
     public Ordine() {}
 
@@ -18,12 +20,12 @@ public class Ordine {
         this.id = id;
     }
 
-    public String getData() {
-        return data;
+    public Timestamp getDataOrdine() {
+        return dataOrdine;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDataOrdine(Timestamp dataOrdine) {
+        this.dataOrdine = dataOrdine;
     }
 
     public double getTotale() {

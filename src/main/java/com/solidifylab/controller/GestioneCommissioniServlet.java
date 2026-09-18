@@ -1,6 +1,7 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -36,7 +37,44 @@ public class GestioneCommissioniServlet extends HttpServlet {
         CommissioneDAO commissioneDAO = new CommissioneDAO();
         List<Commissione> listaCommissioni = commissioneDAO.getAllCommissioni();
         
-        request.setAttribute("commissioniList", listaCommissioni);
+        // Suddivisione delle commissioni in liste separate in base allo stato
+        List<Commissione> inAttesa = new ArrayList<>();
+        List<Commissione> accettate = new ArrayList<>();
+        List<Commissione> inLavorazione = new ArrayList<>();
+        List<Commissione> completate = new ArrayList<>();
+        List<Commissione> rifiutate = new ArrayList<>();
+
+        for (Commissione c : listaCommissioni) {
+            String stato = c.getStato() != null ? c.getStato().toUpperCase().trim() : "IN_ATTESA";
+            
+            switch (stato) {
+                case "IN_ATTESA":
+                    inAttesa.add(c);
+                    break;
+                case "ACCETTATA":
+                    accettate.add(c);
+                    break;
+                case "IN_LAVORAZIONE":
+                    inLavorazione.add(c);
+                    break;
+                case "COMPLETATA":
+                    completate.add(c);
+                    break;
+                case "RIFIUTATA":
+                    rifiutate.add(c);
+                    break;
+                default:
+                    inAttesa.add(c);
+                    break;
+            }
+        }
+
+        // Passiamo le singole liste alla JSP
+        request.setAttribute("listaInAttesa", inAttesa);
+        request.setAttribute("listaAccettate", accettate);
+        request.setAttribute("listaInLavorazione", inLavorazione);
+        request.setAttribute("listaCompletate", completate);
+        request.setAttribute("listaRifiutate", rifiutate);
         
         request.getRequestDispatcher("/WEB-INF/view/admin_commissioni.jsp").forward(request, response);
     }
@@ -63,6 +101,12 @@ public class GestioneCommissioniServlet extends HttpServlet {
                 switch (action) {
                     case "accetta":
                         commissioneDAO.updateStato(commissioneId, "ACCETTATA");
+                        break;
+                    case "lavorazione":
+                        commissioneDAO.updateStato(commissioneId, "IN_LAVORAZIONE");
+                        break;
+                    case "completa":
+                        commissioneDAO.updateStato(commissioneId, "COMPLETATA");
                         break;
                     case "rifiuta":
                         commissioneDAO.updateStato(commissioneId, "RIFIUTATA");

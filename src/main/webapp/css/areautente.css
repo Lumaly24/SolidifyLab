@@ -1,3 +1,36 @@
+.auth-btn {
+    padding: 10px 25px;
+    background: #ff302b;
+    color: #eff1ed;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-btn:hover {
+    background: #ff8888;
+    color: #0f0326;
+}
+
+.btn-secondary {
+	padding: 10px 25px;
+    background: #e56399;
+    color: #0f0326;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+	background: #c12065;
+    color: #eff1ed;
+
+}
+
 body {
     background: url('https://images.unsplash.com/photo-1679123440928-92b1d2511d0d?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
     background-size: cover;
@@ -418,7 +451,7 @@ html {
     font-weight: 600;
 }
 
-.status-completato { 
+.status-completata { 
 	background: rgba(46, 204, 113, 0.2); 
 	color: #1e8449; 
 }

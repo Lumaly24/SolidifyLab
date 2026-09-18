@@ -253,7 +253,7 @@
                             <c:otherwise>
                                 <c:forEach var="ordine" items="${sessionScope.storicoOrdini}">
                                     <tr>
-                                        <td>${ordine.data}</td>
+                                        <td><fmt:formatDate value="${ordine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" /></td>
                                         <td>#${ordine.id}</td>
                                         <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
                                         <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>

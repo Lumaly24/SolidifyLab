@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,6 +150,74 @@ public class ProdottoDAO {
         return prodotti;
     }
 
+    public int doSave(Prodotto p) {
+        String query = "INSERT INTO prodotto (categoria_id, nome, descrizione, prezzo_corrente, iva_corrente, quantita_disponibile, formato_file, immagine_copertina_url, cancellato) VALUES (?, ?, ?, ?, ?, ?, ?, ?, FALSE)";
+        int generatedId = -1;
+
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            
+            ps.setInt(1, p.getCategoriaId());
+            ps.setString(2, p.getNome());
+            ps.setString(3, p.getDescrizione());
+            ps.setDouble(4, p.getPrezzoCorrente());
+            ps.setDouble(5, p.getIvaCorrente());
+            ps.setInt(6, p.getQuantitaDisponibile());
+            ps.setString(7, p.getFormatoFile());
+            ps.setString(8, p.getImmagineCopertinaUrl());
+            
+            ps.executeUpdate();
+            
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    generatedId = rs.getInt(1);
+                }
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Errore durante l'inserimento del prodotto:");
+            e.printStackTrace();
+        }
+        
+        return generatedId;
+    }
+
+    public void doSaveTags(int prodottoId, String[] tagIds) {
+        if (tagIds == null || tagIds.length == 0) return;
+        
+        String query = "INSERT INTO prodotto_tag (prodotto_id, tag_id) VALUES (?, ?)";
+        
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            for (String tagIdStr : tagIds) {
+                ps.setInt(1, prodottoId);
+                ps.setInt(2, Integer.parseInt(tagIdStr));
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            
+        } catch (SQLException e) {
+            System.out.println("Errore durante l'inserimento dei tag nella tabella ponte:");
+            e.printStackTrace();
+        }
+    }
+
+    public void doDelete(int id) {
+        String query = "UPDATE prodotto SET cancellato = TRUE WHERE id = ?";
+
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Errore durante l'eliminazione (soft delete) del prodotto:");
+            e.printStackTrace();
+        }
+    }
+
     private Prodotto mapRowToProdotto(ResultSet rs) throws SQLException {
         Prodotto p = new Prodotto();
         p.setId(rs.getInt("id"));
@@ -163,5 +232,26 @@ public class ProdottoDAO {
         p.setDataInserimento(rs.getString("data_inserimento"));
         p.setCancellato(rs.getBoolean("cancellato"));
         return p;
+    }
+    
+    public void doSaveTagsByNames(int prodottoId, String[] tagNomi) {
+        if (tagNomi == null || tagNomi.length == 0) return;
+        
+        String query = "INSERT INTO prodotto_tag (prodotto_id, tag_id) SELECT ?, id FROM tag WHERE nome = ?";
+        
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            for (String nomeTag : tagNomi) {
+                ps.setInt(1, prodottoId);
+                ps.setString(2, nomeTag); 
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            
+        } catch (SQLException e) {
+            System.out.println("Errore durante l'inserimento dei tag per nome:");
+            e.printStackTrace();
+        }
     }
 }

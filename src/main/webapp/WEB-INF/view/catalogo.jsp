@@ -262,7 +262,8 @@
                                             </c:choose>
                 
                                         <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
-										    <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="POST" style="display:inline;" id="delete-form-${prodotto.id}">
+										    <form action="${pageContext.request.contextPath}/Add&Remove" method="POST" style="display:inline;" id="delete-form-${prodotto.id}">
+										        <input type="hidden" name="action" value="remove">
 										        <input type="hidden" name="id" value="${prodotto.id}">
 										        <button type="button" class="btn-wishlist" title="Elimina dal DB" onclick="showDeleteConfirmAlert('Sei sicuro di voler eliminare definitivamente questo prodotto dal catalogo?', 'delete-form-${prodotto.id}')">
 										            <i class="fa-solid fa-trash-can" style="color: #ff4d4d;"></i>
@@ -428,7 +429,7 @@
         const modal = document.getElementById('successModal');
         if (modal) {
             modal.style.display = 'none';
-            window.location.href = "${pageContext.request.contextPath}/Home";
+            window.location.reload(); // Modificato per ricaricare la pagina invece di mandare alla home
         }
     }
 </script>

@@ -29,7 +29,7 @@
 
 <c:set var="tipiSelezionati" value="${fn:join(paramValues.tipo_commissione, ',')}" />
 
-  <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+<div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
     <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 40px 30px; max-width: 400px; width: 85%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
         <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: #2ecc71; margin-bottom: 20px;"></i>
         <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 15px; color: #333;">Evviva!</h3>
@@ -67,7 +67,7 @@
                         
                         <div class="checkbox-group inline-group" id="groupCheckboxes" style="padding: 10px; border-radius: 8px;">
                             <label>
-                                <input type="checkbox" name="tipo_commissione" value="stampa_3d" id="checkStampa" <c:if test="${fn:contains(tipiSelezionati, 'stampa_3d')}">checked</c:if>> Stampa 3D
+                                <input type="checkbox" name="tipo_commissione" value="stampa_3d" id="checkStampa" <c:if test="${fn:contains(tipiSelezionati, 'stampa_3d') or param.tipo == 'stampa_3d' or param.richiede_stampa_3d == 'true'}">checked</c:if>> Stampa 3D
                             </label>
                             <label>
                                 <input type="checkbox" name="tipo_commissione" value="modello_3d" id="checkModello" <c:if test="${fn:contains(tipiSelezionati, 'modello_3d')}">checked</c:if>> Modello 3D
@@ -100,7 +100,13 @@
                             
                             <input type="file" name="file_riferimento" id="fileRiferimento" multiple class="file-input-hidden">
                             
-                            <div id="file-feedback" style="margin-top: 8px; font-size: 0.95rem; color: #2ecc71; font-weight: bold;"></div>
+                            <!-- Avviso visivo per il file ricevuto in POST da stampe3d.jsp -->
+                            <div id="file-feedback" style="margin-top: 8px; font-size: 0.95rem; color: #2ecc71; font-weight: bold;">
+                                <c:if test="${not empty sessionScope.nomeFileTemporaneo}">
+                                    <i class="fa-solid fa-check"></i> File acquisito correttamente: ${sessionScope.nomeFileTemporaneo}
+                                    <input type="hidden" name="file_gia_caricato" value="${sessionScope.nomeFileTemporaneo}">
+                                </c:if>
+                            </div>
                         </div>
 
                         <div class="optional-section hidden-section" id="optionalStampaSection" style="margin-top: 20px;">
@@ -268,7 +274,6 @@
         }
     }
 
-    // GESTIONE VISIBILITA' DEI BOTTONI FISSI
     function updateActions(stepNumber) {
         document.querySelectorAll('.step-actions-group').forEach(group => {
             group.style.display = 'none';
@@ -326,14 +331,14 @@
         document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
         document.getElementById('step-' + stepNumber).classList.add('active');
         updateDots(stepNumber);
-        updateActions(stepNumber); // Aggiorna i bottoni
+        updateActions(stepNumber);
     }
 
     function prevStep(stepNumber) {
         document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
         document.getElementById('step-' + stepNumber).classList.add('active');
         updateDots(stepNumber);
-        updateActions(stepNumber); // Aggiorna i bottoni
+        updateActions(stepNumber);
     }
 
     function updateDots(stepNumber) {
@@ -424,7 +429,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Inizializza i bottoni corretti al caricamento
         updateActions(1);
 
         const checkStampa = document.getElementById('checkStampa');
@@ -462,6 +466,15 @@
 
         updateMainSections();
         updateSubOptionsStampa();
+
+        // Controllo per auto-avanzamento se veniamo dalla pagina stampe3d.jsp
+        const isPostDalCaricamento = "${param.richiede_stampa_3d}";
+        if (isPostDalCaricamento === 'true') {
+            document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+            document.getElementById('step-2').classList.add('active');
+            updateDots(2);
+            updateActions(2);
+        }
 
         const fileInput = document.getElementById('fileRiferimento');
         const fileFeedback = document.getElementById('file-feedback');

@@ -13,6 +13,32 @@
 %>
 
 <%@ include file="fragment/header.jspf" %>
+		<div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+		    <div style="background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 380px; width: 85%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);">
+		        <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #e56399; margin-bottom: 15px;"></i>
+		        <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 10px; color: #e56399;">Attenzione!</h3>
+		        <p id="customAlertText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 20px; color: #333;">Messaggio</p>
+		        
+		        <button type="button" class="btn-primary auth-btn" id="customAlertSingleBtn" onclick="closeCustomAlert()" style="width: 100%;">Okay</button>
+		        
+		        <div id="customAlertDoubleBtns" style="display: none; gap: 15px; justify-content: center; align-items: center;">
+				    <button type="button" class="btn-secondary" onclick="closeCustomAlert()" style="margin: 0; border-radius: 50px; padding: 10px 25px;">Annulla</button>
+				    <button type="button" class="auth-btn" id="customAlertConfirmBtn" style="margin: 0; border-radius: 50px; padding: 10px 25px; background: #ff4d4d;">Elimina</button>
+				</div>
+		    </div>
+		</div>
+    
+        <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+            <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 40px 30px; max-width: 400px; width: 85%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: #2ecc71; margin-bottom: 20px;"></i>
+                <h3 style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 15px; color: #333;">Evviva!</h3>
+                <p id="successModalText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 25px; color: #555; font-size: 1.1rem; line-height: 1.4;">
+                    Operazione completata con successo!
+                </p>
+                
+                <button type="button" class="btn-primary auth-btn" onclick="closeSuccessModal()" style="width: 100%;">Okay</button>
+            </div>
+        </div>
 
 <div class="admin-body-wrapper">
 
@@ -47,7 +73,9 @@
             <section id="aggiunta-prodotti" class="admin-card" style="margin-top: 0 !important;">
                 <h2>Aggiungi Nuovo Prodotto</h2>
                 
-                <form action="${pageContext.request.contextPath}/AddProductServlet" method="POST" enctype="multipart/form-data" class="admin-form mt-3" onsubmit="return validaFormProdotto()">
+                <form action="${pageContext.request.contextPath}/Add&Remove" method="POST" enctype="multipart/form-data" class="admin-form mt-3" onsubmit="return validaFormProdotto()">
+                    <input type="hidden" name="action" value="add">
+
                     <div class="form-row">
                         <div class="form-group half-width">
                             <label for="nomeProd">Nome Prodotto</label>
@@ -65,24 +93,24 @@
                         <div class="form-group half-width">
                             <label for="catProd">Categoria</label>
                             <select id="catProd" name="categoria" required onchange="aggiornaTags()">
-                                <option value="" disabled selected>-- Seleziona --</option>
+                                <option value="" disabled selected>Seleziona una categoria...</option>
                                 <option value="MODELLO_3D">Modello 3D</option>
                                 <option value="TEXTURE">Texture</option>
                                 <option value="STAMPA_3D">Stampa 3D</option>
                             </select>
                         </div>
-                        
                         <div class="form-group half-width">
-                            <label for="tagProd">Tag Principale</label>
-                            <select id="tagProd" name="tag" required disabled>
-                                <option value="" disabled selected>Prima scegli la categoria</option>
-                            </select>
+                            <label for="imgProd">Immagine Prodotto (JPEG/PNG)</label>
+                            <input type="file" id="imgProd" name="immagine" accept="image/*" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="imgProd">Immagine Prodotto (JPEG/PNG)</label>
-                        <input type="file" id="imgProd" name="immagine" accept="image/*" required>
+                        <label>Tag (selezionane almeno uno)</label>
+                        <div id="tagContainer" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; min-height: 45px; align-items: center;">
+                            <span style="color: #666; font-style: italic; font-size: 0.9rem;">Prima scegli la categoria</span>
+                        </div>
+                        <span class="error-msg" id="err-tags"></span>
                     </div>
 
                     <div class="form-group">
@@ -127,10 +155,14 @@
                                         <input type="hidden" name="id" value="${prodotto.id}">
                                         <button type="submit" class="btn-icon text-blue" title="Modifica"><i class="fa-solid fa-pen"></i></button>
                                     </form>
-                                    <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="POST">
-                                        <input type="hidden" name="id" value="${prodotto.id}">
-                                        <button type="submit" class="btn-icon text-red" title="Elimina" onclick="return confirm('Vuoi davvero eliminare questo prodotto?');"><i class="fa-solid fa-trash"></i></button>
-                                    </form>
+                                 
+								    <form action="${pageContext.request.contextPath}/Add&Remove" method="POST" style="display:inline;" id="delete-form-${prodotto.id}">
+								        <input type="hidden" name="action" value="remove">
+								        <input type="hidden" name="id" value="${prodotto.id}">
+									      <button type="button" class="btn-icon text-red" title="Elimina dal DB" onclick="showDeleteConfirmAlert('Sei sicuro di voler eliminare definitivamente questo prodotto dal catalogo?', 'delete-form-${prodotto.id}')">
+									            <i class="fa-solid fa-trash-can" style="color: #ff4d4d;"></i>
+									      </button>
+								   </form>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -145,7 +177,7 @@
                     <form action="${pageContext.request.contextPath}/FiltraOrdiniAdminServlet" method="GET">
                         <div class="form-group">
                             <label for="filtroCliente">Filtra per Email Cliente:</label>
-                            <input type="text" id="filtroCliente" name="email_cliente" value="${param.email_cliente}" placeholder="Es. mario@rossi.it">
+                            <input type="text" id="filtroCliente" name="email_cliente" value="${param.email_cliente}" placeholder="Es. tom@holland.it">
                         </div>
                         <button type="submit" class="btn-primary"><i class="fa-solid fa-search"></i> Cerca</button>
                         <c:if test="${not empty param.email_cliente}">
@@ -169,12 +201,17 @@
                         <c:forEach var="ordine" items="${listaOrdiniCompleta}">
                             <tr>
                                 <td>#${ordine.id}</td>
-                                <td>${ordine.data}</td>
+                                <td>
+								    <fmt:formatDate value="${ordine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" />
+								</td>
                                 <td><strong>${ordine.utente.nome} ${ordine.utente.cognome}</strong></td>
                                 <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
                                 <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
-                                <td>
-                                    <button class="btn-outline-small">Dettagli</button>
+                                <td class="table-actions">
+                                    <form action="${pageContext.request.contextPath}/Placeholding" method="GET">
+                                        <input type="hidden" name="id" value="${comm.id}">
+                                        <button type="submit" class="btn-icon blue text-blue"><i class="fa-solid fa-file-lines"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -243,45 +280,57 @@
                     </div>
                 </div>
 
-                <div class="chart-container">
-                    <canvas id="salesChart"></canvas>
-                </div>
             </section>
 			
 
         </main>
     </div>
 
-    <!-- SCRIPT GESTIONE TAG DINAMICI -->
+    <!-- SCRIPT GESTIONE TAG DINAMICI (CHECKBOX) -->
     <script>
+        // Lista dei tag esattamente come richiesti
         const tagsPerCategoria = {
-            "MODELLO_3D": ["Fantasy", "Sci-Fi", "Props", "Personaggi", "Veicoli", "Environment"],
-            "TEXTURE": ["Seamless", "PBR", "Metallo", "Legno", "Pietra", "Tessuto"],
-            "STAMPA_3D": ["Miniature", "Cosplay", "Utilità", "Figure", "Decorazioni"]
+            "MODELLO_3D": ["Ambienti", "Creature", "Personaggi", "Props", "Low Poly", "High Poly", "Rigged", "Game Ready", "Realistico", "Fantasy"],
+            "TEXTURE": ["Architettura", "Metalli", "Tessuti", "Organiche", "1K", "2K", "3K", "4K", "Seamless"],
+            "STAMPA_3D": ["Accessori", "Miniature", "Props", "Resina", "PLA", "PETG", "Supporti rimossi", "Levigatura primer", "Colore"]
         };
 
         function aggiornaTags() {
             const catSelect = document.getElementById("catProd");
-            const tagSelect = document.getElementById("tagProd");
+            const tagContainer = document.getElementById("tagContainer");
             const categoriaSelezionata = catSelect.value;
 
-            // Reset iniziale del select dei tag
-            tagSelect.innerHTML = '<option value="" disabled selected>Seleziona un tag...</option>';
+            // Svuota il contenitore
+            tagContainer.innerHTML = '';
 
             if (categoriaSelezionata && tagsPerCategoria[categoriaSelezionata]) {
-                // Abilita la select e popola le opzioni
-                tagSelect.disabled = false;
                 tagsPerCategoria[categoriaSelezionata].forEach(tag => {
-                    const option = document.createElement("option");
-                    // Formatta il value (es: "Sci-Fi" diventa "SCI_FI") per il backend
-                    option.value = tag.toUpperCase().replace(/[-\s]+/g, '_'); 
-                    option.textContent = tag;
-                    tagSelect.appendChild(option);
+                    
+                    // Crea l'elemento label
+                    const label = document.createElement("label");
+                    label.style.display = "inline-flex";
+                    label.style.alignItems = "center";
+                    label.style.gap = "8px";
+                    label.style.cursor = "pointer";
+                    label.style.fontFamily = "'coolveticarg', sans-serif";
+                    label.style.color = "#0f0326";
+
+                    // Crea l'input checkbox
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "tags"; 
+                    checkbox.value = tag; // Usa il testo pulito (es. "Low Poly") come valore
+
+                    // Crea il testo da affiancare
+                    const textNode = document.createTextNode(tag);
+
+                    // Aggiunge elementi al DOM
+                    label.appendChild(checkbox);
+                    label.appendChild(textNode);
+                    tagContainer.appendChild(label);
                 });
             } else {
-                // Disabilita se non c'è una categoria valida
-                tagSelect.disabled = true;
-                tagSelect.innerHTML = '<option value="" disabled selected>Prima scegli la categoria</option>';
+                tagContainer.innerHTML = '<span style="color: #666; font-style: italic; font-size: 0.9rem;">Prima scegli la categoria</span>';
             }
         }
     </script>
@@ -294,6 +343,7 @@
             document.getElementById('err-nome').innerText = "";
             document.getElementById('err-prezzo').innerText = "";
             document.getElementById('err-desc').innerText = "";
+            document.getElementById('err-tags').innerText = "";
 
             let nome = document.getElementById('nomeProd').value.trim();
             let regexNome = /^[a-zA-Z0-9\s\-_]{3,50}$/;
@@ -312,6 +362,16 @@
             if (desc.length < 10) {
                 document.getElementById('err-desc').innerText = "La descrizione deve contenere almeno 10 caratteri.";
                 isValid = false;
+            }
+
+            // Nuova validazione per le checkbox
+            const catSelezionata = document.getElementById("catProd").value;
+            if (catSelezionata) {
+                const checkedTags = document.querySelectorAll('input[name="tags"]:checked');
+                if (checkedTags.length === 0) {
+                    document.getElementById('err-tags').innerText = "Seleziona almeno un tag per il prodotto.";
+                    isValid = false;
+                }
             }
 
             return isValid; 
@@ -380,7 +440,70 @@
             });
         });
 	</script>
+<script>
+    function clearErrors() {
+        document.querySelectorAll('.error-msg').forEach(el => el.innerText = '');
+        document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    }
+function showCustomAlert(message) {
+        const modal = document.getElementById('customAlert');
+        const modalText = document.getElementById('customAlertText');
+        const okayBtn = document.getElementById('customAlertSingleBtn');
+        
+        if (modal && modalText) {
+            document.getElementById('customAlertSingleBtn').style.display = 'block';
+            document.getElementById('customAlertDoubleBtns').style.display = 'none';
+            
+            modalText.innerText = message;
+            modal.style.display = 'flex';
+            okayBtn.onclick = closeCustomAlert;
+        }
+    }
 
+    function showDeleteConfirmAlert(message, formId) {
+        const modal = document.getElementById('customAlert');
+        const modalText = document.getElementById('customAlertText');
+        const confirmBtn = document.getElementById('customAlertConfirmBtn');
+
+        if (modal && modalText && confirmBtn) {
+            document.getElementById('customAlertSingleBtn').style.display = 'none';
+            document.getElementById('customAlertDoubleBtns').style.display = 'flex';
+            
+            modalText.innerText = message;
+            modal.style.display = 'flex';
+            
+            confirmBtn.onclick = function() {
+                document.getElementById(formId).submit();
+            };
+        }
+    }
+
+    function closeCustomAlert() {
+        const modal = document.getElementById('customAlert');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function showSuccessModal(customMessage) {
+        const modal = document.getElementById('successModal');
+        const modalText = document.getElementById('successModalText');
+        if (modal) {
+            if(customMessage && customMessage.trim() !== '') {
+                modalText.innerText = customMessage;
+            }
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeSuccessModal() {
+        const modal = document.getElementById('successModal');
+        if (modal) {
+            modal.style.display = 'none';
+            window.location.reload(); 
+        }
+    }
+</script>
 </div> 
 
 <%@ include file="fragment/footer.jspf" %>

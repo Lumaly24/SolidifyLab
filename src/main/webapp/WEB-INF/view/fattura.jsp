@@ -22,7 +22,7 @@
         <hr class="section-divider">
         
         <div class="invoice-details">
-            <p><strong>Data:</strong> <span>${sessionScope.ultimoOrdine.data}</span></p>
+            <p><strong>Data:</strong> <span>${sessionScope.ultimoOrdine.dataOrdine}</span></p>
             <p><strong>Stato Ordine:</strong> <span class="status-success">${sessionScope.ultimoOrdine.stato}</span></p>
             <p><strong>Totale Pagato:</strong> <span>€ <fmt:formatNumber value="${sessionScope.ultimoOrdine.totale}" pattern="#,##0.00"/></span></p>
         </div>

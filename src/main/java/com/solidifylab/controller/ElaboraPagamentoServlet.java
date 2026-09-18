@@ -85,10 +85,10 @@ public class ElaboraPagamentoServlet extends HttpServlet {
         }
 
         Ordine ordine = new Ordine();
-        ordine.setData(LocalDate.now().toString());
+        ordine.setDataOrdine(new java.sql.Timestamp(System.currentTimeMillis())); 
         ordine.setTotale(carrello.getTotaleFinale());
         ordine.setStato("PAGATO");
-        ordine.setUtente(utente); 
+        ordine.setUtente(utente);
 
         OrdineDAO ordineDAO = new OrdineDAO();
         

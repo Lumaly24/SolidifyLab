@@ -1,8 +1,9 @@
 package com.solidifylab.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -28,9 +29,11 @@ public class RichiestaCommissioneServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
         request.setCharacterEncoding("UTF-8");
         
+        Commissione comm = new Commissione();
+        
+        // 1. Dati Utente
         HttpSession session = request.getSession(false);
         User utente = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
         
@@ -38,46 +41,90 @@ public class RichiestaCommissioneServlet extends HttpServlet {
         if ((email == null || email.trim().isEmpty()) && utente != null) {
             email = utente.getEmail();
         }
+        comm.setEmail(email);
+        if (utente != null) comm.setUtenteId(utente.getId());
         
-        String descrizionePrincipale = request.getParameter("descrizione_principale");
+        // 2. Tipologie
         String[] tipiCommissione = request.getParameterValues("tipo_commissione");
-        
-        String tipiSelezionati = "";
         if (tipiCommissione != null) {
-            List<String> tipiList = new ArrayList<>();
             for (String t : tipiCommissione) {
-                if ("stampa_3d".equals(t)) tipiList.add("Stampa 3D");
-                if ("modello_3d".equals(t)) tipiList.add("Modello 3D");
-                if ("texture".equals(t)) tipiList.add("Texture");
+                if ("stampa_3d".equals(t)) comm.setRichiedeStampa3d(true);
+                if ("modello_3d".equals(t)) comm.setRichiedeModello3d(true);
+                if ("texture".equals(t)) comm.setRichiedeTexture(true);
             }
-            tipiSelezionati = String.join(", ", tipiList); 
         }
         
-        String via = request.getParameter("indirizzo_via");
-        String citta = request.getParameter("indirizzo_citta");
-        String cap = request.getParameter("indirizzo_cap");
+        // 3. Dati Base[cite: 4]
+        comm.setDescrizione(request.getParameter("descrizione_principale"));
+        comm.setVia(request.getParameter("indirizzo_via"));
+        comm.setCitta(request.getParameter("indirizzo_citta"));
+        comm.setCap(request.getParameter("indirizzo_cap"));
         
-        StringBuilder fileNamesBuilder = new StringBuilder();
+        // 4. Gestione File Allegati[cite: 4]
+        List<String> fileCaricati = new ArrayList<>();
+        
+        // Controlla se c'è un file passato via sessione (es. da /Stampe)
+        String filePrecaricato = request.getParameter("file_gia_caricato");
+        if (filePrecaricato != null && !filePrecaricato.isEmpty()) {
+            fileCaricati.add(filePrecaricato);
+            if (session != null) session.removeAttribute("nomeFileTemporaneo");
+        }
+        
+        // Gestisci nuovi file caricati nel form
+        String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads" + File.separator + "commissioni";
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) uploadDir.mkdirs();
+
         for (Part part : request.getParts()) {
-            String fileName = part.getSubmittedFileName();
-            if (fileName != null && !fileName.isEmpty()) {
-                if (fileNamesBuilder.length() > 0) fileNamesBuilder.append(", ");
-                fileNamesBuilder.append(fileName);
+            if (part.getName().equals("file_riferimento") && part.getSize() > 0) {
+                String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                part.write(uploadPath + File.separator + fileName);
+                fileCaricati.add(fileName);
             }
         }
         
+        if (!fileCaricati.isEmpty()) {
+            comm.setFileRiferimentoUrl(String.join(", ", fileCaricati));
+        }
+
+        // 5. Opzioni Stampa 3D[cite: 5]
+        if (request.getParameter("include_materiale") != null) {
+            comm.setMaterialeStampa(request.getParameter("materiale_stampa"));
+            comm.setDescMateriale(request.getParameter("desc_materiale"));
+        }
+        if (request.getParameter("include_postproduzione") != null) {
+            comm.setTipoPostproduzione(request.getParameter("tipo_postproduzione"));
+            comm.setDescPostproduzione(request.getParameter("desc_postproduzione"));
+        }
+
+        // 6. Opzioni Modello 3D[cite: 5]
+        if (request.getParameter("include_texture_modello") != null) {
+            comm.setIncludeTextureModello(true);
+            comm.setDescrizioneTextureModello(request.getParameter("descrizione_texture_modello"));
+        }
+        if (request.getParameter("include_animazione") != null) {
+            comm.setIncludeAnimazione(true);
+            comm.setDescrizioneAnimazione(request.getParameter("descrizione_animazione"));
+        }
+        if (request.getParameter("include_rigging") != null) {
+            comm.setIncludeRigging(true);
+            comm.setDescrizioneRigging(request.getParameter("descrizione_rigging"));
+        }
+
+        // 7. Opzioni Texture[cite: 5]
+        if (request.getParameter("include_uv_mapping") != null) {
+            comm.setIncludeUvMapping(true);
+            comm.setDescUvMapping(request.getParameter("desc_uv_mapping"));
+        }
+        if (request.getParameter("include_materiali_pbr") != null) {
+            comm.setIncludeMaterialiPbr(true);
+            comm.setDescMaterialiPbr(request.getParameter("desc_materiali_pbr"));
+        }
+
+        // 8. Salvataggio
         try {
-            Commissione commissione = new Commissione();
-            commissione.setEmail(email);
-            commissione.setTipi(tipiSelezionati);
-            commissione.setDescrizione(descrizionePrincipale);
-            commissione.setVia(via);
-            commissione.setCitta(citta);
-            commissione.setCap(cap);
-            
             CommissioneDAO commissioneDAO = new CommissioneDAO();
-            commissioneDAO.doSave(commissione); 
-            
+            commissioneDAO.doSave(comm);
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante il salvataggio della commissione.");

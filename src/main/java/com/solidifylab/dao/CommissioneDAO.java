@@ -12,117 +12,76 @@ import com.solidifylab.model.ConPool;
 
 public class CommissioneDAO {
 
-	public synchronized void doSave(Commissione commissione) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
+    public synchronized void doSave(Commissione c) throws SQLException {
         String insertSQL = "INSERT INTO commissione "
-                + "(utente_id, email_contatto, richiede_stampa_3d, richiede_modello_3d, richiede_texture, descrizione_principale, indirizzo_spedizione) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + "(utente_id, email_contatto, richiede_stampa_3d, richiede_modello_3d, richiede_texture, "
+                + "descrizione_principale, file_riferimento_url, indirizzo_spedizione, "
+                + "materiale_stampa, desc_materiale, tipo_postproduzione, desc_postproduzione, "
+                + "include_texture_modello, descrizione_texture_modello, include_animazione, descrizione_animazione, "
+                + "include_rigging, descrizione_rigging, include_uv_mapping, desc_uv_mapping, include_materiali_pbr, desc_materiali_pbr, stato) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'IN_ATTESA')";
 
-        try { 
-            connection = ConPool.getConnection();
-            preparedStatement = connection.prepareStatement(insertSQL);
+        try (Connection connection = ConPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(insertSQL)) {
 
-            if ( commissione.getId() > 0) {
-                preparedStatement.setInt(1, commissione.getId());
+            if (c.getUtenteId() != null && c.getUtenteId() > 0) {
+                ps.setInt(1, c.getUtenteId());
             } else {
-                preparedStatement.setNull(1, java.sql.Types.INTEGER);
+                ps.setNull(1, java.sql.Types.INTEGER);
             }
 
-            preparedStatement.setString(2, commissione.getEmail());
-            
-            String tipi = commissione.getTipi() != null ? commissione.getTipi().toLowerCase() : "";
-            preparedStatement.setBoolean(3, tipi.contains("stampa 3d") || tipi.contains("stampa_3d"));
-            preparedStatement.setBoolean(4, tipi.contains("modello 3d") || tipi.contains("modello_3d"));
-            preparedStatement.setBoolean(5, tipi.contains("texture"));
-            
-            preparedStatement.setString(6, commissione.getDescrizione());
-            
+            ps.setString(2, c.getEmail());
+            ps.setBoolean(3, c.isRichiedeStampa3d());
+            ps.setBoolean(4, c.isRichiedeModello3d());
+            ps.setBoolean(5, c.isRichiedeTexture());
+            ps.setString(6, c.getDescrizione());
+            ps.setString(7, c.getFileRiferimentoUrl());
+
             String indirizzoCompleto = null;
-            if (commissione.getVia() != null && !commissione.getVia().trim().isEmpty()) {
-                indirizzoCompleto = commissione.getVia() + ", " + 
-                                  (commissione.getCitta() != null ? commissione.getCitta() : "") + " " + 
-                                  (commissione.getCap() != null ? commissione.getCap() : "");
+            if (c.getVia() != null && !c.getVia().trim().isEmpty()) {
+                indirizzoCompleto = c.getVia() + ", " + 
+                                  (c.getCitta() != null ? c.getCitta() : "") + " " + 
+                                  (c.getCap() != null ? c.getCap() : "");
             }
-            preparedStatement.setString(7, indirizzoCompleto);
+            ps.setString(8, indirizzoCompleto);
 
-            preparedStatement.executeUpdate();
+            ps.setString(9, c.getMaterialeStampa());
+            ps.setString(10, c.getDescMateriale());
+            ps.setString(11, c.getTipoPostproduzione());
+            ps.setString(12, c.getDescPostproduzione());
 
-        } finally {
-            try {
-                if (preparedStatement != null) preparedStatement.close();
-            } finally {
-                if (connection != null) connection.close();
-            }
+            ps.setBoolean(13, c.isIncludeTextureModello());
+            ps.setString(14, c.getDescrizioneTextureModello());
+            ps.setBoolean(15, c.isIncludeAnimazione());
+            ps.setString(16, c.getDescrizioneAnimazione());
+            ps.setBoolean(17, c.isIncludeRigging());
+            ps.setString(18, c.getDescrizioneRigging());
+
+            ps.setBoolean(19, c.isIncludeUvMapping());
+            ps.setString(20, c.getDescUvMapping());
+            ps.setBoolean(21, c.isIncludeMaterialiPbr());
+            ps.setString(22, c.getDescMaterialiPbr());
+
+            ps.executeUpdate();
         }
     }
 
     public List<Commissione> getAllCommissioni() {
         List<Commissione> list = new ArrayList<>();
-        String query = "SELECT * FROM commissione ORDER BY data_richiesta DESC";
+        String query = "SELECT * FROM commissione ORDER BY data_richiesta ASC";
         
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
             
             while (rs.next()) {
-                Commissione c = new Commissione();
-                
-                c.setId(rs.getInt("id"));
-                c.setEmail(rs.getString("email_contatto"));
-                c.setDescrizione(rs.getString("descrizione_principale"));
-                c.setIndirizzoSpedizione(rs.getString("indirizzo_spedizione"));
-                
-                List<String> tipiList = new java.util.ArrayList<>();
-                if (rs.getBoolean("richiede_stampa_3d")) tipiList.add("Stampa 3D");
-                if (rs.getBoolean("richiede_modello_3d")) tipiList.add("Modello 3D");
-                if (rs.getBoolean("richiede_texture")) tipiList.add("Texture");
-
-                c.setTipi(String.join(", ", tipiList));
-                
-                c.setStato(rs.getString("stato")); 
-                c.setVisionata(rs.getBoolean("visionata"));
-                c.setDataRichiesta(rs.getTimestamp("data_richiesta"));
-                
-                list.add(c);
+                list.add(mapRowToCommissione(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Errore durante il recupero delle commissioni", e);
+            throw new RuntimeException("Errore recupero commissioni", e);
         }
         return list;
-    }
-
-    public void updateStato(int id, String nuovoStato) {
-        String query = "UPDATE commissione SET stato = ?, data_aggiornamento = CURRENT_TIMESTAMP WHERE id = ?";
-        
-        try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
-            
-            ps.setString(1, nuovoStato);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Errore durante l'aggiornamento dello stato", e);
-        }
-    }
-
-    public void segnaComeVisionata(int id) {
-        String query = "UPDATE commissione SET visionata = TRUE WHERE id = ?";
-        
-        try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
-            
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Errore durante l'aggiornamento della visualizzazione", e);
-        }
     }
 
     public List<Commissione> getCommissioniByEmail(String email) {
@@ -136,31 +95,83 @@ public class CommissioneDAO {
             
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Commissione c = new Commissione();
-                    
-                    c.setId(rs.getInt("id"));
-                    c.setEmail(rs.getString("email_contatto"));
-                    c.setDescrizione(rs.getString("descrizione_principale"));
-                    c.setIndirizzoSpedizione(rs.getString("indirizzo_spedizione"));
-                    
-                    List<String> tipiList = new java.util.ArrayList<>();
-                    if (rs.getBoolean("richiede_stampa_3d")) tipiList.add("Stampa 3D");
-                    if (rs.getBoolean("richiede_modello_3d")) tipiList.add("Modello 3D");
-                    if (rs.getBoolean("richiede_texture")) tipiList.add("Texture");
-
-                    c.setTipi(String.join(", ", tipiList));
-                    
-                    c.setStato(rs.getString("stato")); 
-                    c.setVisionata(rs.getBoolean("visionata"));
-                    c.setDataRichiesta(rs.getTimestamp("data_richiesta"));
-                    
-                    list.add(c);
+                    list.add(mapRowToCommissione(rs));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Errore durante il recupero delle commissioni dell'utente", e);
+            throw new RuntimeException("Errore recupero commissioni per email", e);
         }
         return list;
+    }
+
+    public void updateStato(int id, String nuovoStato) {
+        String query = "UPDATE commissione SET stato = ?, data_aggiornamento = CURRENT_TIMESTAMP WHERE id = ?";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, nuovoStato);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Errore aggiornamento stato", e);
+        }
+    }
+
+    public void segnaComeVisionata(int id) {
+        String query = "UPDATE commissione SET visionata = TRUE WHERE id = ?";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Errore aggiornamento visualizzazione", e);
+        }
+    }
+
+    private Commissione mapRowToCommissione(ResultSet rs) throws SQLException {
+        Commissione c = new Commissione();
+        c.setId(rs.getInt("id"));
+        c.setEmail(rs.getString("email_contatto"));
+        c.setDescrizione(rs.getString("descrizione_principale"));
+        c.setFileRiferimentoUrl(rs.getString("file_riferimento_url"));
+        c.setIndirizzoSpedizione(rs.getString("indirizzo_spedizione"));
+        
+        c.setRichiedeStampa3d(rs.getBoolean("richiede_stampa_3d"));
+        c.setRichiedeModello3d(rs.getBoolean("richiede_modello_3d"));
+        c.setRichiedeTexture(rs.getBoolean("richiede_texture"));
+
+        List<String> tipiList = new ArrayList<>();
+        if (c.isRichiedeStampa3d()) tipiList.add("Stampa 3D");
+        if (c.isRichiedeModello3d()) tipiList.add("Modello 3D");
+        if (c.isRichiedeTexture()) tipiList.add("Texture");
+        c.setTipi(String.join(", ", tipiList));
+        
+        // -- OPZIONI EXTRA STAMPA 3D --
+        c.setMaterialeStampa(rs.getString("materiale_stampa"));
+        c.setDescMateriale(rs.getString("desc_materiale"));
+        c.setTipoPostproduzione(rs.getString("tipo_postproduzione"));
+        c.setDescPostproduzione(rs.getString("desc_postproduzione"));
+
+        // -- OPZIONI EXTRA MODELLO 3D --
+        c.setIncludeTextureModello(rs.getBoolean("include_texture_modello"));
+        c.setDescrizioneTextureModello(rs.getString("descrizione_texture_modello"));
+        c.setIncludeAnimazione(rs.getBoolean("include_animazione"));
+        c.setDescrizioneAnimazione(rs.getString("descrizione_animazione"));
+        c.setIncludeRigging(rs.getBoolean("include_rigging"));
+        c.setDescrizioneRigging(rs.getString("descrizione_rigging"));
+
+        // -- OPZIONI EXTRA TEXTURE --
+        c.setIncludeUvMapping(rs.getBoolean("include_uv_mapping"));
+        c.setDescUvMapping(rs.getString("desc_uv_mapping"));
+        c.setIncludeMaterialiPbr(rs.getBoolean("include_materiali_pbr"));
+        c.setDescMaterialiPbr(rs.getString("desc_materiali_pbr"));
+
+        c.setStato(rs.getString("stato")); 
+        c.setVisionata(rs.getBoolean("visionata"));
+        c.setDataRichiesta(rs.getTimestamp("data_richiesta"));
+        
+        return c;
     }
 }

@@ -1,6 +1,7 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -28,24 +29,50 @@ public class AdminDashboardServlet extends HttpServlet {
         
         if (utente != null && "ADMIN".equalsIgnoreCase(utente.getRuolo())) {
             
+            // 1. Prodotti
             ProdottoDAO prodottoDAO = new ProdottoDAO();
             List<Prodotto> listaProdotti = prodottoDAO.doRetrieveAll();
             request.setAttribute("listaProdotti", listaProdotti);
             
+            // 2. Commissioni (Lista completa per la tabella principale della dashboard)
             CommissioneDAO commissioneDAO = new CommissioneDAO();
             List<Commissione> listaCommissioni = commissioneDAO.getAllCommissioni();
             request.setAttribute("listaCommissioni", listaCommissioni);
             
-         // 4. Recupero degli Ordini
+            // Eventuali liste filtrate (se usate anche nella dashboard principale)
+            List<Commissione> inAttesa = new ArrayList<>();
+            List<Commissione> accettate = new ArrayList<>();
+            List<Commissione> inLavorazione = new ArrayList<>();
+            List<Commissione> completate = new ArrayList<>();
+            List<Commissione> rifiutate = new ArrayList<>();
+
+            for (Commissione c : listaCommissioni) {
+                String stato = c.getStato() != null ? c.getStato().toUpperCase().trim() : "IN_ATTESA";
+                switch (stato) {
+                    case "IN_ATTESA": inAttesa.add(c); break;
+                    case "ACCETTATA": accettate.add(c); break;
+                    case "IN_LAVORAZIONE": inLavorazione.add(c); break;
+                    case "COMPLETATA": completate.add(c); break;
+                    case "RIFIUTATA": rifiutate.add(c); break;
+                    default: inAttesa.add(c); break;
+                }
+            }
+
+            request.setAttribute("listaInAttesa", inAttesa);
+            request.setAttribute("listaAccettate", accettate);
+            request.setAttribute("listaInLavorazione", inLavorazione);
+            request.setAttribute("listaCompletate", completate);
+            request.setAttribute("listaRifiutate", rifiutate);
+            
+            // 3. Ordini
             OrdineDAO ordineDAO = new OrdineDAO();
             List<Ordine> listaOrdiniCompleta = ordineDAO.doRetrieveAll();
             request.setAttribute("listaOrdiniCompleta", listaOrdiniCompleta);
 
-            // 5. Inoltro finale alla JSP protetta dentro WEB-INF
+            // 4. Inoltro alla vista della Dashboard Admin
             request.getRequestDispatcher("/WEB-INF/view/admin-dashboard.jsp").forward(request, response);
             
         } else {
-            // Se non è autorizzato, rimbalzo immediato alla Home
             response.sendRedirect(request.getContextPath() + "/Home");
         }
     }

@@ -33,7 +33,7 @@ public class OrdineDAO {
             	
                 Ordine ordine = new Ordine();
                 ordine.setId(rs.getInt("id"));
-                ordine.setData(rs.getString("data_ordine")); 
+                ordine.setDataOrdine(rs.getTimestamp("data_ordine")); 
                 ordine.setTotale(rs.getDouble("totale"));
                 ordine.setStato(rs.getString("stato"));
 
@@ -71,7 +71,7 @@ public class OrdineDAO {
 
             try (PreparedStatement psOrdine = con.prepareStatement(queryOrdine, PreparedStatement.RETURN_GENERATED_KEYS)) {
             	
-                psOrdine.setString(1, ordine.getData());
+                psOrdine.setTimestamp (1, ordine.getDataOrdine());
                 psOrdine.setDouble(2, ordine.getTotale());
                 psOrdine.setString(3, ordine.getStato());
                 psOrdine.setInt(4, ordine.getUtente().getId());
@@ -173,7 +173,7 @@ public class OrdineDAO {
                 	
                     Ordine ordine = new Ordine();
                     ordine.setId(rs.getInt("id"));
-                    ordine.setData(rs.getString("data_ordine")); 
+                    ordine.setDataOrdine(rs.getTimestamp("data_ordine")); 
                     ordine.setTotale(rs.getDouble("totale"));
                     ordine.setStato(rs.getString("stato"));
 
