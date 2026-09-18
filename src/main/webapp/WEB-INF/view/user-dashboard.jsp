@@ -39,7 +39,7 @@
 			        <li><a href="#commissioni" onclick="switchTab('commissioni', this, event)"><i class="fa-solid fa-palette"></i> Tracker Commissioni</a></li>
 			        <li><a href="#pagamenti" onclick="switchTab('pagamenti', this, event)"><i class="fa-solid fa-credit-card"></i> Metodi di Pagamento</a></li>
 			        <li><a href="#sicurezza" onclick="switchTab('sicurezza', this, event)"><i class="fa-solid fa-shield"></i> Sicurezza e Privacy</a></li>
-			        <li><a href="${pageContext.request.contextPath}/LogoutServlet" class="text-red"><i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnettiti</a></li>
+			        <li><a href="${pageContext.request.contextPath}/Logout" class="text-red"><i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnettiti</a></li>
 			    </ul>
 			</nav>
         </aside>
@@ -88,22 +88,73 @@
                     </fieldset>
 
                     <fieldset class="form-section mt-3">
-                        <legend>Indirizzo Principale (per le stampe 3D)</legend>
-                        <div class="form-group">
-                            <label for="indirizzo">Via/Piazza e Civico</label>
-                            <input type="text" id="indirizzo" name="indirizzo" value="${sessionScope.utenteLoggato.indirizzo}">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group half-width">
-                                <label for="citta">Città</label>
-                                <input type="text" id="citta" name="citta" value="${sessionScope.utenteLoggato.citta}">
-                            </div>
-                            <div class="form-group half-width">
-                                <label for="cap">CAP</label>
-                                <input type="text" id="cap" name="cap" value="${sessionScope.utenteLoggato.cap}">
-                            </div>
-                        </div>
-                    </fieldset>
+                    
+					    <legend>Indirizzo Principale (per le stampe 3D)</legend>
+					    
+					    <div class="form-row">
+					    
+					        <div class="form-group half-width">
+					            <label for="via">Via/Piazza</label>
+					            <input type="text" id="via" name="via" value="${sessionScope.indirizzoPrincipale.via}">
+					        </div>
+					        
+					        <div class="form-group half-width" style="max-width: 150px;">
+					        
+					            <label for="civico">Numero Civico</label>
+					            
+					            <input type="text" id="civico" name="civico" 
+					                   value="${sessionScope.indirizzoPrincipale.civico}"
+					                   inputmode="numeric"
+					                   pattern="[0-9]+" 
+					                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+					                   title="Inserisci solo numeri" required>
+					        </div>
+					        
+					    </div>
+					    
+					    <div class="form-row">
+					    
+					        <div class="form-group half-width">
+					        
+					            <label for="citta">Città</label>
+					            
+					            <input type="text" id="citta" name="citta" 
+					                   value="${sessionScope.indirizzoPrincipale.citta}"
+					                   pattern="[a-zA-Za-zA-ZàèéìòùÀÈÉÌÒÙ\s']+" 
+					                   oninput="this.value = this.value.replace(/[^a-zA-Za-zA-ZàèéìòùÀÈÉÌÒÙ\s']/g, '')"
+					                   title="Inserisci solo lettere" required>
+					        </div>
+					        
+					        <div class="form-group half-width">
+					        
+					            <label for="cap">CAP</label>
+					            
+					            <input type="text" id="cap" name="cap" 
+					                   maxlength="5" minlength="5"
+					                   value="${sessionScope.indirizzoPrincipale.cap}"
+					                   inputmode="numeric"
+					                   pattern="[0-9]{5}" 
+					                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+					                   title="Inserisci esattamente 5 cifre numeriche" required>
+					        </div>
+					        
+					        <div class="form-group half-width" style="max-width: 100px;">
+					        
+					            <label for="provincia">Provincia</label>
+					            
+					            <input type="text" id="provincia" name="provincia" 
+					                   maxlength="2" minlength="2"
+					                   value="${sessionScope.indirizzoPrincipale.provincia}" 
+					                   placeholder="RM"
+					                   style="text-transform: uppercase;"
+					                   pattern="[a-zA-Za-zA-Z]{2}"
+					                   oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '')"
+					                   title="Inserisci le 2 lettere della provincia" required>
+					        </div>
+					        
+					    </div>
+					    
+					</fieldset>
 
                     <button type="submit" class="btn-primary mt-3">Salva Modifiche</button>
                 </form>
@@ -122,14 +173,21 @@
                         </c:when>
                         <c:otherwise>
                             <c:forEach var="asset" items="${sessionScope.libreriaDigitale}">
+                            
                                 <div class="library-item-card">
+                                
                                     <div class="library-img">
-                                        <span>(IMG)</span>
+                                    
+                                        <img src="${pageContext.request.contextPath}/product_images/${asset.prodotto.immagineCopertinaUrl}" alt="${prodotto.nome}"
+											     style="width: 100%; border-radius: 8px; object-fit: cover;" />
+                                        
                                     </div>
+                                    
                                     <div class="library-info">
                                         <h4>${asset.prodotto.nome}</h4>
                                         <span class="badge-format">${asset.formatoFile}</span>
                                     </div>
+                                    
                                     <a href="${pageContext.request.contextPath}/DownloadAssetServlet?id=${asset.prodotto.id}" class="btn-outline-small w-100">
                                         <i class="fa-solid fa-download"></i> Scarica Asset
                                     </a>
@@ -200,7 +258,7 @@
                                         <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
                                         <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
                                         <td class="table-actions">
-                                            <button class="btn-outline-small"><i class="fa-solid fa-file-pdf"></i> Ricevuta</button>
+                                            <button onclick="window.print()" class="btn-outline-small"><i class="fa-solid fa-file-pdf"></i> Ricevuta</button>
                                         </td>
                                     </tr>
                                 </c:forEach>

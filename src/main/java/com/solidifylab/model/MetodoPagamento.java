@@ -1,0 +1,41 @@
+package com.solidifylab.model;
+
+public class MetodoPagamento {
+	
+    private int id;
+    private int utenteId;
+    private String cartaMascherata;
+    private String scadenza;
+
+    public int getId() {
+    	return id; 
+    }
+    
+    public void setId(int id) { 
+    	this.id = id; 
+    }
+    
+    public int getUtenteId() { 
+    	return utenteId; 
+    }
+    
+    public void setUtenteId(int utenteId) { 
+    	this.utenteId = utenteId; 
+    }
+    
+    public String getCartaMascherata() { 
+    	return cartaMascherata; 
+    }
+    
+    public void setCartaMascherata(String cartaMascherata) { 
+    	this.cartaMascherata = cartaMascherata; 
+    }
+    
+    public String getScadenza() { 
+    	return scadenza; 
+    }
+    
+    public void setScadenza(String scadenza) { 
+    	this.scadenza = scadenza; 
+    }
+}

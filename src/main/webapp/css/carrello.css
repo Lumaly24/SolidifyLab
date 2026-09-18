@@ -569,3 +569,46 @@ html, body {
 .invoice-actions {
     margin-top: 20px;
 }
+
+.stampa-ricevuta {
+	background-color: #c82268;
+	color: #eff1ed;
+}
+
+.stampa-ricevuta:hover {
+	background-color: #f1adca;
+	color: #0f0326;
+}
+
+/* FATTURA TRAMITE MEDIA QUERY */
+@media print {
+	
+    html, body {
+        background-image: none !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    header, footer, nav, .invoice-actions, .success-icon {
+        display: none !important;
+    }
+
+    .invoice-glass-box {
+        background: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: 1px solid #000000 !important;
+        box-shadow: none !important;
+        margin: 0;
+        max-width: 100%;
+    }
+
+    .invoice-title, .invoice-subtitle, .invoice-details p, .invoice-details strong, .invoice-glass-box h3 {
+        color: #000000 !important;
+        text-shadow: none !important;
+    }
+
+    .invoice-page {
+        padding: 0 !important;
+    }
+}

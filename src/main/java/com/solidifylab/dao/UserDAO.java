@@ -57,4 +57,27 @@ public class UserDAO {
             return false;
         }
     }
+    
+    public void updateProfilo(User user) {
+    	
+        String query = "UPDATE utente SET nome = ?, cognome = ?, indirizzo = ?, citta = ?, cap = ? WHERE id = ?";
+        
+        try (Connection con = ConPool.getConnection();
+        		
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setString(1, user.getNome());
+            ps.setString(2, user.getCognome());
+            ps.setString(3, user.getIndirizzo());
+            ps.setString(4, user.getCitta());
+            ps.setString(5, user.getCap());
+            ps.setInt(6, user.getId());
+            
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+        	
+            e.printStackTrace();
+        }
+    }
 }

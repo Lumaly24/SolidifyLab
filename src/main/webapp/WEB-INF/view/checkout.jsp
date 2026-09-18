@@ -49,7 +49,7 @@
                 </div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/ElaboraPagamentoServlet" method="POST" class="checkout-form">
+            <form action="${pageContext.request.contextPath}/ElaboraPagamentoServlet" method="POST" class="checkout-form" onsubmit="return validaScadenza(event)">
                 
                 <input type="hidden" name="email_ordine" value="${param.email}">
 
@@ -117,6 +117,55 @@
     
     	e.target.value = formattedValue;
     });
+    
+    function validaScadenza(event) {
+        const scadenzaInput = document.getElementById('scadenza');
+        const valore = scadenzaInput.value;
+        
+        const erroreEsistente = document.getElementById('errore-scadenza');
+        if (erroreEsistente) erroreEsistente.remove();
+        scadenzaInput.style.borderColor = 'rgba(0, 0, 0, 0.15)'; 
+
+        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(valore)) {
+            mostraErrore(scadenzaInput, 'Formato non valido (MM/AA).');
+            event.preventDefault();
+            return false;
+        }
+
+        const parti = valore.split('/');
+        const meseInput = parseInt(parti[0], 10);
+
+        const annoInput = 2000 + parseInt(parti[1], 10); 
+
+        const oggi = new Date(); 
+        const meseOggi = oggi.getMonth() + 1; 
+        const annoOggi = oggi.getFullYear(); 
+
+        if (annoInput < annoOggi) {
+            mostraErrore(scadenzaInput, 'Carta scaduta.');
+            event.preventDefault();
+            return false;
+        }
+
+        if (annoInput === annoOggi && meseInput < meseOggi) {
+            mostraErrore(scadenzaInput, 'Carta scaduta.');
+            event.preventDefault();
+            return false;
+        }
+
+        return true; 
+    }
+
+    function mostraErrore(elemento, messaggio) {
+        elemento.style.borderColor = 'red';
+        const divErrore = document.createElement('div');
+        divErrore.id = 'errore-scadenza';
+        divErrore.style.color = 'red';
+        divErrore.style.fontSize = '0.75rem';
+        divErrore.style.marginTop = '4px';
+        divErrore.textContent = messaggio;
+        elemento.parentNode.appendChild(divErrore); 
+    }
 </script>
 
 <%@ include file="fragment/footer.jspf" %>

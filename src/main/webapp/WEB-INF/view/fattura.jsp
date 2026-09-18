@@ -14,8 +14,8 @@
         <i class="fa-solid fa-circle-check"></i>
     </div>
 
-    <h1 class="invoice-title">Grazie di aver acquistato da noi!</h1>
-    <p class="invoice-subtitle">Il tuo ordine è stato elaborato con successo.</p>
+    <h1 class="invoice-title">Grazie per aver acquistato da noi!</h1>
+    <p class="invoice-subtitle">Il tuo ordine è stato elaborato con successo!</p>
 
     <div class="invoice-glass-box">
         <h3>Dettagli Ordine #${sessionScope.ultimoOrdine.id}</h3>
@@ -29,9 +29,14 @@
     </div>
 
     <div class="invoice-actions">
+        
         <a href="${pageContext.request.contextPath}/Catalogo" class="btn-primary" style="text-decoration: none;">Torna allo Shopping</a>
-    </div>
+        
+        <button onclick="window.print()" class="btn-primary stampa-ricevuta" style="margin-right: 15px; text-decoration: none;">
+            <i class="fa-solid fa-print"></i> Stampa Ricevuta
+        </button>
 
+    </div>
 </main>
 
 <%@ include file="fragment/footer.jspf" %>

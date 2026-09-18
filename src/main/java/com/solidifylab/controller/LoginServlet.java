@@ -12,7 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import com.solidifylab.dao.UserDAO;
 import com.solidifylab.dao.WishlistDAO;
-import com.solidifylab.dao.CarrelloDAO; 
+import com.solidifylab.dao.CarrelloDAO;
+import com.solidifylab.dao.LibreriaDAO;
 import com.solidifylab.model.User;
 import com.solidifylab.model.Carrello; 
 
@@ -29,11 +30,13 @@ public class LoginServlet extends HttpServlet {
         User utente = userDAO.doRetrieveByEmailAndPassword(email, password);
         
         if (utente != null) {
+        	
             HttpSession session = request.getSession();
             
             session.setAttribute("utenteLoggato", utente);
             
             try {
+            	
                 WishlistDAO wishlistDAO = new WishlistDAO();
                 List<Integer> wishlistIds = wishlistDAO.getWishlistIdsByUtente(utente.getId());
                 session.setAttribute("wishlistIds", wishlistIds);
@@ -42,14 +45,21 @@ public class LoginServlet extends HttpServlet {
                 Carrello carrelloDb = carrelloDAO.getCarrelloByUtente(utente.getId());
                 session.setAttribute("carrello", carrelloDb);
                 
+                LibreriaDAO libreriaDAO = new LibreriaDAO();
+                session.setAttribute("libreriaDigitale", libreriaDAO.getLibreriaByUtente(utente.getId()));
+                session.setAttribute("idAssetPosseduti", libreriaDAO.getIdAssetPosseduti(utente.getId()));
+                
                 System.out.println("Wishlist e Carrello caricati al login per l'utente: " + utente.getId());
                 
             } catch (Exception e) {
+            	
                 System.out.println("Errore durante il caricamento dei dati utente al login: " + e.getMessage());
             }
             
             response.sendRedirect(request.getContextPath() + "/Home");
+            
         } else {
+        	
             request.setAttribute("erroreLogin", "Email o password errati!");
             request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
         }

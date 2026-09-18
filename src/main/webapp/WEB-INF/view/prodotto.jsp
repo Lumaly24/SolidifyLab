@@ -230,7 +230,42 @@
 	        
 	    </div>
 	    
-	</div>   
+	</div> 
+	
+		<c:set var="isDigitale" value="${not empty prodotto.formatoFile}"/>
+		<c:set var="giaPosseduto" value="${isDigitale and not empty sessionScope.idAssetPosseduti and sessionScope.idAssetPosseduti.contains(prodotto.id)}" />
+		
+		<c:choose>
+		    <c:when test="${giaPosseduto}">
+		    
+		        <div class="badge-acquistato-container">
+		        
+		            <img src="${pageContext.request.contextPath}/img/badge-gia-acquistato.png" alt="Già Acquistato" class="badge-img">
+		            <span class="badge-text">Asset nella tua Libreria</span>
+		            
+		        </div>
+		        
+		        <a href="${pageContext.request.contextPath}/UserDashboard#libreria" class="btn-secondary">
+		            <i class="fa-solid fa-cloud-arrow-down"></i> Vai alla Libreria
+		        </a>
+		    </c:when>
+		    
+		    <c:otherwise>
+		    
+		        <form action="${pageContext.request.contextPath}/AggiungiAlCarrelloServlet" method="POST">
+		            <input type="hidden" name="prodottoId" value="${prodotto.id}">
+		            
+		            <c:if test="${not isDigitale}">
+		                <input type="number" name="quantita" value="1" min="1" max="${prodotto.quantitaDisponibile}">
+		            </c:if>
+		            
+		            <button type="submit" class="btn-primary">Aggiungi al Carrello</button>
+		            
+		        </form>
+		        
+		    </c:otherwise>
+		    
+		</c:choose> 
 
     </main>
 
