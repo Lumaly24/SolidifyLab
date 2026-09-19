@@ -70,7 +70,7 @@
                     <div class="header-actions">
                         
                         <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
-                            <a href="${pageContext.request.contextPath}/EditProductServlet?id=${prodotto.id}" class="btn-icon admin-edit-btn" title="Modifica Prodotto">
+                            <a href="${pageContext.request.contextPath}/AdminDashboard?edit=${prodotto.id}#gestione-prodotti" class="btn-icon admin-edit-btn" title="Modifica Prodotto">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
                         </c:if>

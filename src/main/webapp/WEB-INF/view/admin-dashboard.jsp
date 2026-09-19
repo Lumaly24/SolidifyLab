@@ -654,6 +654,26 @@ function showCustomAlert(message) {
         document.getElementById('editProductModal').style.display = 'none';
         document.getElementById('editProdImg').value = ""; 
     }
+    window.addEventListener('load', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('edit');
+        
+        if (editId) {
+            const tabProdotti = document.querySelector('.admin-sidebar a[href="#gestione-prodotti"]');
+            if (tabProdotti) {
+                tabProdotti.click();
+            }
+
+            setTimeout(() => {
+                const editBtn = document.querySelector('button[data-id="' + editId + '"]');
+                if (editBtn) {
+                    editBtn.click();
+                    
+                    window.history.replaceState({}, document.title, window.location.pathname + "#gestione-prodotti");
+                }
+            }, 300);
+        }
+    });
 </script>
 </div> 
 
