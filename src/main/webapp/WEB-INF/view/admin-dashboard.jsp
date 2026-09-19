@@ -364,6 +364,41 @@
             "STAMPA_3D": ["Accessori", "Miniature", "Props", "Resina", "PLA", "PETG", "Supporti rimossi", "Levigatura primer", "Colore"]
         };
 
+        // 1. Funzione per il form "Aggiungi Nuovo Prodotto"
+        function aggiornaTags() {
+            const catSelect = document.getElementById("catProd");
+            const tagContainer = document.getElementById("tagContainer");
+            const categoriaSelezionata = catSelect.value;
+
+            tagContainer.innerHTML = '';
+
+            if (categoriaSelezionata && tagsPerCategoria[categoriaSelezionata]) {
+                tagsPerCategoria[categoriaSelezionata].forEach(tag => {
+                    const label = document.createElement("label");
+                    label.style.display = "inline-flex";
+                    label.style.alignItems = "center";
+                    label.style.gap = "8px";
+                    label.style.cursor = "pointer";
+                    label.style.fontFamily = "'coolveticarg', sans-serif";
+                    label.style.color = "#0f0326";
+
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "tags"; 
+                    checkbox.value = tag; 
+
+                    const textNode = document.createTextNode(tag);
+                    
+                    label.appendChild(checkbox);
+                    label.appendChild(textNode);
+                    tagContainer.appendChild(label);
+                });
+            } else {
+                tagContainer.innerHTML = '<span style="color: #666; font-style: italic; font-size: 0.9rem;">Prima scegli la categoria</span>';
+            }
+        }
+
+        // 2. Funzione per il Modale "Modifica Prodotto"
         function aggiornaTagsEdit(tagsSelezionati = []) {
             const catSelect = document.getElementById("editProdCat");
             const tagContainer = document.getElementById("editTagContainer");
