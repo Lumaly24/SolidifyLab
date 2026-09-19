@@ -32,7 +32,7 @@ public class WishlistServlet extends HttpServlet {
             List<Prodotto> listaWishlist;
             
             if (tipo != null && !tipo.trim().isEmpty()) {
-                int categoriaId = 1; // Default: Modelli 3D
+                int categoriaId = 1;
                 if ("TEXTURES".equals(tipo)) {
                     categoriaId = 2;
                 } else if ("STAMPE".equals(tipo)) {

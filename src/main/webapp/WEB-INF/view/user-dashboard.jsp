@@ -47,7 +47,6 @@
         <!-- ================= CONTENUTO PRINCIPALE (TABS) ================= -->
         <div class="user-main-content">
             
-            <!-- TAB 1: PANORAMICA (DASHBOARD) -->
             <section id="dashboard" class="user-tab-content active-tab">
                 <h2>Bentornato, ${sessionScope.utenteLoggato.username}!</h2>
                 <p>Dal tuo pannello di controllo puoi visualizzare le tue attività recenti e aggiornare le tue informazioni.</p>
@@ -67,7 +66,6 @@
                     </div>
                 </div>
               </section>
-            <!-- TAB 2: ANAGRAFICA E SPEDIZIONI -->
             <section id="anagrafica" class="user-tab-content">
                 <h2>Anagrafica e Indirizzi di Spedizione</h2>
                 

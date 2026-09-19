@@ -1,0 +1,97 @@
+
+.scopri-wrapper {
+    padding-top: 150px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.scopri-hero-card {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 40px;
+}
+
+.scopri-hero-title {
+    font-family: 'elephant', sans-serif;
+    color: #382381;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.scopri-hero-text {
+    font-family: 'coolveticarg', sans-serif;
+    color: #0f0326;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.scopri-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.scopri-feature-card {
+    text-align: center;
+    padding: 30px;
+}
+
+.scopri-feature-icon-pink {
+    font-size: 2.5rem;
+    color: #e56399;
+    margin-bottom: 15px;
+}
+
+.scopri-feature-icon-purple {
+    font-size: 2.5rem;
+    color: #382381;
+    margin-bottom: 15px;
+}
+
+.scopri-feature-title {
+    color: #382381;
+    margin-bottom: 10px;
+}
+
+.scopri-feature-desc {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.scopri-cta-card {
+    text-align: center;
+    padding: 35px;
+    background: rgba(56, 35, 129, 0.05);
+}
+
+.scopri-cta-title {
+    color: #382381;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.scopri-cta-desc {
+    color: #0f0326;
+    margin-bottom: 25px;
+}
+
+.scopri-cta-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.scopri-btn-secondary {
+    padding: 10px 25px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    background: rgba(15, 3, 38, 0.1);
+    color: #0f0326;
+    display: inline-flex;
+    align-items: center;
+}

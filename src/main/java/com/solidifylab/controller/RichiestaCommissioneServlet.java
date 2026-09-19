@@ -33,7 +33,7 @@ public class RichiestaCommissioneServlet extends HttpServlet {
         
         Commissione comm = new Commissione();
         
-        // 1. Dati Utente
+        // 1. Date Utente
         HttpSession session = request.getSession(false);
         User utente = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
         

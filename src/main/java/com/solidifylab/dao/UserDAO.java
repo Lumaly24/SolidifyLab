@@ -39,7 +39,6 @@ public class UserDAO {
     }
 
     public boolean doSave(User user) {
-        
         String query = "INSERT INTO utente (email, password_hash, username, ruolo) VALUES (?, ?, ?, 'CLIENTE')";
         
         try (Connection con = ConPool.getConnection();
@@ -59,11 +58,9 @@ public class UserDAO {
     }
     
     public void updateProfilo(User user) {
-    	
         String query = "UPDATE utente SET nome = ?, cognome = ?, indirizzo = ?, citta = ?, cap = ? WHERE id = ?";
         
         try (Connection con = ConPool.getConnection();
-        		
              PreparedStatement ps = con.prepareStatement(query)) {
             
             ps.setString(1, user.getNome());
@@ -76,8 +73,42 @@ public class UserDAO {
             ps.executeUpdate();
             
         } catch (SQLException e) {
-        	
             e.printStackTrace();
+        }
+    }
+
+    public boolean updatePassword(String email, String nuovoPasswordHash) {
+        String query = "UPDATE utente SET password_hash = ? WHERE email = ?";
+        
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setString(1, nuovoPasswordHash);
+            ps.setString(2, email);
+            
+            int righeAggiornate = ps.executeUpdate();
+            return righeAggiornate > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean esisteEmail(String email) {
+        String query = "SELECT id FROM utente WHERE email = ?";
+        
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setString(1, email);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

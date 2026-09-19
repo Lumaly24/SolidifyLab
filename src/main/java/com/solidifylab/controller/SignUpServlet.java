@@ -21,21 +21,39 @@ public class SignUpServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         
+        if (email == null || email.trim().isEmpty() || 
+            username == null || username.trim().isEmpty() || 
+            password == null || password.trim().isEmpty()) {
+            
+            request.setAttribute("errore", "Tutti i campi (Email, Username, Password) sono obbligatori.");
+            request.getRequestDispatcher("/WEB-INF/view/signup.jsp").forward(request, response);
+            return;
+        }
+        
+        UserDAO userDAO = new UserDAO();
+        
+        if (userDAO.esisteEmail(email)) {
+            request.setAttribute("errore", "L'email è già in uso");
+            request.getRequestDispatcher("/WEB-INF/view/signup.jsp").forward(request, response);
+            return;
+        }
+        
         User nuovoUser = new User();
         nuovoUser.setUsername(username); 
         nuovoUser.setEmail(email);
         nuovoUser.setPasswordHash(password);
         
-        UserDAO userDAO = new UserDAO();
         boolean registrato = userDAO.doSave(nuovoUser);
         
         if (registrato) {
-        	
-            response.sendRedirect(request.getContextPath() + "/login.jsp?registrazione=successo");
+            User utenteCompleto = userDAO.doRetrieveByEmailAndPassword(email, password);
+            if (utenteCompleto != null) {
+                request.getSession().setAttribute("utenteLoggato", utenteCompleto);
+            }
             
+            response.sendRedirect(request.getContextPath() + "/Home");
         } else {
-        	
-            request.setAttribute("erroreSignup", "Errore durante la registrazione. L'email o l'username potrebbero essere già in uso.");
+            request.setAttribute("errore", "Registrazione fallita. L'username potrebbe essere già in uso.");
             request.getRequestDispatcher("/WEB-INF/view/signup.jsp").forward(request, response);
         }
     }

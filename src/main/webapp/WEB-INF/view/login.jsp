@@ -45,7 +45,7 @@
             
             <div class="auth-footer">
                 <p>Non sei registrato? <a href="${pageContext.request.contextPath}/Signup">Sign up</a></p>
-                <p><a href="#" class="forgot-pwd">Hai dimenticato la password?</a></p>
+                <p><a href="${pageContext.request.contextPath}/ForgotPassword" class="forgot-pwd">Hai dimenticato la password?</a></p>
             </div>
             
         </section>
