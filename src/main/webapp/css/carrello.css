@@ -580,35 +580,153 @@ html, body {
 	color: #0f0326;
 }
 
-/* FATTURA TRAMITE MEDIA QUERY */
+/* --- STILE TABELLA FATTURA (Visualizzazione Web) --- */
+.print-only {
+    display: none;
+}
+
+@media screen {
+	
+    .print-only {
+        display: none !important;
+    }
+
+    .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+    }
+
+    .invoice-table th {
+        font-family: 'elephant', serif;
+        color: #0f0326;
+        font-size: 1rem;
+        border-bottom: 1.5px solid rgba(229, 99, 153, 0.3);
+        padding: 10px 5px;
+    }
+
+    .invoice-table td {
+        font-family: 'coolveticarg', sans-serif;
+        padding: 12px 5px;
+        color: #0f0326;
+        border-bottom: 1px dashed rgba(15, 3, 38, 0.1);
+    }
+
+    .invoice-details strong {
+        font-family: 'coolveticaitalic', sans-serif;
+        color: #e56399;
+        font-size: 1.15rem;
+    }
+}
+
+/* --- 2. VISUALIZZAZIONE STAMPA (PDF STILE PROFESSIONALE) --- */
 @media print {
 	
     html, body {
-        background-image: none !important;
-        background-color: #ffffff !important;
+        background: #ffffff !important;
         color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Arial', sans-serif !important;
     }
 
-    header, footer, nav, .invoice-actions, .success-icon {
+    header, footer, nav, .web-only, .invoice-actions, .success-icon {
         display: none !important;
+    }
+
+    .print-only {
+        display: block !important;
+    }
+
+    .print-only.invoice-print-header,
+    .print-only.print-invoice-footer {
+        display: flex !important;
+    }
+
+    .cart-page-container {
+        display: block !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 1.5cm !important;
+    }
+
+    .invoice-print-header {
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        border-bottom: 1px solid #ccc !important;
+        padding-bottom: 20px !important;
+        margin-bottom: 30px !important;
+        font-size: 10pt;
+    }
+
+    .client-info {
+        font-size: 11pt;
+        margin-bottom: 40px !important;
+        line-height: 1.5;
+    }
+    
+    .print-invoice-title {
+        text-align: center !important;
+        font-size: 16pt !important;
+        font-weight: bold !important;
+        margin-bottom: 30px !important;
+        color: #000 !important;
     }
 
     .invoice-glass-box {
         background: none !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
-        border: 1px solid #000000 !important;
+        border: none !important;
         box-shadow: none !important;
-        margin: 0;
-        max-width: 100%;
-    }
-
-    .invoice-title, .invoice-subtitle, .invoice-details p, .invoice-details strong, .invoice-glass-box h3 {
-        color: #000000 !important;
-        text-shadow: none !important;
-    }
-
-    .invoice-page {
+        margin: 0 !important;
+        max-width: 100% !important;
         padding: 0 !important;
+    }
+
+    .invoice-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin-bottom: 20px !important;
+    }
+
+    .invoice-table th {
+        border-top: 2px solid #000 !important;
+        border-bottom: 2px solid #000 !important;
+        padding: 12px 5px !important;
+        color: #000 !important;
+        font-family: 'Arial', sans-serif !important;
+        font-weight: bold !important;
+        font-size: 10pt !important;
+        text-align: left !important;
+    }
+
+    .invoice-table td {
+        border-bottom: 1px solid #eee !important;
+        padding: 12px 5px !important;
+        color: #000 !important;
+        font-family: 'Arial', sans-serif !important;
+        font-size: 10pt !important;
+    }
+
+    .print-totals {
+        text-align: right !important;
+        font-size: 10pt;
+        line-height: 1.6;
+        margin-top: 20px !important;
+    }
+
+    .print-totals p {
+        margin: 5px 0 !important;
+        color: #000 !important;
+    }
+
+    .print-invoice-footer {
+        justify-content: space-between !important;
+        margin-top: 60px !important;
+        border-top: 1px solid #ccc !important;
+        padding-top: 15px !important;
+        font-size: 9pt;
+        line-height: 1.4;
     }
 }

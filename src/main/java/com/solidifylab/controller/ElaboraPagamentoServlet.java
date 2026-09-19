@@ -2,6 +2,8 @@ package com.solidifylab.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -89,6 +91,8 @@ public class ElaboraPagamentoServlet extends HttpServlet {
         ordine.setTotale(carrello.getTotaleFinale());
         ordine.setStato("PAGATO");
         ordine.setUtente(utente);
+        
+        ordine.setArticoli(new ArrayList<>(carrello.getProdotti()));
 
         OrdineDAO ordineDAO = new OrdineDAO();
         

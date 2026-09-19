@@ -103,7 +103,8 @@ body {
 .catalog-sidebar { 
     border-radius: 20px; 
     padding: 20px; 
-    height: fit-content; 
+    height: fit-content;
+    position: sticky; 
 }
 
 .catalog-sidebar, .btn-primary {

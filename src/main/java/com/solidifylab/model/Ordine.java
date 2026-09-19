@@ -1,5 +1,7 @@
 package com.solidifylab.model;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ordine {
     
@@ -9,6 +11,8 @@ public class Ordine {
     private String stato;
     private User utente;
     private Timestamp dataOrdine;
+    
+    private List<ItemCarrello> articoli = new ArrayList<>();
 
     public Ordine() {}
 
@@ -50,5 +54,13 @@ public class Ordine {
 
     public void setUtente(User utente) {
         this.utente = utente;
+    }
+    
+    public List<ItemCarrello> getArticoli() {
+        return articoli;
+    }
+
+    public void setArticoli(List<ItemCarrello> articoli) {
+        this.articoli = articoli;
     }
 }
