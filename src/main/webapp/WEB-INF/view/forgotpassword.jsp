@@ -42,7 +42,7 @@
                 <span class="error-msg" id="err-forgot-email"></span>
             </div>
             
-            <button type="submit" class="btn-primary auth-btn">Invia l'istruzione</button>
+            <button type="submit" class="btn-primary auth-btn">INVIA</button>
             
         </form>
         

@@ -11,6 +11,7 @@ import com.solidifylab.model.Carrello;
 import com.solidifylab.model.ConPool;
 import com.solidifylab.model.ItemCarrello;
 import com.solidifylab.model.Ordine;
+import com.solidifylab.model.Prodotto;
 import com.solidifylab.model.User;
 
 public class OrdineDAO {
@@ -184,6 +185,7 @@ public class OrdineDAO {
                     utente.setEmail(rs.getString("utente_email"));
                     
                     ordine.setUtente(utente);
+                    ordine.setArticoli(getArticoliPerOrdine(ordine.getId(), con));
                     ordini.add(ordine);
                 }
             }
@@ -195,5 +197,35 @@ public class OrdineDAO {
         }
         
         return ordini;
+    }
+    
+    private List<ItemCarrello> getArticoliPerOrdine(int ordineId, Connection con) {
+    	
+        List<ItemCarrello> articoli = new ArrayList<>();
+        String query = "SELECT ro.quantita, p.nome FROM riga_ordine ro JOIN prodotto p ON ro.prodotto_id = p.id WHERE ro.ordine_id = ?";
+        
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+        	
+            ps.setInt(1, ordineId);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+            	
+                while(rs.next()) {
+                	
+                    ItemCarrello item = new ItemCarrello(null, ordineId);
+                    Prodotto p = new Prodotto();
+                    p.setNome(rs.getString("nome"));
+                    item.setProdotto(p);
+                    item.setQuantita(rs.getInt("quantita"));
+                    articoli.add(item);
+                }
+            }
+            
+        } catch (SQLException e) {
+        	
+            e.printStackTrace();
+        }
+        
+        return articoli;
     }
 }

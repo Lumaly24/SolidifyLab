@@ -66,6 +66,7 @@
                     </div>
                 </div>
               </section>
+              
             <section id="anagrafica" class="user-tab-content">
                 <h2>Anagrafica e Indirizzi di Spedizione</h2>
                 
@@ -232,38 +233,67 @@
                 </div>
 
                 <table class="user-table">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>N. Ordine</th>
-                            <th>Totale</th>
-                            <th>Stato</th>
-                            <th>Azioni</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:choose>
-                            <c:when test="${empty sessionScope.storicoOrdini}">
-                                <tr>
-                                    <td colspan="5" class="text-center">Nessun ordine trovato.</td>
-                                </tr>
-                            </c:when>
-                            <c:otherwise>
-                                <c:forEach var="ordine" items="${sessionScope.storicoOrdini}">
-                                    <tr>
-                                        <td><fmt:formatDate value="${ordine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" /></td>
-                                        <td>#${ordine.id}</td>
-                                        <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
-                                        <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
-                                        <td class="table-actions">
-                                            <button onclick="window.print()" class="btn-outline-small"><i class="fa-solid fa-file-pdf"></i> Ricevuta</button>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </c:otherwise>
-                        </c:choose>
-                    </tbody>
-                </table>
+                
+				    <thead>
+				    
+				        <tr>
+				            <th>Data</th>
+				            <th>N. Ordine</th>
+				            <th>Prodotti</th>
+				            <th>Totale</th>
+				            <th>Stato</th>
+				            <th class="no-print">Azioni</th>
+				        </tr>
+				        
+				    </thead>
+				    
+				    <tbody>
+				    
+				        <c:choose>
+				        
+				            <c:when test="${empty sessionScope.storicoOrdini}">
+				            
+				                <tr>
+				                    <td colspan="6" class="text-center">Nessun ordine trovato.</td>
+				                </tr>
+				                
+				            </c:when>
+				            
+				            <c:otherwise>
+				            
+				                <c:forEach var="ordine" items="${sessionScope.storicoOrdini}">
+				                
+				                    <tr>
+				                        <td><fmt:formatDate value="${ordine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" /></td>
+				                        
+				                        <td>#${ordine.id}</td>
+				                        
+				                        <td>
+				                            <ul class="order-items-list">
+				                                <c:forEach var="item" items="${ordine.articoli}">
+				                                    <li>${item.quantita}x ${item.prodotto.nome}</li>
+				                                </c:forEach>
+				                            </ul>
+				                        </td>
+				                        
+				                        <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
+				                        <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
+				                        
+				                        <td class="table-actions no-print">
+				                            <button onclick="window.print()" class="btn-outline-small"><i class="fa-solid fa-file-pdf"></i> Ricevuta</button>
+				                        </td>
+				                    </tr>
+				                    
+				                </c:forEach>
+				                
+				            </c:otherwise>
+				            
+				        </c:choose>
+				        
+				    </tbody>
+				    
+				</table>
+				
             </section>
 
             <!-- TAB 5: TRACKER COMMISSIONI -->

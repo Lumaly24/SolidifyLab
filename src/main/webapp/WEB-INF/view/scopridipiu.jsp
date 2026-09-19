@@ -8,20 +8,18 @@
 
 <%@ include file="fragment/header.jspf" %>
 
-<div class="admin-body-wrapper scopri-wrapper">
+<main class="scopri-wrapper">
 
-    <!-- SEZIONE INTRODUTTIVA -->
-    <div class="admin-card scopri-hero-card">
+    <div class="card scopri-hero-card">
         <h1 class="scopri-hero-title">IL TUO VIAGGIO CREATIVO INIZIA QUI</h1>
         <p class="scopri-hero-text">
             <strong>SolidifyLab</strong> nasce dall'unione tra la passione per la modellazione tridimensionale e lo sviluppo web avanzato. Un punto di riferimento per artisti, designer e maker alla ricerca di risorse digitali di altissima qualità e servizi di stampa su misura.
         </p>
     </div>
 
-    <!-- SEZIONE CARATTERISTICHE (GRID) -->
     <div class="scopri-grid">
         
-        <div class="admin-card scopri-feature-card">
+        <div class="card scopri-feature-card">
             <i class="fa-solid fa-cube scopri-feature-icon-pink"></i>
             <h3 class="scopri-feature-title">Modelli 3D Ottimizzati</h3>
             <p class="scopri-feature-desc">
@@ -29,15 +27,15 @@
             </p>
         </div>
 
-        <div class="admin-card scopri-feature-card">
-            <i class="fa-solid fa-mountain-sun scopri-feature-icon-purple"></i>
+        <div class="card scopri-feature-card">
+            <i class="fa-solid fa-chess-board scopri-feature-icon-pink"></i>
             <h3 class="scopri-feature-title">Textures Seamless</h3>
             <p class="scopri-feature-desc">
                 Mappe e superfici dettagliate pensate per dare vita e realismo a qualsiasi ambiente architettonico, organico o fantasy.
             </p>
         </div>
 
-        <div class="admin-card scopri-feature-card">
+        <div class="card scopri-feature-card">
             <i class="fa-solid fa-print scopri-feature-icon-pink"></i>
             <h3 class="scopri-feature-title">Stampe 3D & Commissioni</h3>
             <p class="scopri-feature-desc">
@@ -47,8 +45,7 @@
 
     </div>
 
-    <!-- SEZIONE CTA FINALE -->
-    <div class="admin-card scopri-cta-card">
+    <div class="card scopri-cta-card">
         <h2 class="scopri-cta-title">Pronto a dare forma alle tue idee?</h2>
         <p class="scopri-cta-desc">Esplora subito la libreria o richiedi una commissione personalizzata.</p>
         
@@ -65,6 +62,6 @@
         </div>
     </div>
 
-</div>
+</main>
 
 <%@ include file="fragment/footer.jspf" %>

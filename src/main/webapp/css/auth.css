@@ -60,8 +60,9 @@
 }
 
 .form-group label {
+	font-family: 'elephant', serif;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 300;
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -128,4 +129,9 @@
 
 .auth-footer a:hover {
     opacity: 0.8;
+}
+
+.auth-box p {
+	font-family: 'coolveticaitalic', serif;
+	margin-bottom: 10px;
 }

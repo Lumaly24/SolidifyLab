@@ -17,14 +17,12 @@
             
             <h2>Log in</h2>
             
-            <!-- BLOCCO ERRORI SERVER: Allineato a "erroreLogin" per corrispondere alla Servlet -->
             <c:if test="${not empty erroreLogin}">
                 <div class="error-msg global-error">
                     <c:out value="${erroreLogin}"/>
                 </div>
             </c:if>
             
-            <!-- CORRETTO: action punta a /Login (senza "Servlet") -->
             <form id="loginForm" action="${pageContext.request.contextPath}/Login" method="POST" onsubmit="return validaLogin()">
                 
                 <div class="form-group">
@@ -51,7 +49,6 @@
         </section>
     </main>
 
-<!-- SCRIPT PER LA VALIDAZIONE JS CON REGEX (Requisito Checklist) -->
 <script>
     function validaLogin() {
         let isValid = true;
@@ -60,7 +57,7 @@
         document.getElementById('err-email').innerText = '';
         document.getElementById('err-password').innerText = '';
 
-        // 1. Validazione Email con Regex
+        // Validazione Email con Regex
         const email = document.getElementById('loginEmail').value.trim();
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         
@@ -72,14 +69,14 @@
             isValid = false;
         }
 
-        // 2. Validazione Password
+        // Validazione Password
         const password = document.getElementById('loginPassword').value.trim();
         if (password === '') {
             document.getElementById('err-password').innerText = 'La password è obbligatoria.';
             isValid = false;
         }
 
-        return isValid; // Se false, blocca l'invio del form e mostra i messaggi inline
+        return isValid;
     }
 </script>
 

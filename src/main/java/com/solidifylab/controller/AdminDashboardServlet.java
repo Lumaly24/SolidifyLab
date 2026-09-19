@@ -29,17 +29,14 @@ public class AdminDashboardServlet extends HttpServlet {
         
         if (utente != null && "ADMIN".equalsIgnoreCase(utente.getRuolo())) {
             
-            // 1. Prodotti
             ProdottoDAO prodottoDAO = new ProdottoDAO();
             List<Prodotto> listaProdotti = prodottoDAO.doRetrieveAll();
             request.setAttribute("listaProdotti", listaProdotti);
             
-            // 2. Commissioni (Lista completa per la tabella principale della dashboard)
             CommissioneDAO commissioneDAO = new CommissioneDAO();
             List<Commissione> listaCommissioni = commissioneDAO.getAllCommissioni();
             request.setAttribute("listaCommissioni", listaCommissioni);
             
-            // Eventuali liste filtrate (se usate anche nella dashboard principale)
             List<Commissione> inAttesa = new ArrayList<>();
             List<Commissione> accettate = new ArrayList<>();
             List<Commissione> inLavorazione = new ArrayList<>();
@@ -64,12 +61,10 @@ public class AdminDashboardServlet extends HttpServlet {
             request.setAttribute("listaCompletate", completate);
             request.setAttribute("listaRifiutate", rifiutate);
             
-            // 3. Ordini
             OrdineDAO ordineDAO = new OrdineDAO();
             List<Ordine> listaOrdiniCompleta = ordineDAO.doRetrieveAll();
             request.setAttribute("listaOrdiniCompleta", listaOrdiniCompleta);
 
-            // 4. Inoltro alla vista della Dashboard Admin
             request.getRequestDispatcher("/WEB-INF/view/admin-dashboard.jsp").forward(request, response);
             
         } else {

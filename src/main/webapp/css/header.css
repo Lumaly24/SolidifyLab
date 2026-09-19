@@ -121,6 +121,8 @@
 }
 
 .search-bar input {
+	font-family: arial !important;
+	font-weight: 100;
     padding: 8px 35px 8px 12px;
     border-radius: 20px;
     border: 1px solid #ccc;
@@ -328,9 +330,7 @@
     color: #e56399 !important;
 }
 
-/* FIX HEADER VISIBILE E TRASPARENTE STILE VETRO SATINATO */
-header.main-header,
-.main-header {
+header.main-header, .main-header {
     position: fixed !important;
     top: 0;
     left: 0;

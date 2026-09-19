@@ -73,7 +73,6 @@
                         </div>
                     </div>
 
-                    <!-- Sezione per i Tag del modale di modifica -->
                     <div class="form-group" style="text-align: left; margin-bottom: 15px;">
                         <label style="color: #0f0326; font-weight: bold; margin-bottom: 5px; display: block;">Tag (Riseleziona i tag per salvarli)</label>
                         <div id="editTagContainer" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; min-height: 45px; align-items: center;">
@@ -278,10 +277,9 @@
                                 <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
                                 <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
                                 <td class="table-actions">
-                                    <form action="${pageContext.request.contextPath}/Placeholding" method="GET">
-                                        <input type="hidden" name="id" value="${comm.id}">
-                                        <button type="submit" class="btn-icon blue text-blue"><i class="fa-solid fa-file-lines"></i></button>
-                                    </form>
+                                    <button type="button" onclick="window.print()" class="btn-icon text-blue" title="Stampa Ordini">
+									    <i class="fa-solid fa-file-pdf"></i>
+									</button>
                                 </td>
                             </tr>
                         </c:forEach>
