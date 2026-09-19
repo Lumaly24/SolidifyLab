@@ -8,7 +8,7 @@
 </c:if>
 
 <% 
-    request.setAttribute("titoloPagina", "Gestione Commissioni"); 
+    request.setAttribute("titoloPagina", "Pannello Admin"); 
 	request.setAttribute("cssPagina", "areautente.css");
 %>
 
@@ -37,6 +37,68 @@
                 </p>
                 
                 <button type="button" class="btn-primary auth-btn" onclick="closeSuccessModal()" style="width: 100%;">Okay</button>
+            </div>
+        </div>
+
+        <!-- ================= MODALE MODIFICA PRODOTTO ================= -->
+        <div id="editProductModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+            <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 500px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px dashed rgba(15,3,38,0.2); padding-bottom: 10px;">
+                    <h3 style="font-family: 'elephant', sans-serif; color: #382381; margin: 0;">Modifica Prodotto</h3>
+                    <button type="button" onclick="closeEditModal()" style="background: transparent; border: none; font-size: 1.5rem; color: #e56399; cursor: pointer; transition: transform 0.2s;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <form action="${pageContext.request.contextPath}/EditProductServlet" method="POST" enctype="multipart/form-data" class="admin-form">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" id="editProdId" name="id">
+
+                    <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                        <label for="editProdNome" style="color: #0f0326; font-weight: bold; margin-bottom: 5px; display: block;">Nome Prodotto</label>
+                        <input type="text" id="editProdNome" name="nome" required style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc;">
+                    </div>
+
+                    <div class="form-row" style="display: flex; gap: 15px; margin-bottom: 15px; text-align: left;">
+                        <div class="form-group half-width" style="flex: 1;">
+                            <label for="editProdPrezzo" style="color: #0f0326; font-weight: bold; margin-bottom: 5px; display: block;">Prezzo (€)</label>
+                            <input type="number" id="editProdPrezzo" name="prezzo" step="0.01" min="0" required style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc;">
+                        </div>
+                        <div class="form-group half-width" style="flex: 1;">
+                            <label for="editProdCat" style="color: #0f0326; font-weight: bold; margin-bottom: 5px; display: block;">Categoria</label>
+                            <select id="editProdCat" name="categoria" required onchange="aggiornaTagsEdit()" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc; background: white;">
+                                <option value="1">Modello 3D</option>
+                                <option value="2">Texture</option>
+                                <option value="3">Stampe 3D</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Sezione per i Tag del modale di modifica -->
+                    <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                        <label style="color: #0f0326; font-weight: bold; margin-bottom: 5px; display: block;">Tag (Riseleziona i tag per salvarli)</label>
+                        <div id="editTagContainer" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; min-height: 45px; align-items: center;">
+                            <span style="color: #666; font-style: italic; font-size: 0.9rem;">Scegli una categoria...</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                        <label for="editProdImg" style="color: #0f0326; font-weight: bold; margin-bottom: 5px; display: block;">Nuova Immagine (lascia vuoto per non cambiare)</label>
+                        <div style="font-size: 0.9rem; color: #382381; margin-bottom: 8px; font-family: 'coolveticarg', sans-serif;">
+                            <em>File attuale: <span id="editProdImgCorrente" style="font-weight: bold;">nessuno</span></em>
+                        </div>
+                        <input type="file" id="editProdImg" name="immagine" accept="image/*" style="width: 100%; padding: 5px;">
+                    </div>
+
+                    <div class="form-group" style="text-align: left; margin-bottom: 20px;">
+                        <label for="editProdDesc" style="color: #0f0326; font-weight: bold; margin-bottom: 5px; display: block;">Descrizione</label>
+                        <textarea id="editProdDesc" name="descrizione" rows="3" required style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc; resize: vertical;"></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 10px;">
+                        <button type="button" class="btn-secondary" onclick="closeEditModal()" style="flex: 1; border-radius: 50px; padding: 12px; background: rgba(15,3,38,0.1); border: none; color: #0f0326; font-weight: bold; cursor: pointer;">Annulla</button>
+                        <button type="submit" class="auth-btn" style="flex: 1; border-radius: 50px; padding: 12px; border: none; background: #382381; color: #b9c1df; font-weight: bold; cursor: pointer;">Salva Modifiche</button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -151,10 +213,18 @@
 								</td>
                                 <td>€ <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/></td>
                                 <td class="table-actions">
-                                    <form action="${pageContext.request.contextPath}/EditProductServlet" method="GET">
-                                        <input type="hidden" name="id" value="${prodotto.id}">
-                                        <button type="submit" class="btn-icon text-blue" title="Modifica"><i class="fa-solid fa-pen"></i></button>
-                                    </form>
+                                    
+                                    <button type="button" class="btn-icon text-blue" title="Modifica"
+                                            data-id="${prodotto.id}"
+                                            data-nome="${fn:escapeXml(prodotto.nome)}"
+                                            data-prezzo="${prodotto.prezzoCorrente}"
+                                            data-categoria="${prodotto.categoriaId}"
+                                            data-descrizione="${fn:escapeXml(prodotto.descrizione)}"
+                                            data-tags="${prodotto.tagsUniti}"
+                                            data-immagine="${prodotto.immagineCopertinaUrl}"
+                                            onclick="openEditModal(this)">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
                                  
 								    <form action="${pageContext.request.contextPath}/Add&Remove" method="POST" style="display:inline;" id="delete-form-${prodotto.id}">
 								        <input type="hidden" name="action" value="remove">
@@ -288,23 +358,30 @@
 
     <!-- SCRIPT GESTIONE TAG DINAMICI (CHECKBOX) -->
     <script>
-        // Lista dei tag esattamente come richiesti
         const tagsPerCategoria = {
             "MODELLO_3D": ["Ambienti", "Creature", "Personaggi", "Props", "Low Poly", "High Poly", "Rigged", "Game Ready", "Realistico", "Fantasy"],
             "TEXTURE": ["Architettura", "Metalli", "Tessuti", "Organiche", "1K", "2K", "3K", "4K", "Seamless"],
             "STAMPA_3D": ["Accessori", "Miniature", "Props", "Resina", "PLA", "PETG", "Supporti rimossi", "Levigatura primer", "Colore"]
         };
 
-        function aggiornaTags() {
-            const catSelect = document.getElementById("catProd");
-            const tagContainer = document.getElementById("tagContainer");
-            const categoriaSelezionata = catSelect.value;
+        function aggiornaTagsEdit(tagsSelezionati = []) {
+            const catSelect = document.getElementById("editProdCat");
+            const tagContainer = document.getElementById("editTagContainer");
+            const categoriaId = catSelect.value;
+            
+            let catString = "";
+            if (categoriaId === "1") catString = "MODELLO_3D";
+            else if (categoriaId === "2") catString = "TEXTURE";
+            else if (categoriaId === "3") catString = "STAMPA_3D";
 
             tagContainer.innerHTML = '';
 
-            if (categoriaSelezionata && tagsPerCategoria[categoriaSelezionata]) {
-                tagsPerCategoria[categoriaSelezionata].forEach(tag => {
-                    
+            const normalizedSelected = tagsSelezionati.map(t => 
+                t.replace(/[\[\]]/g, '').toLowerCase().replace(/_/g, ' ').trim()
+            );
+
+            if (catString && tagsPerCategoria[catString]) {
+                tagsPerCategoria[catString].forEach(tag => {
                     const label = document.createElement("label");
                     label.style.display = "inline-flex";
                     label.style.alignItems = "center";
@@ -317,16 +394,20 @@
                     checkbox.type = "checkbox";
                     checkbox.name = "tags"; 
                     checkbox.value = tag; 
+                    
+                    const normalizedCurrent = tag.toLowerCase().replace(/_/g, ' ').trim();
+
+                    if (normalizedSelected.includes(normalizedCurrent)) {
+                        checkbox.checked = true;
+                    }
 
                     const textNode = document.createTextNode(tag);
-                    
                     label.appendChild(checkbox);
                     label.appendChild(textNode);
                     tagContainer.appendChild(label);
                 });
-                
             } else {
-                tagContainer.innerHTML = '<span style="color: #666; font-style: italic; font-size: 0.9rem;">Prima scegli la categoria</span>';
+                tagContainer.innerHTML = '<span style="color: #666; font-style: italic; font-size: 0.9rem;">Scegli una categoria...</span>';
             }
         }
     </script>
@@ -498,6 +579,45 @@ function showCustomAlert(message) {
             modal.style.display = 'none';
             window.location.reload(); 
         }
+    }
+
+    function openEditModal(buttonEl) {
+        const id = buttonEl.getAttribute('data-id');
+        const nome = buttonEl.getAttribute('data-nome');
+        let prezzo = buttonEl.getAttribute('data-prezzo');
+        const categoria = buttonEl.getAttribute('data-categoria');
+        const descrizione = buttonEl.getAttribute('data-descrizione');
+        
+        const immagine = buttonEl.getAttribute('data-immagine');
+        
+        const tagsAttr = buttonEl.getAttribute('data-tags');
+        const tagsSelezionati = tagsAttr ? tagsAttr.split(',') : [];
+
+        if (prezzo) {
+            prezzo = prezzo.replace(',', '.');
+        }
+
+        document.getElementById('editProdId').value = id;
+        document.getElementById('editProdNome').value = nome;
+        document.getElementById('editProdPrezzo').value = parseFloat(prezzo).toFixed(2);
+        document.getElementById('editProdCat').value = categoria;
+        document.getElementById('editProdDesc').value = descrizione && descrizione !== 'null' ? descrizione : '';
+
+        const imgLabel = document.getElementById('editProdImgCorrente');
+        if (immagine && immagine !== 'null' && immagine.trim() !== '') {
+            imgLabel.innerText = immagine;
+        } else {
+            imgLabel.innerText = "Nessun file presente";
+        }
+
+        aggiornaTagsEdit(tagsSelezionati);
+
+        document.getElementById('editProductModal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editProductModal').style.display = 'none';
+        document.getElementById('editProdImg').value = ""; 
     }
 </script>
 </div> 

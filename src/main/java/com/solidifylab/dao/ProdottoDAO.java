@@ -22,7 +22,10 @@ public class ProdottoDAO {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                prodotti.add(mapRowToProdotto(rs));
+                Prodotto p = mapRowToProdotto(rs);
+                // Estrae i tag e li associa al prodotto
+                p.setTags(getTagsForProdotto(p.getId(), con));
+                prodotti.add(p);
             }
             
         } catch (SQLException e) {
@@ -45,6 +48,8 @@ public class ProdottoDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     prodotto = mapRowToProdotto(rs);
+                    // Estrae i tag e li associa al prodotto
+                    prodotto.setTags(getTagsForProdotto(prodotto.getId(), con));
                 }
             }
         } catch (SQLException e) {
@@ -66,7 +71,9 @@ public class ProdottoDAO {
             
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    prodotti.add(mapRowToProdotto(rs));
+                    Prodotto p = mapRowToProdotto(rs);
+                    p.setTags(getTagsForProdotto(p.getId(), con));
+                    prodotti.add(p);
                 }
             }
         } catch (SQLException e) {
@@ -88,7 +95,9 @@ public class ProdottoDAO {
             
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    prodotti.add(mapRowToProdotto(rs));
+                    Prodotto p = mapRowToProdotto(rs);
+                    p.setTags(getTagsForProdotto(p.getId(), con));
+                    prodotti.add(p);
                 }
             }
         } catch (SQLException e) {
@@ -139,7 +148,9 @@ public class ProdottoDAO {
             
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    prodotti.add(mapRowToProdotto(rs));
+                    Prodotto p = mapRowToProdotto(rs);
+                    p.setTags(getTagsForProdotto(p.getId(), con));
+                    prodotti.add(p);
                 }
             }
         } catch (SQLException e) {
@@ -253,5 +264,60 @@ public class ProdottoDAO {
             System.out.println("Errore durante l'inserimento dei tag per nome:");
             e.printStackTrace();
         }
+    }
+
+    public void doUpdate(Prodotto p) {
+        String query = "UPDATE prodotto SET categoria_id = ?, nome = ?, descrizione = ?, prezzo_corrente = ?, quantita_disponibile = ?, formato_file = ?, immagine_copertina_url = ? WHERE id = ?";
+
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setInt(1, p.getCategoriaId());
+            ps.setString(2, p.getNome());
+            ps.setString(3, p.getDescrizione());
+            ps.setDouble(4, p.getPrezzoCorrente());
+            ps.setInt(5, p.getQuantitaDisponibile());
+            ps.setString(6, p.getFormatoFile());
+            ps.setString(7, p.getImmagineCopertinaUrl());
+            ps.setInt(8, p.getId());
+            
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Errore durante l'aggiornamento del prodotto:");
+            e.printStackTrace();
+        }
+    }
+
+    public void doDeleteTagsByProdottoId(int prodottoId) {
+        String query = "DELETE FROM prodotto_tag WHERE prodotto_id = ?";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setInt(1, prodottoId);
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Errore durante l'eliminazione dei vecchi tag:");
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> getTagsForProdotto(int prodottoId, Connection con) {
+        List<String> tags = new ArrayList<>();
+        String query = "SELECT t.nome FROM tag t JOIN prodotto_tag pt ON t.id = pt.tag_id WHERE pt.prodotto_id = ?";
+        
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, prodottoId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    tags.add(rs.getString("nome"));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore nel recupero dei tag per il prodotto ID " + prodottoId);
+            e.printStackTrace();
+        }
+        return tags;
     }
 }

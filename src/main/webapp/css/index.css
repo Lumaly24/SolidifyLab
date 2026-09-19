@@ -379,9 +379,9 @@ main > section.final-section footer, main > section.final-section .main-footer {
     cursor: pointer;
     font-size: 1.1rem; 
     color: #e56399; 
-    margin-left: auto;
+    margin-left: auto; 
     display: flex;
-    align-items: right;
+    align-items: center;
     justify-content: center;
     padding: 4px;
     transition: transform 0.2s ease, color 0.2s ease;
@@ -390,6 +390,12 @@ main > section.final-section footer, main > section.final-section .main-footer {
 .btn-wishlist:hover {
     transform: scale(1.15);
     color: #e60073;
+}
+
+.wishlist-form {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
 }
 
 .product-image {
