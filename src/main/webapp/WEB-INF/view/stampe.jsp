@@ -201,9 +201,9 @@
                         </div>  
                         
                         <!-- Messaggio verde di conferma file caricato (inizialmente nascosto) -->
-                        <div id="fileLoadedMessage" style="display: none; margin-bottom: 15px; padding: 12px 15px; background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; border-radius: 8px; color: #2ecc71; font-family: 'coolveticarg', sans-serif; font-size: 1rem; text-align: center; align-items: center; justify-content: center; gap: 8px;">
+                        <div id="fileLoadedMessage" style="display: none; margin-bottom: 15px; padding: 12px 15px; background: rgba(46, 204, 113, 0.2); ; border: 1px solid #46a24a; border-radius: 8px; color: #46a24a; font-family: 'coolveticarg', sans-serif; font-size: 1rem; text-align: center; align-items: center; justify-content: center; gap: 8px;">
                             <i class="fa-solid fa-circle-check"></i> 
-                            <span>File caricato: <strong id="selectedFileName" style="color: #27ae60;"></strong></span>
+                            <span>File caricato: <strong id="selectedFileName" style="color: #46a24a;"></strong></span>
                         </div>
                         
                         <div class="hero-buttons">

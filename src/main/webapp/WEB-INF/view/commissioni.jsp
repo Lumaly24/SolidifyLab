@@ -101,7 +101,7 @@
                             <input type="file" name="file_riferimento" id="fileRiferimento" multiple class="file-input-hidden">
                             
                             <!-- Avviso visivo per il file ricevuto in POST da stampe3d.jsp -->
-                            <div id="file-feedback" style="margin-top: 8px; font-size: 0.95rem; color: #2ecc71; font-weight: bold;">
+                            <div id="file-feedback" style="margin-top: 8px; font-size: 0.95rem; color: #46a24a; font-weight: bold;">
                                 <c:if test="${not empty sessionScope.nomeFileTemporaneo}">
                                     <i class="fa-solid fa-check"></i> File acquisito correttamente: ${sessionScope.nomeFileTemporaneo}
                                     <input type="hidden" name="file_gia_caricato" value="${sessionScope.nomeFileTemporaneo}">

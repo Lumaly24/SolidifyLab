@@ -299,6 +299,12 @@ body {
     font-size: 0.95rem;
 }
 
+.ajax-search-container input:focus {
+	outline: none;
+	border-color: #e56399;
+	box-shadow: 0 0 0 3px rgba(229, 99, 153, 0.2);
+}
+
 #searchSuggestions { 
     border-radius: 12px; 
     overflow: hidden; 

@@ -1,3 +1,16 @@
+.bg-video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background-image: url('https://images.unsplash.com/photo-1747723025372-50aaa325bdde?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: center;
+}
+
 .auth-btn {
     padding: 10px 25px;
     background: #ff302b;
@@ -29,19 +42,6 @@
 	background: #c12065;
     color: #eff1ed;
 
-}
-
-.bg-video-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    overflow: hidden;
-    background-image: url('https://images.unsplash.com/photo-1747723025372-50aaa325bdde?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-    background-size: cover;
-    background-position: center;
 }
 
 .nuova-stampa {
@@ -114,7 +114,7 @@
     font-family: 'coolveticaitalic', sans-serif;
     font-size: 1.1rem;
     color: #374477;
-    margin-top: 0;
+    margin-top: 12px;
     margin-bottom: 12px;
     border-bottom: 1px solid rgba(55, 68, 119, 0.3); 
     padding-bottom: 6px;
@@ -139,7 +139,8 @@
     border: none; 
     height: 1px; 
     background: rgba(15, 3, 38, 0.15); 
-    margin: 10px 0 12px 0; 
+    margin: 5px 0 5px 0; 
+    margin-bottom: 5px;
 }
 
 .filter-list {
@@ -284,7 +285,7 @@
 .sidebar-divider {
     border: none;
     border-top: 1px dashed rgba(15, 3, 38, 0.2);
-    margin: 24px 0;
+    margin: 0;
 }
 
 .btn-primary.w-100 {
