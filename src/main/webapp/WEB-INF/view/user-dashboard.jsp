@@ -283,7 +283,9 @@
                                 <div class="commission-card">
                                     <div class="commission-card-header">
                                         <h3 class="commission-title">Richiesta #${comm.id} - ${comm.tipi}</h3>
-                                        <span class="status-badge status-${fn:toLowerCase(comm.stato)}">${comm.stato}</span>
+                                        <span class="status-badge status-${fn:toLowerCase(fn:replace(comm.stato, '_', '-'))}">
+					                    	${fn:replace(comm.stato, '_', ' ')}
+					                </span>
                                     </div>
                                     <div class="commission-card-footer">
                                         <p class="commission-date">Inviata il: <fmt:formatDate value="${comm.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
