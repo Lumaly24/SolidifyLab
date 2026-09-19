@@ -300,13 +300,11 @@
             const tagContainer = document.getElementById("tagContainer");
             const categoriaSelezionata = catSelect.value;
 
-            // Svuota il contenitore
             tagContainer.innerHTML = '';
 
             if (categoriaSelezionata && tagsPerCategoria[categoriaSelezionata]) {
                 tagsPerCategoria[categoriaSelezionata].forEach(tag => {
                     
-                    // Crea l'elemento label
                     const label = document.createElement("label");
                     label.style.display = "inline-flex";
                     label.style.alignItems = "center";
@@ -315,20 +313,18 @@
                     label.style.fontFamily = "'coolveticarg', sans-serif";
                     label.style.color = "#0f0326";
 
-                    // Crea l'input checkbox
                     const checkbox = document.createElement("input");
                     checkbox.type = "checkbox";
                     checkbox.name = "tags"; 
-                    checkbox.value = tag; // Usa il testo pulito (es. "Low Poly") come valore
+                    checkbox.value = tag; 
 
-                    // Crea il testo da affiancare
                     const textNode = document.createTextNode(tag);
-
-                    // Aggiunge elementi al DOM
+                    
                     label.appendChild(checkbox);
                     label.appendChild(textNode);
                     tagContainer.appendChild(label);
                 });
+                
             } else {
                 tagContainer.innerHTML = '<span style="color: #666; font-style: italic; font-size: 0.9rem;">Prima scegli la categoria</span>';
             }

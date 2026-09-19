@@ -421,17 +421,106 @@ body {
 }
 
 .admin-dashboard {
-    max-width: 1200px;
+    max-width: 1300px; 
+    width: 100%;
     margin: 0 auto;
     padding: 40px 20px;
     position: relative;
     z-index: 1;
-    flex: 1 0 auto; 
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: calc(100vh - 80px); 
+}
+
+.admin-dashboard-wrapper {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(15, 3, 38, 0.15);
+    padding: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1; 
+    overflow: hidden; 
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 5px;
+    border-bottom: 2px solid rgba(15, 3, 38, 0.1);
+    padding-bottom: 0;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    scrollbar-width: none; 
+}
+
+.admin-tabs::-webkit-scrollbar {
+    display: none; 
+}
+
+.admin-tab {
+    font-family: 'elephant', serif;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border-bottom: none;
+    padding: 12px 25px;
+    border-radius: 15px 15px 0 0; 
+    color: #0f0326;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.admin-tab.in-attesa.active {
+    background: #f49300;
+    color: #ffffff;
+    border-color: #f49300;
+}
+
+.admin-tab.accettate.active {
+    background: #46a24a;
+    color: #ffffff;
+    border-color: #46a24a;
+}
+
+.admin-tab.in-lavorazione.active {
+    background: #c72167;
+    color: #ffffff;
+    border-color: #c72167;
+}
+
+.admin-tab.completate.active {
+    background: #455492;
+    color: #ffffff;
+    border-color: #455492;
+}
+
+.admin-tab.rifiutate.active {
+    background: #ba160a;
+    color: #ffffff;
+    border-color: #ba160a;
+}
+
+.tab-content {
+    display: none;
+    flex-direction: column;
+    flex: 1; 
+    overflow: hidden; 
+}
+
+.tab-content.active {
+    display: flex;
+    animation: fadeIn 0.4s ease;
 }
 
 .admin-dashboard h1 {
     font-family: 'elephant', serif;
     font-size: 2.2rem;
+    text-shadow: 2px 2px 4px #eff1ed;
     color: #0f0326;
     text-align: center;
     margin-bottom: 8px;
@@ -446,10 +535,33 @@ body {
     font-size: 1.1rem;
 }
 
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
+.card-horizontal-scroll {
+    display: flex;
     gap: 25px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 20px; 
+    flex: 1; 
+    align-items: stretch;
+}
+
+.card-horizontal-scroll::-webkit-scrollbar {
+    height: 12px;
+}
+
+.card-horizontal-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.card-horizontal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(229, 99, 153, 0.7);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.card-horizontal-scroll::-webkit-scrollbar-thumb:hover {
+    background: #e56399;
 }
 
 .commission-card {
@@ -463,6 +575,10 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
     display: flex;
     flex-direction: column;
+    min-width: 320px; 
+    max-width: 350px;
+    flex: 0 0 auto; 
+    height: 100%;
 }
 
 .commission-card:hover {
@@ -512,20 +628,30 @@ body {
     color: #0f0326;
 }
 
-[class*="status-accettat"] { 
-	background-color: #4caf50; 
-	color: white; 
+[class*="status-accettata"] { 
+	background-color: #74c278; 
+	color: 0f0326; 
 }
 
-[class*="status-rifiutat"] { 
-	background-color: #f44336; 
-	color: white; 
+[class*="status-rifiutata"] { 
+	background-color: #f7756a; 
+	color: 0f0326; 
 }
 
-[class*="status-attes"], [class*="status-in"] { 
-	background-color: #ff9800; 
-	color: white; 
+[class*="status-in_attesa"] { 
+	background-color: #ffbb55; 
+	color: 0f0326; 
 }
+
+ [class*="status-in_lavorazione"] {
+ 	background-color: #f0a6c6; 
+	color: #0f0326; 
+ }
+ 
+ [class*="status-completata"] {
+ 	background-color: #97a2ce; 
+	color: #0f0326; 
+ }
 
 .card-body {
     flex-grow: 1;
@@ -571,7 +697,9 @@ body {
 }
 
 .btn-action {
-    font-family: 'coolveticarg', sans-serif;
+    font-family: 'Afterglow', sans-serif;
+    letter-spacing: 0.06em;
+    font-weight: 300;
     flex: 1;
     padding: 10px;
     border: none;

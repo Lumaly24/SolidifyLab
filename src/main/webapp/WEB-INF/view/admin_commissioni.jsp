@@ -14,150 +14,260 @@
     <h1>Pannello di Controllo Commissioni</h1>
     <p>Clicca su "Vedi Dettagli" per leggere la richiesta e sbloccare le azioni.</p>
 
-    <!-- 1. SEZIONE IN ATTESA -->
-    <c:if test="${not empty requestScope.listaInAttesa}">
-        <h2 style="font-family: 'elephant', serif; color: #0f0326; margin-top: 35px; margin-bottom: 15px; border-bottom: 2px solid #ff9800; padding-bottom: 5px;">In Attesa</h2>
-        <div class="card-grid">
-            <c:forEach var="commissione" items="${requestScope.listaInAttesa}">
-                <div class="commission-card" id="card-${commissione.id}">
-                    <div class="card-header">
-                        <span class="card-title">Ordine #${commissione.id}</span>
-                        <div class="badge-container">
-                            <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
-                            <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
-                        </div>
-                    </div>
-                    
-                    <div class="card-body">
-                        <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                        <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
-                    </div>
-                    
-                    <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
-                    
-                    <!-- BOTTONI: ACCETTA / RIFIUTA -->
-                    <div class="card-actions ${!commissione.visionata ? 'hidden-actions' : ''}" id="actions-${commissione.id}">
-                        <button type="button" class="btn-action btn-accept" onclick="showConfirm('${commissione.id}', 'accetta')">Accetta</button>
-                        <button type="button" class="btn-action btn-reject" onclick="showConfirm('${commissione.id}', 'rifiuta')">Rifiuta</button>
-                    </div>
-                </div>
-            </c:forEach>
+    <div class="admin-dashboard-wrapper">
+        
+        <div class="admin-tabs">
+            <button class="admin-tab in-attesa active" onclick="switchTab('attesa', this)">IN ATTESA</button>
+            <button class="admin-tab accettate" onclick="switchTab('accettate', this)">ACCETTATE</button>
+            <button class="admin-tab in-lavorazione" onclick="switchTab('lavorazione', this)">IN LAVORAZIONE</button>
+            <button class="admin-tab completate" onclick="switchTab('completate', this)">COMPLETATE</button>
+            <button class="admin-tab rifiutate" onclick="switchTab('rifiutate', this)">RIFIUTATE</button>
         </div>
-    </c:if>
 
-    <!-- 2. SEZIONE ACCETTATE -->
-    <c:if test="${not empty requestScope.listaAccettate}">
-        <h2 style="font-family: 'elephant', serif; color: #0f0326; margin-top: 35px; margin-bottom: 15px; border-bottom: 2px solid #4caf50; padding-bottom: 5px;">Accettate</h2>
-        <div class="card-grid">
-            <c:forEach var="commissione" items="${requestScope.listaAccettate}">
-                <div class="commission-card" id="card-${commissione.id}">
-                    <div class="card-header">
-                        <span class="card-title">Ordine #${commissione.id}</span>
-                        <div class="badge-container">
-                            <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
-                            <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
-                        </div>
+        <div id="tab-attesa" class="tab-content" style="display: flex;">
+        
+            <c:choose>
+            
+                <c:when test="${not empty requestScope.listaInAttesa}">
+                
+                    <div class="card-horizontal-scroll">
+                        <c:forEach var="commissione" items="${requestScope.listaInAttesa}">
+                            <div class="commission-card" id="card-${commissione.id}">
+                            
+                                <div class="card-header">
+                                    <span class="card-title">Ordine #${commissione.id}</span>
+                                    
+                                    <div class="badge-container">
+                                        <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
+                                        <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="card-body">
+                                    <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                </div>
+                                
+                                <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
+                                
+                                <div class="card-actions ${!commissione.visionata ? 'hidden-actions' : ''}" id="actions-${commissione.id}">
+                                    <button type="button" class="btn-action btn-accept" onclick="showConfirm('${commissione.id}', 'accetta')">Accetta</button>
+                                    <button type="button" class="btn-action btn-reject" onclick="showConfirm('${commissione.id}', 'rifiuta')">Rifiuta</button>
+                                </div>
+                                
+                            </div>
+                            
+                        </c:forEach>
+                        
                     </div>
                     
-                    <div class="card-body">
-                        <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                        <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
-                    </div>
-                    
-                    <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
-                    
-                    <!-- BOTTONE: PRENDI IN LAVORAZIONE -->
-                    <div class="card-actions" id="actions-${commissione.id}">
-                        <button type="button" class="btn-action btn-accept" onclick="submitAction('${commissione.id}', 'lavorazione')" style="width: 100%;">Prendi in Lavorazione</button>
-                    </div>
-                </div>
-            </c:forEach>
+                </c:when>
+                
+                <c:otherwise>
+                
+                    <p style="text-align: center; color: #0f0326; font-family: 'coolveticaitalic', serif; width: 100%;">Nessuna commissione in attesa.</p>
+                </c:otherwise>
+            </c:choose>
         </div>
-    </c:if>
 
-    <!-- 3. SEZIONE IN LAVORAZIONE -->
-    <c:if test="${not empty requestScope.listaInLavorazione}">
-        <h2 style="font-family: 'elephant', serif; color: #0f0326; margin-top: 35px; margin-bottom: 15px; border-bottom: 2px solid #2196f3; padding-bottom: 5px;">In Lavorazione</h2>
-        <div class="card-grid">
-            <c:forEach var="commissione" items="${requestScope.listaInLavorazione}">
-                <div class="commission-card" id="card-${commissione.id}">
-                    <div class="card-header">
-                        <span class="card-title">Ordine #${commissione.id}</span>
-                        <div class="badge-container">
-                            <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
-                            <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
-                        </div>
+        <div id="tab-accettate" class="tab-content">
+        
+            <c:choose>
+            
+                <c:when test="${not empty requestScope.listaAccettate}">
+                
+                    <div class="card-horizontal-scroll">
+                    
+                        <c:forEach var="commissione" items="${requestScope.listaAccettate}">
+                        
+                            <div class="commission-card" id="card-${commissione.id}">
+                            
+                                <div class="card-header">
+                                
+                                    <span class="card-title">Ordine #${commissione.id}</span>
+                                    
+                                    <div class="badge-container">
+                                        <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
+                                        <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="card-body">
+                                    <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                </div>
+                                
+                                <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
+                                
+                                <div class="card-actions" id="actions-${commissione.id}">
+                                    <button type="button" class="btn-action btn-accept" onclick="submitAction('${commissione.id}', 'lavorazione')" style="width: 100%;">Prendi in Lavorazione</button>
+                                </div>
+                                
+                            </div>
+                            
+                        </c:forEach>
+                        
                     </div>
                     
-                    <div class="card-body">
-                        <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                        <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
-                    </div>
-                    
-                    <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
-                    
-                    <!-- BOTTONE: INVIA COMMISSIONE -->
-                    <div class="card-actions" id="actions-${commissione.id}">
-                        <button type="button" class="btn-action btn-accept" onclick="submitAction('${commissione.id}', 'completa')" style="width: 100%;">Invia Commissione</button>
-                    </div>
-                </div>
-            </c:forEach>
+                </c:when>
+                
+                <c:otherwise>
+                    <p style="text-align: center; color: #0f0326; font-family: 'coolveticaitalic', serif; width: 100%;">Nessuna commissione accettata.</p>
+                </c:otherwise>
+                
+            </c:choose>
+            
         </div>
-    </c:if>
 
-    <!-- 4. SEZIONE COMPLETATE -->
-    <c:if test="${not empty requestScope.listaCompletate}">
-        <h2 style="font-family: 'elephant', serif; color: #0f0326; margin-top: 35px; margin-bottom: 15px; border-bottom: 2px solid #8bc34a; padding-bottom: 5px;">Completate</h2>
-        <div class="card-grid">
-            <c:forEach var="commissione" items="${requestScope.listaCompletate}">
-                <div class="commission-card" id="card-${commissione.id}">
-                    <div class="card-header">
-                        <span class="card-title">Ordine #${commissione.id}</span>
-                        <div class="badge-container">
-                            <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
-                            <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
-                        </div>
+        <div id="tab-lavorazione" class="tab-content">
+        
+            <c:choose>
+            
+                <c:when test="${not empty requestScope.listaInLavorazione}">
+                
+                    <div class="card-horizontal-scroll">
+                    
+                        <c:forEach var="commissione" items="${requestScope.listaInLavorazione}">
+                        
+                            <div class="commission-card" id="card-${commissione.id}">
+                            
+                                <div class="card-header">
+                                    <span class="card-title">Ordine #${commissione.id}</span>
+                                    
+                                    <div class="badge-container">
+                                        <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
+                                        <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="card-body">
+                                    <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                </div>
+                                
+                                <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
+                                
+                                <div class="card-actions" id="actions-${commissione.id}">
+                                    <button type="button" class="btn-action btn-accept" onclick="submitAction('${commissione.id}', 'completa')" style="width: 100%;">Invia Commissione</button>
+                                </div>
+                                
+                            </div>
+                            
+                        </c:forEach>
+                        
                     </div>
-                    <div class="card-body">
-                        <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                        <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
-                    </div>
-                    <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
-                </div>
-            </c:forEach>
+                    
+                </c:when>
+                
+                <c:otherwise>
+                    <p style="text-align: center; color: #0f0326; font-family: 'coolveticaitalic', serif; width: 100%;">Nessuna commissione in lavorazione.</p>
+                </c:otherwise>
+                
+            </c:choose>
+            
         </div>
-    </c:if>
 
-    <!-- 5. SEZIONE RIFIUTATE -->
-    <c:if test="${not empty requestScope.listaRifiutate}">
-        <h2 style="font-family: 'elephant', serif; color: #0f0326; margin-top: 35px; margin-bottom: 15px; border-bottom: 2px solid #f44336; padding-bottom: 5px;">Rifiutate</h2>
-        <div class="card-grid">
-            <c:forEach var="commissione" items="${requestScope.listaRifiutate}">
-                <div class="commission-card" id="card-${commissione.id}">
-                    <div class="card-header">
-                        <span class="card-title">Ordine #${commissione.id}</span>
-                        <div class="badge-container">
-                            <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
-                            <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
-                        </div>
+        <div id="tab-completate" class="tab-content">
+        
+            <c:choose>
+            
+                <c:when test="${not empty requestScope.listaCompletate}">
+                
+                    <div class="card-horizontal-scroll">
+                    
+                        <c:forEach var="commissione" items="${requestScope.listaCompletate}">
+                        
+                            <div class="commission-card" id="card-${commissione.id}">
+                            
+                                <div class="card-header">
+                                    <span class="card-title">Ordine #${commissione.id}</span>
+                                    
+                                    <div class="badge-container">
+                                        <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
+                                        <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="card-body">
+                                    <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                </div>
+                                
+                                <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
+                            </div>
+                            
+                        </c:forEach>
+                        
                     </div>
-                    <div class="card-body">
-                        <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                        <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
-                    </div>
-                    <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
-                </div>
-            </c:forEach>
+                    
+                </c:when>
+                
+                <c:otherwise>
+                    <p style="text-align: center; color: #0f0326; font-family: 'coolveticaitalic', serif; width: 100%;">Nessuna commissione completata.</p>
+                </c:otherwise>
+                
+            </c:choose>
+            
         </div>
-    </c:if>
+
+        <div id="tab-rifiutate" class="tab-content">
+        
+            <c:choose>
+            
+                <c:when test="${not empty requestScope.listaRifiutate}">
+                
+                    <div class="card-horizontal-scroll">
+                    
+                        <c:forEach var="commissione" items="${requestScope.listaRifiutate}">
+                        
+                            <div class="commission-card" id="card-${commissione.id}">
+                            
+                                <div class="card-header">
+                                    <span class="card-title">Ordine #${commissione.id}</span>
+                                    
+                                    <div class="badge-container">
+                                        <span class="badge type-badge"><c:out value="${commissione.tipi}" /></span>
+                                        <span class="badge status-badge status-${fn:toLowerCase(commissione.stato)}"><c:out value="${fn:replace(commissione.stato, '_', ' ')}" /></span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="card-body">
+                                    <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                </div>
+                                
+                                <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
+                            </div>
+                            
+                        </c:forEach>
+                        
+                    </div>
+                    
+                </c:when>
+                
+                <c:otherwise>
+                    <p style="text-align: center; color: #0f0326; font-family: 'coolveticaitalic', serif; width: 100%;">Nessuna commissione rifiutata.</p>
+                </c:otherwise>
+                
+            </c:choose>
+            
+        </div>
+
+    </div>
 </main>
 
-<!-- MODALI E SCRIPT -->
 <div class="admin-modal" id="detailsModal" style="display: none;">
+
     <div class="modal-box">
         <h2>Dettagli Commissione #<span id="modId"></span></h2>
         
         <div class="modal-info">
+        
             <p><strong>Cliente:</strong> <span id="modClient"></span></p>
             <p><strong>Tipologia:</strong> <span id="modType"></span></p>
             <p id="modAddressContainer" style="display: none;"><strong>Indirizzo Spedizione:</strong> <span id="modAddress"></span></p>
@@ -165,12 +275,15 @@
                 <strong><i class="fa-solid fa-paperclip"></i> File Allegati:</strong> <br>
                 <span id="modFile" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px;"></span>
             </p>
+            
         </div>
         
         <hr>
         
         <div class="modal-desc">
+        
             <p><strong>Descrizione Progetto:</strong></p>
+            
             <div id="modDesc" style="background: rgba(0,0,0,0.03); padding: 10px; border-radius: 5px; margin-bottom: 10px;"></div>
         </div>
         
@@ -179,24 +292,49 @@
         <div class="modal-actions-container" style="margin-top: 20px;">
             <button type="button" class="btn-action btn-close" onclick="closeDetailsModal()">Chiudi</button>
         </div>
+        
     </div>
+    
 </div>
 
 <div class="admin-modal" id="confirmModal" style="display: none;">
+
     <div class="modal-box confirm-box">
+    
         <h3 id="confirmTitle">Sei sicuro?</h3>
         <p id="confirmText"></p>
         
         <div class="modal-actions-container">
-            <button type="button" class="btn-action btn-accept" id="confirmYesBtn">Sì, Conferma</button>
+            <button type="button" class="btn-action btn-accept" id="confirmYesBtn">Conferma</button>
             <button type="button" class="btn-action btn-close" onclick="closeConfirmModal()">Annulla</button>
         </div>
+        
     </div>
 </div>
 
 <script>
     let currentCommissionId = null;
     const contextPath = "${pageContext.request.contextPath}";
+
+    function switchTab(tabId, btnElement) {
+    	
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.style.display = 'none';
+        });
+        
+        document.querySelectorAll('.admin-tab').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        const activeTab = document.getElementById('tab-' + tabId);
+        if(activeTab) {
+            activeTab.style.display = 'flex';
+        }
+        
+        if(btnElement) {
+            btnElement.classList.add('active');
+        }
+    }
 
     function openDetailsModal(
         id, client, type, desc, address, fileUrl, 
