@@ -280,7 +280,9 @@
 				                        <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
 				                        
 				                        <td class="table-actions no-print">
-				                            <button onclick="window.print()" class="btn-outline-small"><i class="fa-solid fa-file-pdf"></i> Ricevuta</button>
+				                            <a href="${pageContext.request.contextPath}/FatturaServlet?id=${ordine.id}" target="_blank" class="btn-outline-small">
+										        <i class="fa-solid fa-file-pdf"></i> Ricevuta
+										    </a>
 				                        </td>
 				                    </tr>
 				                    

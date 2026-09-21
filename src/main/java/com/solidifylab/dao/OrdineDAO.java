@@ -199,22 +199,71 @@ public class OrdineDAO {
         return ordini;
     }
     
+    public Ordine doRetrieveById(int id) {
+        
+        Ordine ordine = null;
+        String query = "SELECT o.*, u.nome as utente_nome, u.cognome as utente_cognome, u.email as utente_email " +
+                       "FROM ordine o " +
+                       "JOIN utente u ON o.utente_id = u.id " +
+                       "WHERE o.id = ?";
+
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setInt(1, id);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                
+                if (rs.next()) {
+                    
+                    ordine = new Ordine();
+                    ordine.setId(rs.getInt("id"));
+                    ordine.setDataOrdine(rs.getTimestamp("data_ordine")); 
+                    ordine.setTotale(rs.getDouble("totale"));
+                    ordine.setStato(rs.getString("stato"));
+
+                    User utente = new User();
+                    utente.setId(rs.getInt("utente_id"));
+                    utente.setNome(rs.getString("utente_nome"));
+                    utente.setCognome(rs.getString("utente_cognome"));
+                    utente.setEmail(rs.getString("utente_email"));
+                    
+                    ordine.setUtente(utente);
+                    
+                    ordine.setArticoli(getArticoliPerOrdine(ordine.getId(), con));
+                }
+            }
+            
+        } catch (SQLException e) {
+        	
+            System.out.println("Errore durante l'estrazione dell'ordine per ID:");
+            e.printStackTrace();
+        }
+        
+        return ordine;
+    }
+    
     private List<ItemCarrello> getArticoliPerOrdine(int ordineId, Connection con) {
-    	
+        
         List<ItemCarrello> articoli = new ArrayList<>();
-        String query = "SELECT ro.quantita, p.nome FROM riga_ordine ro JOIN prodotto p ON ro.prodotto_id = p.id WHERE ro.ordine_id = ?";
+
+        String query = "SELECT ro.quantita, ro.prezzo_unitario_storico, ro.iva_storica, p.nome FROM riga_ordine ro JOIN prodotto p ON ro.prodotto_id = p.id WHERE ro.ordine_id = ?";
         
         try (PreparedStatement ps = con.prepareStatement(query)) {
-        	
+            
             ps.setInt(1, ordineId);
             
             try (ResultSet rs = ps.executeQuery()) {
-            	
+                
                 while(rs.next()) {
-                	
+                    
                     ItemCarrello item = new ItemCarrello(null, ordineId);
                     Prodotto p = new Prodotto();
                     p.setNome(rs.getString("nome"));
+                    p.setPrezzoCorrente(rs.getDouble("prezzo_unitario_storico"));
+                    
+                    p.setIvaCorrente(rs.getDouble("iva_storica"));
+                    
                     item.setProdotto(p);
                     item.setQuantita(rs.getInt("quantita"));
                     articoli.add(item);
@@ -222,7 +271,6 @@ public class OrdineDAO {
             }
             
         } catch (SQLException e) {
-        	
             e.printStackTrace();
         }
         

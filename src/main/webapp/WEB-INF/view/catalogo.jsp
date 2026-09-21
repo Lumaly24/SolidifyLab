@@ -274,8 +274,19 @@
                                     </div>
                                     
                                     <a href="${pageContext.request.contextPath}/Prodotto?id=${prodotto.id}" class="product-link">
-                                        <div class="product-image">
                                         
+                                        <div class="product-image">
+                                            
+                                            <c:set var="isDigitale" value="${not empty prodotto.formatoFile}"/>
+                                            <c:set var="giaPosseduto" value="${isDigitale and not empty sessionScope.idAssetPosseduti and sessionScope.idAssetPosseduti.contains(prodotto.id)}" />
+                                            
+                                            <c:if test="${giaPosseduto}">
+                                            
+                                                <img src="${pageContext.request.contextPath}/images/badge-gia-acquistato.png" 
+                                                     alt="Già Acquistato" 
+                                                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 10; pointer-events: none;">
+                                            </c:if>
+
                                             <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" alt="${prodotto.nome}"
 											     style="width: 100%; border-radius: 8px; object-fit: cover;" />
                                        

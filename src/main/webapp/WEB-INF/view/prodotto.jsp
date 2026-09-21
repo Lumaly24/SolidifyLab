@@ -28,9 +28,18 @@
             
             <aside class="product-gallery-side">
                 
-                <div class="main-product-image">
+                <c:set var="isDigitale" value="${not empty prodotto.formatoFile}"/>
+                <c:set var="giaPosseduto" value="${isDigitale and not empty sessionScope.idAssetPosseduti and sessionScope.idAssetPosseduti.contains(prodotto.id)}" />
                 
-                    <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" alt="{prodotto.nome}" 
+                <div class="main-product-image" style="position: relative;">
+                
+                    <c:if test="${giaPosseduto}">
+                        <img src="${pageContext.request.contextPath}/images/badge-gia-acquistato.png" 
+                             alt="Già Acquistato" 
+                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 10; pointer-events: none;">
+                    </c:if>
+                
+                    <img src="${pageContext.request.contextPath}/product_images/${prodotto.immagineCopertinaUrl}" alt="${prodotto.nome}" 
 					     style="width: 100%; border-radius: 8px; object-fit: cover;" />
                     
                 </div>
@@ -166,55 +175,59 @@
                         </div>
                     </div>
                 </c:if>
+                
+                <c:choose>
+                    <c:when test="${giaPosseduto}">
+                        <div class="add-to-cart-form" style="margin-top: 25px;">
+                            <p style="font-family: 'coolveticarg', sans-serif; color: #eff1ed; margin-bottom: 10px; text-shadow: 2px 2px 4px #0f0326; ">Hai già acquistato questo asset. È pronto per il download!</p>
+                            <a href="${pageContext.request.contextPath}/UserDashboard#libreria" class="btn-primary btn-add-cart-large" style="text-decoration: none; box-sizing: border-box;">
+                                <i class="fa-solid fa-cloud-arrow-down"></i> VAI ALLA LIBRERIA
+                            </a>
+                        </div>
+                    </c:when>
+                    
+                    <c:otherwise>
+                        <form class="add-to-cart-form" action="${pageContext.request.contextPath}/AddtoCart" method="POST">
+                            <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+                        
+                            <c:if test="${catCodice == 'STAMPA_3D'}">
+                                <div class="material-selector">
+                                    <p><strong>Seleziona Materiale:</strong></p>
+                                    <div class="material-options">
+                                        <label class="mat-radio">
+                                            <input type="radio" name="materiale" value="resina_grigia" checked>
+                                            <span>Resina Grigia (Alto Dettaglio)</span>
+                                        </label>
+                                        <label class="mat-radio">
+                                            <input type="radio" name="materiale" value="pla_nero">
+                                            <span>PLA Nero (Resistente)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                        
+                                <div class="quantity-selector-large" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                                    <p style="margin: 0;"><strong>Quantità:</strong></p>
+                                    <div class="quantity-control" style="display: flex; align-items: center; background: rgba(255,255,255,0.4); border: 1px solid rgba(229, 99, 153, 0.3); border-radius: 8px; width: 120px; padding: 5px;">
+                                        <button type="button" class="qty-btn" onclick="updateQty(this, -1)" style="border:none; background:none; color:#e56399; font-size:1.2rem; cursor:pointer; width: 30px;">-</button>
+                                        <input type="number" name="quantita" value="1" min="1" max="99" readonly class="qty-input" style="width: 100%; border:none; background:transparent; text-align:center; font-family:'coolveticarg', sans-serif; font-size:1.1rem; color:#0f0326; pointer-events:none;">
+                                        <button type="button" class="qty-btn" onclick="updateQty(this, 1)" style="border:none; background:none; color:#e56399; font-size:1.2rem; cursor:pointer; width: 30px;">+</button>
+                                    </div>
+                                </div>
+                            </c:if>
+                        
+                            <c:if test="${catCodice != 'STAMPA_3D'}">
+                                <input type="hidden" name="quantita" value="1">
+                            </c:if>
+                        
+                            <div class="product-purchase-action">
+                                <button type="submit" class="btn-primary btn-add-cart-large">
+                                    <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO - € <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/>
+                                </button>
+                            </div>
+                        </form>
+                    </c:otherwise>
+                </c:choose>
 
-                <form class="add-to-cart-form" action="${pageContext.request.contextPath}/AddtoCart" method="POST">
-                
-				    <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-				
-				    <c:if test="${catCodice == 'STAMPA_3D'}">
-				    
-				        <div class="material-selector">
-				        
-				            <p><strong>Seleziona Materiale:</strong></p>
-				            <div class="material-options">
-				            
-				                <label class="mat-radio">
-				                    <input type="radio" name="materiale" value="resina_grigia" checked>
-				                    <span>Resina Grigia (Alto Dettaglio)</span>
-				                </label>
-				                
-				                <label class="mat-radio">
-				                    <input type="radio" name="materiale" value="pla_nero">
-				                    <span>PLA Nero (Resistente)</span>
-				                </label>
-				            </div>
-				            
-				        </div>
-				
-				        <div class="quantity-selector-large" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-				            <p style="margin: 0;"><strong>Quantità:</strong></p>
-				            
-				            <div class="quantity-control" style="display: flex; align-items: center; background: rgba(255,255,255,0.4); border: 1px solid rgba(229, 99, 153, 0.3); border-radius: 8px; width: 120px; padding: 5px;">
-				                <button type="button" class="qty-btn" onclick="updateQty(this, -1)" style="border:none; background:none; color:#e56399; font-size:1.2rem; cursor:pointer; width: 30px;">-</button>
-				                <input type="number" name="quantita" value="1" min="1" max="99" readonly class="qty-input" style="width: 100%; border:none; background:transparent; text-align:center; font-family:'coolveticarg', sans-serif; font-size:1.1rem; color:#0f0326; pointer-events:none;">
-				                <button type="button" class="qty-btn" onclick="updateQty(this, 1)" style="border:none; background:none; color:#e56399; font-size:1.2rem; cursor:pointer; width: 30px;">+</button>
-				            
-				            </div>
-				            
-				        </div>
-				    </c:if>
-				
-				    <c:if test="${catCodice != 'STAMPA_3D'}">
-				        <input type="hidden" name="quantita" value="1">
-				    </c:if>
-				
-				    <div class="product-purchase-action">
-				        <button type="submit" class="btn-primary btn-add-cart-large">
-				            <i class="fa-solid fa-cart-plus"></i> AGGIUNGI AL CARRELLO - € <fmt:formatNumber value="${prodotto.prezzoCorrente}" pattern="#,##0.00"/>
-				        </button>
-				    </div>
-				</form>
-                
               </section>
               
         </div>
@@ -231,41 +244,6 @@
 	    </div>
 	    
 	</div> 
-	
-		<c:set var="isDigitale" value="${not empty prodotto.formatoFile}"/>
-		<c:set var="giaPosseduto" value="${isDigitale and not empty sessionScope.idAssetPosseduti and sessionScope.idAssetPosseduti.contains(prodotto.id)}" />
-		
-		<c:choose>
-		    <c:when test="${giaPosseduto}">
-		    
-		        <div class="badge-acquistato-container">
-		        
-		            <img src="${pageContext.request.contextPath}/img/badge-gia-acquistato.png" alt="Già Acquistato" class="badge-img">
-		            <span class="badge-text">Asset nella tua Libreria</span>
-		            
-		        </div>
-		        
-		        <a href="${pageContext.request.contextPath}/UserDashboard#libreria" class="btn-secondary">
-		            <i class="fa-solid fa-cloud-arrow-down"></i> Vai alla Libreria
-		        </a>
-		    </c:when>
-		    
-		    <c:otherwise>
-		    
-		        <form action="${pageContext.request.contextPath}/AggiungiAlCarrelloServlet" method="POST">
-		            <input type="hidden" name="prodottoId" value="${prodotto.id}">
-		            
-		            <c:if test="${not isDigitale}">
-		                <input type="number" name="quantita" value="1" min="1" max="${prodotto.quantitaDisponibile}">
-		            </c:if>
-		            
-		            <button type="submit" class="btn-primary">Aggiungi al Carrello</button>
-		            
-		        </form>
-		        
-		    </c:otherwise>
-		    
-		</c:choose> 
 
     </main>
 

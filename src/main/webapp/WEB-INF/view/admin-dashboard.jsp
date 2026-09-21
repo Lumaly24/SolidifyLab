@@ -277,9 +277,9 @@
                                 <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
                                 <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
                                 <td class="table-actions">
-                                    <button type="button" onclick="window.print()" class="btn-icon text-blue" title="Stampa Ordini">
-									    <i class="fa-solid fa-file-pdf"></i>
-									</button>
+                                    <a href="${pageContext.request.contextPath}/FatturaServlet?id=${ordine.id}" target="_blank" class="btn-icon text-blue" title="Vedi e Stampa Fattura">
+								        <i class="fa-solid fa-file-pdf"></i>
+								    </a>
                                 </td>
                             </tr>
                         </c:forEach>
