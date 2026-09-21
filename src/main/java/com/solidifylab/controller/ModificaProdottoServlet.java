@@ -22,8 +22,7 @@ public class ModificaProdottoServlet extends HttpServlet {
         if (utente != null && "ADMIN".equalsIgnoreCase(utente.getRuolo())) {
             request.getRequestDispatcher("/WEB-INF/view/modifica-prodotto.jsp").forward(request, response);
         } else {
-            response.sendRedirect(request.getContextPath() + "/Home");
-        }
+        	response.sendError(HttpServletResponse.SC_FORBIDDEN);        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

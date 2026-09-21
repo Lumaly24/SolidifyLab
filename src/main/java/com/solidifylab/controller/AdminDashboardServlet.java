@@ -68,7 +68,8 @@ public class AdminDashboardServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/view/admin-dashboard.jsp").forward(request, response);
             
         } else {
-            response.sendRedirect(request.getContextPath() + "/Home");
+        	
+        	response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
     }
 
