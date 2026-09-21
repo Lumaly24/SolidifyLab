@@ -24,7 +24,7 @@ public class AggiungiWishlistServlet extends HttpServlet {
 
         if (utenteLoggato == null) {
 
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/Login");
             return;
         }
 

@@ -1,7 +1,8 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
+
+
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -82,7 +83,7 @@ public class ElaboraPagamentoServlet extends HttpServlet {
         } catch (IllegalArgumentException e) {
         	
             request.setAttribute("erroreCheckout", e.getMessage());
-            request.getRequestDispatcher("/WEB-INF/view/checkout.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/view/Checkout").forward(request, response);
             return;
         }
 

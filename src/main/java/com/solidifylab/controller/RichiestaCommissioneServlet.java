@@ -21,9 +21,9 @@ import com.solidifylab.model.User;
 
 @WebServlet("/Request")
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
-    maxFileSize = 1024 * 1024 * 20,       // 20MB
-    maxRequestSize = 1024 * 1024 * 25     // 25MB
+    fileSizeThreshold = 1024 * 1024 * 2,  
+    maxFileSize = 1024 * 1024 * 20,       
+    maxRequestSize = 1024 * 1024 * 25     
 )
 public class RichiestaCommissioneServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -33,7 +33,6 @@ public class RichiestaCommissioneServlet extends HttpServlet {
         
         Commissione comm = new Commissione();
         
-        // 1. Date Utente
         HttpSession session = request.getSession(false);
         User utente = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
         
@@ -44,7 +43,6 @@ public class RichiestaCommissioneServlet extends HttpServlet {
         comm.setEmail(email);
         if (utente != null) comm.setUtenteId(utente.getId());
         
-        // 2. Tipologie
         String[] tipiCommissione = request.getParameterValues("tipo_commissione");
         if (tipiCommissione != null) {
             for (String t : tipiCommissione) {
@@ -54,23 +52,19 @@ public class RichiestaCommissioneServlet extends HttpServlet {
             }
         }
         
-        // 3. Dati Base[cite: 4]
         comm.setDescrizione(request.getParameter("descrizione_principale"));
         comm.setVia(request.getParameter("indirizzo_via"));
         comm.setCitta(request.getParameter("indirizzo_citta"));
         comm.setCap(request.getParameter("indirizzo_cap"));
         
-        // 4. Gestione File Allegati[cite: 4]
         List<String> fileCaricati = new ArrayList<>();
         
-        // Controlla se c'è un file passato via sessione (es. da /Stampe)
         String filePrecaricato = request.getParameter("file_gia_caricato");
         if (filePrecaricato != null && !filePrecaricato.isEmpty()) {
             fileCaricati.add(filePrecaricato);
             if (session != null) session.removeAttribute("nomeFileTemporaneo");
         }
         
-        // Gestisci nuovi file caricati nel form
         String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads" + File.separator + "commissioni";
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdirs();
@@ -87,7 +81,6 @@ public class RichiestaCommissioneServlet extends HttpServlet {
             comm.setFileRiferimentoUrl(String.join(", ", fileCaricati));
         }
 
-        // 5. Opzioni Stampa 3D[cite: 5]
         if (request.getParameter("include_materiale") != null) {
             comm.setMaterialeStampa(request.getParameter("materiale_stampa"));
             comm.setDescMateriale(request.getParameter("desc_materiale"));
@@ -97,7 +90,6 @@ public class RichiestaCommissioneServlet extends HttpServlet {
             comm.setDescPostproduzione(request.getParameter("desc_postproduzione"));
         }
 
-        // 6. Opzioni Modello 3D[cite: 5]
         if (request.getParameter("include_texture_modello") != null) {
             comm.setIncludeTextureModello(true);
             comm.setDescrizioneTextureModello(request.getParameter("descrizione_texture_modello"));
@@ -111,7 +103,6 @@ public class RichiestaCommissioneServlet extends HttpServlet {
             comm.setDescrizioneRigging(request.getParameter("descrizione_rigging"));
         }
 
-        // 7. Opzioni Texture[cite: 5]
         if (request.getParameter("include_uv_mapping") != null) {
             comm.setIncludeUvMapping(true);
             comm.setDescUvMapping(request.getParameter("desc_uv_mapping"));
@@ -121,7 +112,6 @@ public class RichiestaCommissioneServlet extends HttpServlet {
             comm.setDescMaterialiPbr(request.getParameter("desc_materiali_pbr"));
         }
 
-        // 8. Salvataggio
         try {
             CommissioneDAO commissioneDAO = new CommissioneDAO();
             commissioneDAO.doSave(comm);
@@ -132,6 +122,6 @@ public class RichiestaCommissioneServlet extends HttpServlet {
         }
         
         request.setAttribute("successMessage", "La tua richiesta è stata inviata con successo. Analizzeremo il progetto e ti risponderemo in 24/48h!");
-        request.getRequestDispatcher("/WEB-INF/view/commissioni.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/Commissioni").forward(request, response);
     }
 }

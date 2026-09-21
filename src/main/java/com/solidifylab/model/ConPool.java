@@ -26,11 +26,11 @@ public class ConPool {
             p.setRemoveAbandonedTimeout(60); 
             p.setRemoveAbandoned(true);
             
-            p.setTestOnBorrow(true);               // Testa la connessione PRIMA di usarla
-            p.setTestWhileIdle(true);              // Testa le connessioni che riposano nel pool
-            p.setValidationQuery("SELECT 1");      // La micro-query magica per il ping
-            p.setValidationInterval(30000);        // Evita di fare ping se la connessione è stata usata negli ultimi 30 sec
-            p.setTimeBetweenEvictionRunsMillis(30000); // Controlla le connessioni inattive ogni 30 sec
+            p.setTestOnBorrow(true);              
+            p.setTestWhileIdle(true);              
+            p.setValidationQuery("SELECT 1");      
+            p.setValidationInterval(30000);        
+            p.setTimeBetweenEvictionRunsMillis(30000); 
             
             datasource = new DataSource();
             datasource.setPoolProperties(p);

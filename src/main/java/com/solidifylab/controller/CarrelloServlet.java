@@ -13,7 +13,6 @@ public class CarrelloServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // In futuro qui potrai leggere gli oggetti dalla sessione e passarli alla pagina
         request.getRequestDispatcher("/WEB-INF/view/carrello.jsp").forward(request, response);
     }
 

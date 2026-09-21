@@ -1,6 +1,7 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,6 @@ public class GestioneCommissioniServlet extends HttpServlet {
         CommissioneDAO commissioneDAO = new CommissioneDAO();
         List<Commissione> listaCommissioni = commissioneDAO.getAllCommissioni();
         
-        // Suddivisione delle commissioni in liste separate in base allo stato
         List<Commissione> inAttesa = new ArrayList<>();
         List<Commissione> accettate = new ArrayList<>();
         List<Commissione> inLavorazione = new ArrayList<>();
@@ -69,7 +69,6 @@ public class GestioneCommissioniServlet extends HttpServlet {
             }
         }
 
-        // Passiamo le singole liste alla JSP
         request.setAttribute("listaInAttesa", inAttesa);
         request.setAttribute("listaAccettate", accettate);
         request.setAttribute("listaInLavorazione", inLavorazione);
