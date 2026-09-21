@@ -38,7 +38,6 @@ public class EditProductServlet extends HttpServlet {
         String prezzoStr = request.getParameter("prezzo");
         String categoriaStr = request.getParameter("categoria");
         
-        // 1. Recuperiamo i tag scelti dall'admin
         String[] tagScelti = request.getParameterValues("tags"); 
         
         if (idStr != null && nome != null && !nome.trim().isEmpty() && prezzoStr != null && categoriaStr != null) {
@@ -70,13 +69,11 @@ public class EditProductServlet extends HttpServlet {
                         p.setImmagineCopertinaUrl(fileName); 
                     }
 
-                    // Eseguiamo l'UPDATE dei dati base
                     prodottoDAO.doUpdate(p);
                     
-                    // 2. Eseguiamo l'UPDATE dei tag (solo se l'admin ne ha spuntato almeno uno)
                     if (tagScelti != null && tagScelti.length > 0) {
-                        prodottoDAO.doDeleteTagsByProdottoId(id);       // Elimina i vecchi
-                        prodottoDAO.doSaveTagsByNames(id, tagScelti);   // Salva i nuovi
+                        prodottoDAO.doDeleteTagsByProdottoId(id);       
+                        prodottoDAO.doSaveTagsByNames(id, tagScelti);   
                     }
                     
                     request.getSession().setAttribute("successMessage", "Prodotto e tag aggiornati con successo!");

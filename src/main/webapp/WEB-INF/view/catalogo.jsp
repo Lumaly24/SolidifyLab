@@ -188,14 +188,13 @@
                     </div>
                  
                     <div class="ajax-search-container">
-                        <div class="search-input-wrapper">
-                            <input type="text" id="ajaxSearchBar" placeholder="Cerca un modello 3D o una texture..." autocomplete="off">
-                            <button type="button" class="btn-primary btn-search"><i class="fa-solid fa-search"></i></button>
-                        </div>
-                 
-                        <div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; max-height: 200px; overflow-y: auto;">
-                        </div>
-                    </div>
+					    <div class="search-input-wrapper">
+					        <input type="text" id="ajaxSearchBar" placeholder="Cerca..." autocomplete="off">
+					        <button type="button" class="btn-primary btn-search"><i class="fa-solid fa-search"></i></button>
+					    </div>
+					    <div id="ajaxSearchSuggestions" class="suggestions-box">
+					    </div>
+					</div>
                     
                 </div>
 
@@ -440,9 +439,74 @@
         const modal = document.getElementById('successModal');
         if (modal) {
             modal.style.display = 'none';
-            window.location.reload(); // Modificato per ricaricare la pagina invece di mandare alla home
+            window.location.reload();
         }
     }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const localSearchInput = document.getElementById('ajaxSearchBar');
+        const localSuggestionsBox = document.getElementById('ajaxSearchSuggestions');
+        
+        if (!localSearchInput) return;
+
+        const localContesto = "${param.tipo == 'TEXTURES' ? 'textures' : '3d'}";;
+
+        localSearchInput.addEventListener('keyup', function() {
+            let query = this.value.trim();
+            
+            if(query.length >= 2) {
+                const fetchUrl = '${pageContext.request.contextPath}/Search?q=' + encodeURIComponent(query) + '&contesto=' + localContesto;
+                
+                fetch(fetchUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        localSuggestionsBox.innerHTML = '';
+                        
+                        if(data.length > 0) {
+                            data.forEach(item => {
+                                let div = document.createElement('div');
+                                div.style.padding = '12px 15px';
+                                div.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+                                div.style.cursor = 'pointer';
+                                div.style.transition = 'background 0.2s';
+                                div.style.color = '#0f0326';
+                                
+                                div.innerHTML = `<strong>\${item.nome}</strong> - €\${item.prezzo.toFixed(2)}`;
+                                
+                                div.onclick = function() {
+                                    window.location.href = '${pageContext.request.contextPath}/Prodotto?id=' + item.id;
+                                };
+                                
+                                div.onmouseover = function() { this.style.backgroundColor = 'rgba(229, 99, 153, 0.15)'; };
+                                div.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
+                                
+                                localSuggestionsBox.appendChild(div);
+                            });
+                            localSuggestionsBox.style.display = 'block';
+                        } else {
+                            localSuggestionsBox.innerHTML = '<div style="padding:12px 15px; color:#d1236d; font-style:italic;">Nessun risultato trovato...</div>';
+                            localSuggestionsBox.style.display = 'block';
+                        }
+                    })
+                    .catch(error => console.error('Errore Fetch AJAX Local:', error));
+            } else {
+                localSuggestionsBox.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if(!localSearchInput.contains(e.target) && !localSuggestionsBox.contains(e.target)) {
+                localSuggestionsBox.style.display = 'none';
+            }
+        });
+        
+        localSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+    });
 </script>
 
 <c:if test="${not empty requestScope.successMessage}">

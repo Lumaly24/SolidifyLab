@@ -15,10 +15,6 @@ public class User {
 
     public User() {}
 
-    // ==========================================
-    // Metodi Getter e Setter
-    // ==========================================
-    
     public int getId() { 
     	return id; }
     public void setId(int id) { 
@@ -34,7 +30,6 @@ public class User {
     public void setPasswordHash(String passwordHash) { 
     	this.passwordHash = passwordHash; }
 
-    // --- Getter e Setter per USERNAME ---
     public String getUsername() { 
     	return username; }
     public void setUsername(String username) { 

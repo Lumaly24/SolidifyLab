@@ -320,4 +320,69 @@ public class ProdottoDAO {
         }
         return tags;
     }
+    
+    public List<Prodotto> doRetrieveByNomeAndContesto(String nome, String contesto) {
+        List<Prodotto> prodotti = new ArrayList<>();
+        
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT DISTINCT p.* FROM prodotto p ");
+        query.append("LEFT JOIN prodotto_tag pt ON p.id = pt.prodotto_id ");
+        query.append("LEFT JOIN tag t ON pt.tag_id = t.id ");
+        query.append("WHERE p.cancellato = FALSE ");
+        
+        if ("stampe".equals(contesto)) {
+            query.append("AND p.categoria_id = 3 ");
+        } else if ("textures".equals(contesto)) {
+            query.append("AND p.categoria_id = 2 "); 
+        } else if ("3d".equals(contesto)) {
+            query.append("AND p.categoria_id = 1 "); 
+        }
+        
+        String[] paroleChiave = null;
+        
+        if (nome != null && !nome.trim().isEmpty()) {
+            paroleChiave = nome.trim().replaceAll("\\s+", " ").split(" ");
+            
+            for (int i = 0; i < paroleChiave.length; i++) {
+                query.append("AND (LOWER(p.nome) LIKE LOWER(?) OR LOWER(p.descrizione) LIKE LOWER(?) OR LOWER(t.nome) LIKE LOWER(?)) ");
+            }
+        }
+
+        if (nome != null && !nome.trim().isEmpty()) {
+            query.append("ORDER BY CASE WHEN LOWER(p.nome) LIKE LOWER(?) THEN 1 ELSE 2 END, p.nome ASC ");
+        } else {
+            query.append("ORDER BY p.id DESC ");
+        }
+        
+        query.append("LIMIT 8");
+
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query.toString())) {
+            
+            int paramIndex = 1;
+            
+            if (paroleChiave != null && paroleChiave.length > 0) {
+                for (String parola : paroleChiave) {
+                    String searchString = "%" + parola + "%";
+                    ps.setString(paramIndex++, searchString);
+                    ps.setString(paramIndex++, searchString);
+                    ps.setString(paramIndex++, searchString);
+                }
+                ps.setString(paramIndex++, nome.trim() + "%");
+            }
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Prodotto p = mapRowToProdotto(rs);
+                    p.setTags(getTagsForProdotto(p.getId(), con));
+                    prodotti.add(p);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore durante la ricerca avanzata dei prodotti:");
+            e.printStackTrace();
+        }
+        
+        return prodotti;
+    }
 }

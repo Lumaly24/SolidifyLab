@@ -9,7 +9,7 @@ body {
 
 .product-page-container {
     width: 100%;
-    max-width: 1000px; 
+    max-width: 1150px; 
     box-sizing: border-box;
     margin: 10px auto 10px; 
     padding-left: 20px;
@@ -37,12 +37,14 @@ body {
     background: rgba(255, 255, 255, 0.55); 
     border: 1px solid #d1236d; 
     padding: 8px 20px; 
-    margin: 0; 
     cursor: pointer; 
     letter-spacing: 1px;
     border-radius: 50px;
     transition: all 0.2s ease;
     width: fit-content;
+    margin-left: -20px;
+    position: relative;
+    left: -160px;
 }
 
 .btn-back:hover {
@@ -355,8 +357,10 @@ body {
 }
 
 .specs-grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
     gap: 20px;
+    align-items: start;
 }
 
 .specs-list {
@@ -404,21 +408,6 @@ body {
     font-family: 'coolveticarg', sans-serif;
 }
 
-.software-icons-grid {
-    display: flex;
-    gap: 12px;
-    font-size: 1.6rem;
-    color: rgba(15, 3, 38, 0.4);
-}
-
-.soft-box {
-    transition: color 0.3s ease;
-    cursor: help;
-}
-
-.soft-box:hover {
-    color: #e56399;
-}
 
 .shipping-info-layout {
     display: flex;
