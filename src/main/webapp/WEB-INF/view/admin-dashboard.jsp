@@ -655,6 +655,17 @@ function showCustomAlert(message) {
     window.addEventListener('load', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const editId = urlParams.get('edit');
+        const preselectedCat = urlParams.get('cat'); 
+        
+        if (preselectedCat) {
+            const catSelect = document.getElementById('catProd');
+            if (catSelect) {
+                catSelect.value = preselectedCat; 
+                if (typeof aggiornaTags === 'function') {
+                    aggiornaTags(); 
+                }
+            }
+        }
         
         if (editId) {
             const tabProdotti = document.querySelector('.admin-sidebar a[href="#gestione-prodotti"]');
@@ -666,7 +677,6 @@ function showCustomAlert(message) {
                 const editBtn = document.querySelector('button[data-id="' + editId + '"]');
                 if (editBtn) {
                     editBtn.click();
-                    
                     window.history.replaceState({}, document.title, window.location.pathname + "#gestione-prodotti");
                 }
             }, 300);

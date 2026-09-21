@@ -171,9 +171,9 @@
                 </nav>
 
                 <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
-                    <a href="${pageContext.request.contextPath}/AdminDashboard#aggiunta-prodotti" class="btn-primary nuova-stampa" style="padding: 5px 15px; font-size: 0.9em;">
-                        <i class="fa-solid fa-plus"></i> Nuova Stampa
-                    </a>
+                    <a href="${pageContext.request.contextPath}/AdminDashboard?cat=STAMPA_3D#aggiunta-prodotti" class="btn-primary nuova-stampa" style="padding: 5px 15px; font-size: 0.9em;">
+					    <i class="fa-solid fa-plus"></i> Nuova Stampa
+					</a>
                 </c:if>
             </div>
             

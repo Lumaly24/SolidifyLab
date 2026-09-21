@@ -48,22 +48,31 @@ public class CarrelloDAO {
         String queryInsert = "INSERT INTO carrello (utente_id, prodotto_id, quantita) VALUES (?, ?, ?)";
         
         try (Connection con = ConPool.getConnection()) {
+            con.setAutoCommit(false); 
             
-            try (PreparedStatement psDelete = con.prepareStatement(queryDelete)) {
-                psDelete.setInt(1, utenteId);
-                psDelete.executeUpdate();
-            }
-            
-            if (carrello != null && !carrello.getProdotti().isEmpty()) {
-                try (PreparedStatement psInsert = con.prepareStatement(queryInsert)) {
-                    for (ItemCarrello item : carrello.getProdotti()) {
-                        psInsert.setInt(1, utenteId);
-                        psInsert.setInt(2, item.getProdotto().getId());
-                        psInsert.setInt(3, item.getQuantita());
-                        psInsert.addBatch(); 
-                    }
-                    psInsert.executeBatch();
+            try {
+                try (PreparedStatement psDelete = con.prepareStatement(queryDelete)) {
+                    psDelete.setInt(1, utenteId);
+                    psDelete.executeUpdate();
                 }
+                
+                if (carrello != null && !carrello.getProdotti().isEmpty()) {
+                    try (PreparedStatement psInsert = con.prepareStatement(queryInsert)) {
+                        for (ItemCarrello item : carrello.getProdotti()) {
+                            psInsert.setInt(1, utenteId);
+                            psInsert.setInt(2, item.getProdotto().getId());
+                            psInsert.setInt(3, item.getQuantita());
+                            psInsert.addBatch(); 
+                        }
+                        psInsert.executeBatch();
+                    }
+                }
+                
+                con.commit();
+                
+            } catch (SQLException e) {
+                con.rollback(); 
+                throw e;
             }
             
         } catch (SQLException e) {

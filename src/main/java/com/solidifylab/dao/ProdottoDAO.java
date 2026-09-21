@@ -23,7 +23,6 @@ public class ProdottoDAO {
 
             while (rs.next()) {
                 Prodotto p = mapRowToProdotto(rs);
-                // Estrae i tag e li associa al prodotto
                 p.setTags(getTagsForProdotto(p.getId(), con));
                 prodotti.add(p);
             }
@@ -48,7 +47,6 @@ public class ProdottoDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     prodotto = mapRowToProdotto(rs);
-                    // Estrae i tag e li associa al prodotto
                     prodotto.setTags(getTagsForProdotto(prodotto.getId(), con));
                 }
             }
@@ -215,16 +213,33 @@ public class ProdottoDAO {
     }
 
     public void doDelete(int id) {
-        String query = "UPDATE prodotto SET cancellato = TRUE WHERE id = ?";
+        String queryProdotto = "UPDATE prodotto SET cancellato = TRUE WHERE id = ?";
+        String queryCarrello = "DELETE FROM carrello WHERE prodotto_id = ?";
+        String queryWishlist = "DELETE FROM wishlist WHERE prodotto_id = ?";
 
-        try (Connection con = ConPool.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
-            
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            
+        try (Connection con = ConPool.getConnection()) {
+            con.setAutoCommit(false);
+
+            try (PreparedStatement psProd = con.prepareStatement(queryProdotto);
+                 PreparedStatement psCart = con.prepareStatement(queryCarrello);
+                 PreparedStatement psWish = con.prepareStatement(queryWishlist)) {
+
+                psProd.setInt(1, id);
+                psProd.executeUpdate();
+
+                psCart.setInt(1, id);
+                psCart.executeUpdate();
+
+                psWish.setInt(1, id);
+                psWish.executeUpdate();
+
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            }
         } catch (SQLException e) {
-            System.out.println("Errore durante l'eliminazione (soft delete) del prodotto:");
+            System.out.println("Errore durante l'eliminazione del prodotto e la pulizia dei carrelli:");
             e.printStackTrace();
         }
     }
