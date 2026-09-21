@@ -108,7 +108,7 @@
         <div class="logo"><strong>SolidifyLab ADMIN</strong></div>
         <div class="admin-user">
             <span>Benvenuto, ${sessionScope.utenteLoggato.nome}</span>
-            <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn-outline-small text-red">Esci</a>
+            <a href="${pageContext.request.contextPath}/Logout" class="btn-outline-small text-red">Esci</a>
         </div>
     </header>
 
@@ -313,11 +313,12 @@
 					                </span>
 					            </td>
                                 <td class="table-actions">
-                                    <form action="${pageContext.request.contextPath}/GestioneCommissioni" method="GET">
-                                        <input type="hidden" name="id" value="${comm.id}">
-                                        <button type="submit" class="btn-icon blue text-blue"><i class="fa-solid fa-gear"></i></button>
-                                    </form>
-                                </td>
+								    <form action="${pageContext.request.contextPath}/GestioneCommissioni" method="GET">
+								        <input type="hidden" name="id" value="${comm.id}">
+								        <input type="hidden" name="open" value="true">
+								        <button type="submit" class="btn-icon blue text-blue" title="Gestisci Commissione"><i class="fa-solid fa-gear"></i></button>
+								    </form>
+								</td>
                             </tr>
                         </c:forEach>
                     </tbody>

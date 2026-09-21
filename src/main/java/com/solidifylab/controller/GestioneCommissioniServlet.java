@@ -38,6 +38,22 @@ public class GestioneCommissioniServlet extends HttpServlet {
         CommissioneDAO commissioneDAO = new CommissioneDAO();
         List<Commissione> listaCommissioni = commissioneDAO.getAllCommissioni();
         
+        String openIdParam = request.getParameter("id");
+        String openParam = request.getParameter("open");
+        
+        if (openIdParam != null && "true".equals(openParam)) {
+            try {
+                int targetId = Integer.parseInt(openIdParam);
+                for (Commissione c : listaCommissioni) {
+                    if (c.getId() == targetId) {
+                        request.setAttribute("openCommissione", c);
+                        break;
+                    }
+                }
+            } catch (NumberFormatException e) {
+            }
+        }
+
         List<Commissione> inAttesa = new ArrayList<>();
         List<Commissione> accettate = new ArrayList<>();
         List<Commissione> inLavorazione = new ArrayList<>();
@@ -48,24 +64,12 @@ public class GestioneCommissioniServlet extends HttpServlet {
             String stato = c.getStato() != null ? c.getStato().toUpperCase().trim() : "IN_ATTESA";
             
             switch (stato) {
-                case "IN_ATTESA":
-                    inAttesa.add(c);
-                    break;
-                case "ACCETTATA":
-                    accettate.add(c);
-                    break;
-                case "IN_LAVORAZIONE":
-                    inLavorazione.add(c);
-                    break;
-                case "COMPLETATA":
-                    completate.add(c);
-                    break;
-                case "RIFIUTATA":
-                    rifiutate.add(c);
-                    break;
-                default:
-                    inAttesa.add(c);
-                    break;
+                case "IN_ATTESA": inAttesa.add(c); break;
+                case "ACCETTATA": accettate.add(c); break;
+                case "IN_LAVORAZIONE": inLavorazione.add(c); break;
+                case "COMPLETATA": completate.add(c); break;
+                case "RIFIUTATA": rifiutate.add(c); break;
+                default: inAttesa.add(c); break;
             }
         }
 

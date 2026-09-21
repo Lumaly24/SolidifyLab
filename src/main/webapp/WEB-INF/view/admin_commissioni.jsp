@@ -489,6 +489,43 @@
             confirmYesBtn.innerText = "Sì, Conferma";
         });
     }
+    
 </script>
+<c:if test="${not empty requestScope.openCommissione}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const stato = "${openCommissione.stato}";
+            let tabId = 'attesa';
+            
+            if (stato === 'ACCETTATA') tabId = 'accettate';
+            else if (stato === 'IN_LAVORAZIONE') tabId = 'lavorazione';
+            else if (stato === 'COMPLETATA') tabId = 'completate';
+            else if (stato === 'RIFIUTATA') tabId = 'rifiutate';
+
+            const tabButton = document.querySelector(`.admin-tab.\${tabId}`) || document.querySelector('.admin-tab');
+            switchTab(tabId, tabButton);
+
+            openDetailsModal(
+                '${openCommissione.id}', 
+                '${fn:escapeXml(openCommissione.email)}', 
+                '${fn:escapeXml(openCommissione.tipi)}', 
+                '${fn:escapeXml(openCommissione.descrizione)}', 
+                '${fn:escapeXml(openCommissione.indirizzoSpedizione)}', 
+                '${fn:escapeXml(openCommissione.fileRiferimentoUrl)}',${openCommissione.richiedeStampa3d}, 
+                '${fn:escapeXml(openCommissione.materialeStampa)}', 
+                '${fn:escapeXml(openCommissione.descMateriale)}', 
+                '${fn:escapeXml(openCommissione.tipoPostproduzione)}', 
+                '${fn:escapeXml(openCommissione.descPostproduzione)}', 
+                ${openCommissione.richiedeModello3d},${openCommissione.includeTextureModello}, 
+                '${fn:escapeXml(openCommissione.descrizioneTextureModello)}',${openCommissione.includeAnimazione}, 
+                '${fn:escapeXml(openCommissione.descrizioneAnimazione)}',${openCommissione.includeRigging}, 
+                '${fn:escapeXml(openCommissione.descrizioneRigging)}', 
+                ${openCommissione.richiedeTexture},${openCommissione.includeUvMapping}, 
+                '${fn:escapeXml(openCommissione.descUvMapping)}',${openCommissione.includeMaterialiPbr}, 
+                '${fn:escapeXml(openCommissione.descMaterialiPbr)}'
+            );
+        });
+    </script>
+</c:if>
 
 <%@ include file="fragment/footer.jspf" %>
