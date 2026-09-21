@@ -1,7 +1,6 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
-
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -27,22 +26,29 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         
+        String redirectParam = request.getParameter("redirect");
+        
         UserDAO userDAO = new UserDAO();
         User utente = userDAO.doRetrieveByEmailAndPassword(email, password);
         
         if (utente != null) {
-        	
-            HttpSession session = request.getSession();
             
+            HttpSession session = request.getSession();
             session.setAttribute("utenteLoggato", utente);
             
             try {
-            	
                 WishlistDAO wishlistDAO = new WishlistDAO();
                 List<Integer> wishlistIds = wishlistDAO.getWishlistIdsByUtente(utente.getId());
                 session.setAttribute("wishlistIds", wishlistIds);
                 
                 CarrelloDAO carrelloDAO = new CarrelloDAO();
+                
+                Carrello carrelloSessione = (Carrello) session.getAttribute("carrello");
+                
+                if (carrelloSessione != null && !carrelloSessione.getProdotti().isEmpty()) {
+                    carrelloDAO.salvaOAggiornaCarrello(utente.getId(), carrelloSessione);
+                }
+                
                 Carrello carrelloDb = carrelloDAO.getCarrelloByUtente(utente.getId());
                 session.setAttribute("carrello", carrelloDb);
                 
@@ -53,20 +59,29 @@ public class LoginServlet extends HttpServlet {
                 System.out.println("Wishlist e Carrello caricati al login per l'utente: " + utente.getId());
                 
             } catch (Exception e) {
-            	
                 System.out.println("Errore durante il caricamento dei dati utente al login: " + e.getMessage());
             }
             
-            response.sendRedirect(request.getContextPath() + "/Home");
+            if (redirectParam != null && !redirectParam.trim().isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/" + redirectParam);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/Home");
+            }
             
         } else {
-        	
+            
             request.setAttribute("erroreLogin", "Email o password errati!");
+            request.setAttribute("redirect", redirectParam);
             request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String redirect = request.getParameter("redirect");
+        if (redirect != null && !redirect.trim().isEmpty()) {
+            request.setAttribute("redirect", redirect);
+        }
+        
         request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
     }
 }

@@ -40,7 +40,7 @@ public class RicercaServlet extends HttpServlet {
             for (int i = 0; i < risultati.size(); i++) {
                 Prodotto p = risultati.get(i);
                 
-                String nomeSicuro = p.getNome().replace("\"", "\\\""); 
+                String nomeSicuro = p.getNome() != null ? p.getNome().replace("\\", "\\\\").replace("\"", "\\\"") : "";
                 
                 json.append("{")
                     .append("\"id\":").append(p.getId()).append(",")

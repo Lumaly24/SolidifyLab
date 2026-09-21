@@ -397,12 +397,10 @@
 
 <script>
 	function switchTab(tabId, clickedElement, event) {
-	    // 1. Blocca il salto nativo dell'ancora #
 	    if (event) {
 	        event.preventDefault();
 	    }
 	
-	    // 2. Nascondi tutti i tab e rimuovi la classe active dai link
 	    let tabs = document.querySelectorAll('.user-tab-content');
 	    tabs.forEach(tab => {
 	        tab.classList.remove('active-tab');
@@ -413,11 +411,9 @@
 	        link.classList.remove('active');
 	    });
 	
-	    // 3. Attiva il tab selezionato
 	    document.getElementById(tabId).classList.add('active-tab');
 	    clickedElement.classList.add('active');
 	
-	    // 4. Riporta la pagina all'inizio
 	    window.scrollTo({
 	        top: 0,
 	        behavior: 'smooth'

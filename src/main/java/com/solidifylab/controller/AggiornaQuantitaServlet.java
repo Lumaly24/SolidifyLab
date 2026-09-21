@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import com.solidifylab.model.Carrello;
 import com.solidifylab.model.ItemCarrello;
+import com.solidifylab.model.User;
+import com.solidifylab.dao.CarrelloDAO;
 
 @WebServlet("/AggiornaQuantitaServlet")
 public class AggiornaQuantitaServlet extends HttpServlet {
@@ -30,8 +32,8 @@ public class AggiornaQuantitaServlet extends HttpServlet {
                     nuovaQuantita = 1;
                 }
 
-                HttpSession session = request.getSession();
-                Carrello carrello = (Carrello) session.getAttribute("carrello");
+                HttpSession session = request.getSession(false);
+                Carrello carrello = (session != null) ? (Carrello) session.getAttribute("carrello") : null;
 
                 if (carrello != null) {
                     for (ItemCarrello item : carrello.getProdotti()) {
@@ -41,16 +43,20 @@ public class AggiornaQuantitaServlet extends HttpServlet {
                             if (item.getProdotto().getCategoriaId() == 3) {
                                 item.setQuantita(nuovaQuantita);
                             } else {
-                            	
                                 item.setQuantita(1);
                             }
                             
                             break; 
                         }
                     }
+                    
+                    User utenteLoggato = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
+                    if (utenteLoggato != null) {
+                        CarrelloDAO carrelloDAO = new CarrelloDAO();
+                        carrelloDAO.salvaOAggiornaCarrello(utenteLoggato.getId(), carrello);
+                    }
                 }
             } catch (NumberFormatException e) {
-
                 System.out.println("Errore nel formato dei numeri per l'aggiornamento quantità.");
             }
         }

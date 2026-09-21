@@ -33,7 +33,7 @@ public class ElaboraPagamentoServlet extends HttpServlet {
         if (utente == null) {
         	
             session.setAttribute("messaggioAuth", "Sessione scaduta. Registrati o accedi per completare l'ordine.");
-            response.sendRedirect(request.getContextPath() + "/Login"); 
+            response.sendRedirect(request.getContextPath() + "/Login?redirect=Checkout"); 
             return;
         }
 
@@ -83,7 +83,7 @@ public class ElaboraPagamentoServlet extends HttpServlet {
         } catch (IllegalArgumentException e) {
         	
             request.setAttribute("erroreCheckout", e.getMessage());
-            request.getRequestDispatcher("/WEB-INF/view/Checkout").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/view/checkout.jsp").forward(request, response);
             return;
         }
 

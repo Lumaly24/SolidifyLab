@@ -144,7 +144,7 @@
                             <p>Tasse (IVA 22% incl.): <span>€ <fmt:formatNumber value="${sessionScope.carrello.tasse}" pattern="#,##0.00"/></span></p>
                         </div>
 
-						<form action="${pageContext.request.contextPath}/Checkout" method="POST" class="checkout-form">
+						<form action="${pageContext.request.contextPath}/Checkout" method="POST" class="checkout-form" onsubmit="return checkCheckoutLogin(event)">
 						    <div class="form-group">
 						        <label for="checkoutEmail">Indirizzo Mail (per ricevuta e asset):</label>
 						        <input type="email" id="checkoutEmail" name="email" value="${sessionScope.utenteLoggato.email}" required>
@@ -161,6 +161,16 @@
         </c:choose>
         
         <script>
+        const isUserLoggedIn = ${not empty sessionScope.utenteLoggato};
+
+        function checkCheckoutLogin(event) {
+            if (!isUserLoggedIn) {
+                event.preventDefault(); 
+                window.location.href = "${pageContext.request.contextPath}/Login?redirect=Carrello";
+                return false;
+            }
+            return true;
+        }
         
         function showConfirmAlert(message, formId) {
             const modal = document.getElementById('customAlert');

@@ -29,7 +29,7 @@
             <aside class="product-gallery-side">
                 
                 <c:set var="isDigitale" value="${not empty prodotto.formatoFile}"/>
-                <c:set var="giaPosseduto" value="${isDigitale and not empty sessionScope.idAssetPosseduti and sessionScope.idAssetPosseduti.contains(prodotto.id)}" />
+                <c:set var="giaPosseduto" value="${not empty sessionScope.utenteLoggato and isDigitale and not empty sessionScope.idAssetPosseduti and sessionScope.idAssetPosseduti.contains(prodotto.id)}" />
                 
                 <c:set var="tagsStr" value="${fn:toLowerCase(prodotto.tagsUniti)}" />
                 

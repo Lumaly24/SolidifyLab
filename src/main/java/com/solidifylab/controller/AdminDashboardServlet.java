@@ -1,7 +1,6 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,47 +29,54 @@ public class AdminDashboardServlet extends HttpServlet {
         
         if (utente != null && "ADMIN".equalsIgnoreCase(utente.getRuolo())) {
             
-            ProdottoDAO prodottoDAO = new ProdottoDAO();
-            List<Prodotto> listaProdotti = prodottoDAO.doRetrieveAll();
-            request.setAttribute("listaProdotti", listaProdotti);
-            
-            CommissioneDAO commissioneDAO = new CommissioneDAO();
-            List<Commissione> listaCommissioni = commissioneDAO.getAllCommissioni();
-            request.setAttribute("listaCommissioni", listaCommissioni);
-            
-            List<Commissione> inAttesa = new ArrayList<>();
-            List<Commissione> accettate = new ArrayList<>();
-            List<Commissione> inLavorazione = new ArrayList<>();
-            List<Commissione> completate = new ArrayList<>();
-            List<Commissione> rifiutate = new ArrayList<>();
+            try {
+                ProdottoDAO prodottoDAO = new ProdottoDAO();
+                List<Prodotto> listaProdotti = prodottoDAO.doRetrieveAll();
+                request.setAttribute("listaProdotti", listaProdotti != null ? listaProdotti : new ArrayList<>());
+                
+                CommissioneDAO commissioneDAO = new CommissioneDAO();
+                List<Commissione> listaCommissioni = commissioneDAO.getAllCommissioni();
+                request.setAttribute("listaCommissioni", listaCommissioni != null ? listaCommissioni : new ArrayList<>());
+                
+                List<Commissione> inAttesa = new ArrayList<>();
+                List<Commissione> accettate = new ArrayList<>();
+                List<Commissione> inLavorazione = new ArrayList<>();
+                List<Commissione> completate = new ArrayList<>();
+                List<Commissione> rifiutate = new ArrayList<>();
 
-            for (Commissione c : listaCommissioni) {
-                String stato = c.getStato() != null ? c.getStato().toUpperCase().trim() : "IN_ATTESA";
-                switch (stato) {
-                    case "IN_ATTESA": inAttesa.add(c); break;
-                    case "ACCETTATA": accettate.add(c); break;
-                    case "IN_LAVORAZIONE": inLavorazione.add(c); break;
-                    case "COMPLETATA": completate.add(c); break;
-                    case "RIFIUTATA": rifiutate.add(c); break;
-                    default: inAttesa.add(c); break;
+                if (listaCommissioni != null) {
+                    for (Commissione c : listaCommissioni) {
+                        String stato = c.getStato() != null ? c.getStato().toUpperCase().trim() : "IN_ATTESA";
+                        switch (stato) {
+                            case "IN_ATTESA": inAttesa.add(c); break;
+                            case "ACCETTATA": accettate.add(c); break;
+                            case "IN_LAVORAZIONE": inLavorazione.add(c); break;
+                            case "COMPLETATA": completate.add(c); break;
+                            case "RIFIUTATA": rifiutate.add(c); break;
+                            default: inAttesa.add(c); break;
+                        }
+                    }
                 }
+
+                request.setAttribute("listaInAttesa", inAttesa);
+                request.setAttribute("listaAccettate", accettate);
+                request.setAttribute("listaInLavorazione", inLavorazione);
+                request.setAttribute("listaCompletate", completate);
+                request.setAttribute("listaRifiutate", rifiutate);
+                
+                OrdineDAO ordineDAO = new OrdineDAO();
+                List<Ordine> listaOrdiniCompleta = ordineDAO.doRetrieveAll();
+                request.setAttribute("listaOrdiniCompleta", listaOrdiniCompleta != null ? listaOrdiniCompleta : new ArrayList<>());
+
+                request.getRequestDispatcher("/WEB-INF/view/admin-dashboard.jsp").forward(request, response);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante il caricamento della dashboard amministrativa.");
             }
-
-            request.setAttribute("listaInAttesa", inAttesa);
-            request.setAttribute("listaAccettate", accettate);
-            request.setAttribute("listaInLavorazione", inLavorazione);
-            request.setAttribute("listaCompletate", completate);
-            request.setAttribute("listaRifiutate", rifiutate);
-            
-            OrdineDAO ordineDAO = new OrdineDAO();
-            List<Ordine> listaOrdiniCompleta = ordineDAO.doRetrieveAll();
-            request.setAttribute("listaOrdiniCompleta", listaOrdiniCompleta);
-
-            request.getRequestDispatcher("/WEB-INF/view/admin-dashboard.jsp").forward(request, response);
             
         } else {
-        	
-        	response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Accesso non autorizzato.");
         }
     }
 

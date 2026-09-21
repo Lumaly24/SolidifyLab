@@ -247,11 +247,11 @@
                                             <c:choose>
                                                 <c:when test="${not empty sessionScope.utenteLoggato}">
                                                     <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
-                                                        <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-                                                        <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
-                                                            <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
-                                                        </button>
-                                                    </form>
+													    <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+													    <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
+													        <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
+													    </button>
+													</form>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="showLoginAlert('${pageContext.request.contextPath}/Login')">
@@ -277,7 +277,7 @@
                                         <div class="product-image">
                                             
                                             <c:set var="isDigitale" value="${not empty prodotto.formatoFile}"/>
-                                            <c:set var="giaPosseduto" value="${isDigitale and not empty sessionScope.idAssetPosseduti and sessionScope.idAssetPosseduti.contains(prodotto.id)}" />
+                                            <c:set var="giaPosseduto" value="${not empty sessionScope.utenteLoggato and isDigitale and not empty sessionScope.idAssetPosseduti and sessionScope.idAssetPosseduti.contains(prodotto.id)}" />
                                             
                                             <c:if test="${giaPosseduto}">
                                             
@@ -506,6 +506,34 @@
                 e.preventDefault();
             }
         });
+    });
+    const wishlistForms = document.querySelectorAll('.wishlist-form');
+    wishlistForms.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            const url = this.action;
+            const formData = new FormData(this);
+            const btn = this.querySelector('.btn-wishlist');
+            const icon = btn.querySelector('i');
+            
+            fetch(url, {
+                method: 'POST',
+                body: new URLSearchParams(formData),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+            .then(response => {
+                if (response.ok) {
+                    icon.classList.toggle('fa-regular');
+                    icon.classList.toggle('fa-solid');
+                    icon.style.color = icon.classList.contains('fa-solid') ? '#e56399' : '';
+                    
+                    btn.style.transform = 'scale(1.3)';
+                    setTimeout(() => { btn.style.transform = 'scale(1)'; }, 200);
+                }
+            })
+            .catch(err => console.error('Errore Wishlist:', err));
+        });
+    });
     });
 </script>
 

@@ -36,6 +36,11 @@ public class RichiestaCommissioneServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         User utente = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
         
+        if (utente == null) {
+            response.sendRedirect(request.getContextPath() + "/Login?redirect=Commissioni");
+            return;
+        }
+        
         String email = request.getParameter("email");
         if ((email == null || email.trim().isEmpty()) && utente != null) {
             email = utente.getEmail();
@@ -122,6 +127,6 @@ public class RichiestaCommissioneServlet extends HttpServlet {
         }
         
         request.setAttribute("successMessage", "La tua richiesta è stata inviata con successo. Analizzeremo il progetto e ti risponderemo in 24/48h!");
-        request.getRequestDispatcher("/WEB-INF/view/Commissioni").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/commissioni.jsp").forward(request, response);
     }
 }

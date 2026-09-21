@@ -1,7 +1,7 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -19,11 +19,21 @@ public class IndexServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        ProdottoDAO prodottoDAO = new ProdottoDAO();
-        
-        List<Prodotto> listaProdotti = prodottoDAO.doRetrieveInEvidenza(7);
-        
-        request.setAttribute("prodottiInEvidenza", listaProdotti);
+        try {
+            ProdottoDAO prodottoDAO = new ProdottoDAO();
+            List<Prodotto> listaProdotti = prodottoDAO.doRetrieveInEvidenza(7);
+            
+            if (listaProdotti == null) {
+                listaProdotti = new ArrayList<>();
+            }
+            
+            request.setAttribute("prodottiInEvidenza", listaProdotti);
+            
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento dei prodotti in evidenza per la Home:");
+            e.printStackTrace();
+            request.setAttribute("prodottiInEvidenza", new ArrayList<>());
+        }
         
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

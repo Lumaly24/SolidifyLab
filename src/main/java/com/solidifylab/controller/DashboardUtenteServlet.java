@@ -31,12 +31,11 @@ public class DashboardUtenteServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
-        HttpSession session = request.getSession();
-        User utente = (User) session.getAttribute("utenteLoggato");
+    	HttpSession session = request.getSession(false);
+        User utente = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
 
         if (utente == null) {
-        	
-            response.sendRedirect(request.getContextPath() + "/Login");
+            response.sendRedirect(request.getContextPath() + "/Login?redirect=UserDashboard");
             return;
         }
 

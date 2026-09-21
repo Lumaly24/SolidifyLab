@@ -117,6 +117,9 @@ public class GestioneCommissioniServlet extends HttpServlet {
                     case "visiona":
                         commissioneDAO.segnaComeVisionata(commissioneId);
                         break;
+                    default:
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+                        return;
                 }
                 
                 response.setStatus(HttpServletResponse.SC_OK);

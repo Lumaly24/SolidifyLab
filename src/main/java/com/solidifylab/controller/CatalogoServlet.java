@@ -1,7 +1,6 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
-
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -26,7 +25,6 @@ public class CatalogoServlet extends HttpServlet {
         List<Prodotto> prodotti;
         
         String tipo = request.getParameter("tipo");
-        
         String maxPriceStr = request.getParameter("max_price");
         String[] tags = request.getParameterValues("tag"); 
         
@@ -43,11 +41,10 @@ public class CatalogoServlet extends HttpServlet {
         prodotti = prodottoDAO.doRetrieveByFilters(categoriaId, maxPrice, tags);
         
         request.setAttribute("listaProdotti", prodotti);
-        
         request.setAttribute("selectedTags", tags);
         
-        HttpSession session = request.getSession();
-        User utenteLoggato = (User) session.getAttribute("utenteLoggato");
+        HttpSession session = request.getSession(false);
+        User utenteLoggato = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
         
         if (utenteLoggato != null) {
             WishlistDAO wishlistDAO = new WishlistDAO();

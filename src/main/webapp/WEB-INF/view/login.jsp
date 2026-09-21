@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!-- Aggiunta taglib per gestire i messaggi di errore del server -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <% 
@@ -24,7 +23,7 @@
             </c:if>
             
             <form id="loginForm" action="${pageContext.request.contextPath}/Login" method="POST" onsubmit="return validaLogin()">
-                
+                <input type="hidden" name="redirect" value="${redirect}">
                 <div class="form-group">
                     <label for="loginEmail">Email</label>
                     <input type="email" id="loginEmail" name="email" autocomplete="email">
@@ -53,11 +52,9 @@
     function validaLogin() {
         let isValid = true;
 
-        // Svuota i messaggi precedenti
         document.getElementById('err-email').innerText = '';
         document.getElementById('err-password').innerText = '';
 
-        // Validazione Email con Regex
         const email = document.getElementById('loginEmail').value.trim();
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         
@@ -69,7 +66,6 @@
             isValid = false;
         }
 
-        // Validazione Password
         const password = document.getElementById('loginPassword').value.trim();
         if (password === '') {
             document.getElementById('err-password').innerText = 'La password è obbligatoria.';

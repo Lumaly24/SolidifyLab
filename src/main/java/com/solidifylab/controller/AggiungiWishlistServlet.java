@@ -1,7 +1,7 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
-import java.util.List; // Import fondamentale per gestire la lista degli ID!
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,12 +19,11 @@ public class AggiungiWishlistServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        HttpSession session = request.getSession();
-        User utenteLoggato = (User) session.getAttribute("utenteLoggato");
+        HttpSession session = request.getSession(false);
+        User utenteLoggato = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
 
         if (utenteLoggato == null) {
-
-            response.sendRedirect(request.getContextPath() + "/Login");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
@@ -55,13 +54,7 @@ public class AggiungiWishlistServlet extends HttpServlet {
             System.out.println("ERRORE: La Servlet non ha ricevuto l'id_prodotto dalla JSP!");
         }
 
-        String referer = request.getHeader("Referer");
-        if (referer != null) {
-            response.sendRedirect(referer);
-        } else {
-
-            response.sendRedirect(request.getContextPath() + "/Catalogo");
-        }
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -17,15 +17,21 @@ public class SignUpServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        request.setCharacterEncoding("UTF-8");
+
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String nome = request.getParameter("nome");
+        String cognome = request.getParameter("cognome");
         
         if (email == null || email.trim().isEmpty() || 
             username == null || username.trim().isEmpty() || 
-            password == null || password.trim().isEmpty()) {
+            password == null || password.trim().isEmpty() ||
+            nome == null || nome.trim().isEmpty() ||
+            cognome == null || cognome.trim().isEmpty()) {
             
-            request.setAttribute("errore", "Tutti i campi (Email, Username, Password) sono obbligatori.");
+            request.setAttribute("errore", "Tutti i campi (Nome, Cognome, Email, Username, Password) sono obbligatori.");
             request.getRequestDispatcher("/WEB-INF/view/signup.jsp").forward(request, response);
             return;
         }
@@ -33,15 +39,17 @@ public class SignUpServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         
         if (userDAO.esisteEmail(email)) {
-            request.setAttribute("errore", "L'email è già in uso");
+            request.setAttribute("errore", "L'email è già in uso.");
             request.getRequestDispatcher("/WEB-INF/view/signup.jsp").forward(request, response);
             return;
         }
         
         User nuovoUser = new User();
-        nuovoUser.setUsername(username); 
-        nuovoUser.setEmail(email);
+        nuovoUser.setUsername(username.trim()); 
+        nuovoUser.setEmail(email.trim());
         nuovoUser.setPasswordHash(password);
+        nuovoUser.setNome(nome.trim());
+        nuovoUser.setCognome(cognome.trim());
         
         boolean registrato = userDAO.doSave(nuovoUser);
         

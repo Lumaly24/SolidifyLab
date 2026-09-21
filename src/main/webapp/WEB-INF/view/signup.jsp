@@ -25,6 +25,18 @@
             <form id="signupForm" action="${pageContext.request.contextPath}/Signup" method="POST" onsubmit="return validaSignup()">
                 
                 <div class="form-group">
+                    <label for="regNome">Nome</label>
+                    <input type="text" id="regNome" name="nome" autocomplete="given-name">
+                    <span id="err-nome" class="error-msg"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="regCognome">Cognome</label>
+                    <input type="text" id="regCognome" name="cognome" autocomplete="family-name">
+                    <span id="err-cognome" class="error-msg"></span>
+                </div>
+
+                <div class="form-group">
                     <label for="regUsername">Username</label>
                     <input type="text" id="regUsername" name="username" autocomplete="off">
                     <span id="err-username" class="error-msg"></span>
@@ -60,13 +72,27 @@
     </main>
 
 <script>
-    
     function validaSignup() {
         let isValid = true;
 
+        document.getElementById('err-nome').innerText = '';
+        document.getElementById('err-cognome').innerText = '';
         document.getElementById('err-username').innerText = '';
         document.getElementById('err-password').innerText = '';
         document.getElementById('err-confirmpassword').innerText = '';
+
+        const nome = document.getElementById('regNome').value.trim();
+        const regexNomeCognome = /^[a-zA-ZàèéìòùÀÈÉÌÒÙ\s']+$/;
+        if (!nome || !regexNomeCognome.test(nome)) {
+            document.getElementById('err-nome').innerText = 'Inserisci un nome valido.';
+            isValid = false;
+        }
+
+        const cognome = document.getElementById('regCognome').value.trim();
+        if (!cognome || !regexNomeCognome.test(cognome)) {
+            document.getElementById('err-cognome').innerText = 'Inserisci un cognome valido.';
+            isValid = false;
+        }
 
         const username = document.getElementById('regUsername').value.trim();
         const regexUser = /^[a-zA-Z0-9]{3,20}$/;
@@ -75,7 +101,7 @@
             isValid = false;
         }
 
-        if (!isEmailValid) {
+        if (typeof isEmailValid !== 'undefined' && !isEmailValid) {
             document.getElementById('emailAjaxFeedback').innerText = 'Inserisci un\'email valida e non registrata.';
             document.getElementById('emailAjaxFeedback').className = 'error-msg';
             isValid = false;

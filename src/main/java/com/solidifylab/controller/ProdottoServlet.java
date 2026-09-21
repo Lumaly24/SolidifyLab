@@ -55,6 +55,6 @@ public class ProdottoServlet extends HttpServlet {
             }
         }
         
-        request.getRequestDispatcher("/WEB-INF/view//prodotto.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/prodotto.jsp").forward(request, response);
     }
 }

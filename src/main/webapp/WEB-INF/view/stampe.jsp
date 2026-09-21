@@ -16,7 +16,6 @@
 
 <main class="catalog-page">
     
-    <!-- MODAL DI AVVISO -->
     <div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
         <div style="background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 380px; width: 85%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);">
             <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #e56399; margin-bottom: 15px;"></i>
@@ -32,7 +31,6 @@
         </div>
     </div>
 
-    <!-- MODAL DI SUCCESSO -->
     <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
         <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 40px 30px; max-width: 400px; width: 85%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
             <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: #2ecc71; margin-bottom: 20px;"></i>
@@ -47,7 +45,6 @@
 
     <div class="catalog-layout">
         
-        <!-- SIDEBAR FILTRI -->
         <aside class="catalog-sidebar">
             <form action="${pageContext.request.contextPath}/Stampe" method="GET">
                 
@@ -148,7 +145,6 @@
             </form>
         </aside>
 
-        <!-- CONTENUTO PRINCIPALE -->
         <section class="catalog-main-content">
             
             <div class="top-nav-row">
@@ -190,7 +186,6 @@
                         <input type="hidden" name="tipo" value="stampa_3d">
                         <input type="hidden" name="step" value="2">
                         
-                        <!-- Wrapper del box di caricamento file -->
                         <div class="file-upload-wrapper" id="fileUploadWrapper">
                             <input type="file" id="file3dInput" name="file_riferimento" accept=".stl,.obj,.3mf,.png" class="file-input-hidden">
                             <label for="file3dInput" class="file-dropzone" id="fileDropzoneLabel">
@@ -200,7 +195,6 @@
                             </label>
                         </div>  
                         
-                        <!-- Messaggio verde di conferma file caricato (inizialmente nascosto) -->
                         <div id="fileLoadedMessage" style="display: none; margin-bottom: 15px; padding: 12px 15px; background: rgba(46, 204, 113, 0.2); ; border: 1px solid #46a24a; border-radius: 8px; color: #46a24a; font-family: 'coolveticarg', sans-serif; font-size: 1rem; text-align: center; align-items: center; justify-content: center; gap: 8px;">
                             <i class="fa-solid fa-circle-check"></i> 
                             <span>File caricato: <strong id="selectedFileName" style="color: #46a24a;"></strong></span>
@@ -227,7 +221,6 @@
                             <article class="product-card">
                                 <div class="product-badges">
                                     
-                                    <!-- LOGICA WISHLIST -->
                                     <c:set var="inWishlist" value="false" />
                                     <c:forEach var="wId" items="${sessionScope.wishlistIds}">
                                         <c:if test="${wId == prodotto.id}">
@@ -237,21 +230,20 @@
                                     
                                     <c:choose>
                                         <c:when test="${not empty sessionScope.utenteLoggato}">
-                                            <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" style="display:inline;">
-                                                <input type="hidden" name="id_prodotto" value="${prodotto.id}">
-                                                <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
-                                                    <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
-                                                </button>
-                                            </form>
+                                            <form action="${pageContext.request.contextPath}/AddtoWishlist" method="POST" class="inline-form wishlist-form">
+											    <input type="hidden" name="id_prodotto" value="${prodotto.id}">
+											    <button type="submit" class="btn-wishlist" title="${inWishlist ? 'Rimuovi dalla Wishlist' : 'Aggiungi alla Wishlist'}">
+											        <i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart" style="${inWishlist ? 'color: #e56399;' : ''}"></i>
+											    </button>
+											</form>
                                         </c:when>
                                         <c:otherwise>
-                                            <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="alert('Devi effettuare il login per usare la Wishlist!'); window.location.href='${pageContext.request.contextPath}/Login';">
-                                                <i class="fa-regular fa-heart"></i>
-                                            </button>
-                                        </c:otherwise>
+									    <button type="button" class="btn-wishlist" title="Accedi per la Wishlist" onclick="showLoginAlert('${pageContext.request.contextPath}/Login')">
+									        <i class="fa-regular fa-heart"></i>
+									    </button>
+									</c:otherwise>
                                     </c:choose>
                                     
-                                    <!-- LOGICA ADMIN DELETE -->
                                     <c:if test="${not empty sessionScope.utenteLoggato and sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
                                         <form action="${pageContext.request.contextPath}/Add&Remove" method="POST" style="display:inline;" id="delete-form-${prodotto.id}">
                                             <input type="hidden" name="action" value="remove">
@@ -337,7 +329,6 @@
             });
         }
 
-        // Gestione click sul pulsante originale per inviare il form
         if (submitStampaBtn && heroStampaForm) {
             submitStampaBtn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -429,6 +420,37 @@
             window.location.href = "${pageContext.request.contextPath}/Home";
         }
     }
+    
+    const wishlistForms = document.querySelectorAll('.wishlist-form');
+    
+    const wishlistForms = document.querySelectorAll('.wishlist-form');
+    wishlistForms.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            const url = this.action;
+            const formData = new FormData(this);
+            const btn = this.querySelector('.btn-wishlist');
+            const icon = btn.querySelector('i');
+            
+            fetch(url, {
+                method: 'POST',
+                body: new URLSearchParams(formData),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+            .then(response => {
+                if (response.ok) {
+                    icon.classList.toggle('fa-regular');
+                    icon.classList.toggle('fa-solid');
+                    icon.style.color = icon.classList.contains('fa-solid') ? '#e56399' : '';
+                    
+                    btn.style.transform = 'scale(1.3)';
+                    setTimeout(() => { btn.style.transform = 'scale(1)'; }, 200);
+                }
+            })
+            .catch(err => console.error('Errore Wishlist:', err));
+        });
+    });
+    });
 </script>
 
 

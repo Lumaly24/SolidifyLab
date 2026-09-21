@@ -233,7 +233,6 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         
-    	// --- SCRIPT 1: CAROSELLO ---
         const carousel = document.getElementById('productsCarousel');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
@@ -280,7 +279,6 @@
             setTimeout(updateArrows, 150); 
         }
 
-        // --- SCRIPT 2: SCROLL SPY CON OBSERVER (PRECISO AL 100%) ---
         const main = document.querySelector('main');
         const sections = document.querySelectorAll('main > section');
         const dots = document.querySelectorAll('.scroll-progress-nav .dot');
@@ -319,7 +317,6 @@
             });
         }
 
-        // --- SCRIPT 3: WISHLIST AJAX ---
         const wishlistForms = document.querySelectorAll('.wishlist-form');
         wishlistForms.forEach(form => {
             form.addEventListener('submit', function(event) {

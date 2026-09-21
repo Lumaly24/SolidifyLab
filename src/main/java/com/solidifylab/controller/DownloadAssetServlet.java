@@ -1,10 +1,8 @@
 package com.solidifylab.controller;
 
 import java.io.InputStream;
-
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.solidifylab.dao.ProdottoDAO;
+import com.solidifylab.dao.LibreriaDAO;
 import com.solidifylab.model.Prodotto;
 import com.solidifylab.model.User;
 
@@ -21,13 +20,13 @@ import com.solidifylab.model.User;
 public class DownloadAssetServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
         HttpSession session = request.getSession(false);
         User utenteLoggato = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
 
         if (utenteLoggato == null) {
-            response.sendRedirect(request.getContextPath() + "/Login");
+            response.sendRedirect(request.getContextPath() + "/Login?redirect=UserDashboard");
             return;
         }
 
@@ -39,10 +38,11 @@ public class DownloadAssetServlet extends HttpServlet {
 
         try {
             int assetId = Integer.parseInt(idParam);
-            Set<Integer> idAssetPosseduti = (Set<Integer>) session.getAttribute("idAssetPosseduti");
             
-            if (idAssetPosseduti != null && idAssetPosseduti.contains(assetId)) {
-                
+            LibreriaDAO libreriaDAO = new LibreriaDAO();
+            boolean posseduto = libreriaDAO.haGiaAcquistato(utenteLoggato.getId(), assetId);
+            
+            if (posseduto) {
                 ProdottoDAO prodottoDAO = new ProdottoDAO();
                 Prodotto prodotto = prodottoDAO.doRetrieveById(assetId);
                 
@@ -54,7 +54,7 @@ public class DownloadAssetServlet extends HttpServlet {
                     if (inStream != null) {
                         try {
                             String mimeType = getServletContext().getMimeType(imagePath);
-                            if (mimeType == null) {        
+                            if (mimeType == null) {    
                                 mimeType = "application/octet-stream";
                             }
                             
@@ -79,12 +79,9 @@ public class DownloadAssetServlet extends HttpServlet {
                         }
                     }
                 }
-                
-                response.sendRedirect(request.getContextPath() + "/UserDashboard");
-                
-            } else {
-                response.sendRedirect(request.getContextPath() + "/UserDashboard");
             }
+            
+            response.sendRedirect(request.getContextPath() + "/UserDashboard");
             
         } catch (Exception e) {
             e.printStackTrace();

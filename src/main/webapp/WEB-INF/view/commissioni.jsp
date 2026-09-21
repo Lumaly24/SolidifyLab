@@ -283,6 +283,8 @@
             activeGroup.style.display = 'flex';
         }
     }
+    
+    const isUserLoggedIn = ${not empty sessionScope.utenteLoggato};
 
     function nextStep(stepNumber) {
         const currentActiveStep = document.querySelector('.form-step.active');
@@ -294,8 +296,13 @@
                 showCustomAlert('Seleziona almeno una tipologia di ordine per proseguire!');
                 return; 
             }
-        }
 
+            if (!isUserLoggedIn) {
+                window.location.href = "${pageContext.request.contextPath}/Login?redirect=Commissioni";
+                return;
+            }
+        }
+        
         if (currentActiveStep && currentActiveStep.id === 'step-2') {
             const descInput = document.getElementById('descPrincipale');
             if (descInput.value.trim().length < 15) {
@@ -467,7 +474,6 @@
         updateMainSections();
         updateSubOptionsStampa();
 
-        // Controllo per auto-avanzamento se veniamo dalla pagina stampe3d.jsp
         const isPostDalCaricamento = "${param.richiede_stampa_3d}";
         if (isPostDalCaricamento === 'true') {
             document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
@@ -488,6 +494,25 @@
                     let fileNames = Array.from(files).map(f => f.name).join(', ');
                     fileFeedback.innerHTML = '<i class="fa-solid fa-check"></i> Hai selezionato: ' + fileNames;
                 }
+            });
+        }
+    });
+    
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputCap = document.getElementById('indCap');
+        const inputCitta = document.getElementById('indCitta');
+
+        if(inputCap) {
+            inputCap.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        }
+
+        if(inputCitta) {
+            inputCitta.addEventListener('input', function() {
+                this.value = this.value.replace(/[0-9]/g, '');
             });
         }
     });

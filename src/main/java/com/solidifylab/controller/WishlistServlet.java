@@ -48,7 +48,7 @@ public class WishlistServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/view/wishlist.jsp").forward(request, response);
             
         } else {
-            response.sendRedirect(request.getContextPath() + "/Login?errore=auth");
+        	response.sendRedirect(request.getContextPath() + "/Login?redirect=Wishlist");
         }
     }
 
