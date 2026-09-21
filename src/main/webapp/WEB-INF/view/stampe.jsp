@@ -289,7 +289,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Slider Prezzo
         const slider = document.getElementById('priceRange');
         const priceDisplay = document.getElementById('priceVal');
 
@@ -314,7 +313,6 @@
             updateSlider();
         }
 
-        // Feedback visivo e gestione scomparsa box caricamento file
         const fileInput = document.getElementById('file3dInput');
         const fileUploadWrapper = document.getElementById('fileUploadWrapper');
         const fileLoadedMessage = document.getElementById('fileLoadedMessage');
@@ -327,12 +325,10 @@
                 if (fileInput.files && fileInput.files.length > 0) {
                     const fileName = fileInput.files[0].name;
                     
-                    // Nasconde il box di caricamento file
                     if (fileUploadWrapper) {
                         fileUploadWrapper.style.display = 'none';
                     }
                     
-                    // Mostra la scritta verde di conferma con il nome del file
                     if (selectedFileName && fileLoadedMessage) {
                         selectedFileName.innerText = fileName;
                         fileLoadedMessage.style.display = "flex";
@@ -434,6 +430,7 @@
         }
     }
 </script>
+
 
 <c:if test="${not empty requestScope.successMessage}">
     <script>

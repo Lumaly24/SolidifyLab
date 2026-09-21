@@ -48,16 +48,31 @@ body {
     box-shadow: 0 8px 32px 0 rgba(15, 3, 38, 0.1) !important;
 }
 
+.suggestions-box{
+ display: none; 
+ position: absolute; 
+ top: 100%; left: 0; 
+ right: 0; z-index: 9999; 
+ background: rgba(255,255,255,0.95);
+ backdrop-filter: blur(10px); 
+ border-radius: 12px; 
+ box-shadow: 0 8px 32px rgba(15,3,38,0.1); 
+ overflow: hidden; 
+ max-height: 300px; 
+ overflow-y: auto;
+ }
+ 
 .catalog-page { 
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
     margin-top: 95px;
-    margin-bottom: 50px;
+    margin-bottom: 350px;
     margin-left: 0 !important;
     margin-right: 0 !important;
     padding-left: 30px !important;
     padding-right: 30px !important;
+    padding-bottom: 140px;
 }
 
 .catalog-layout { 
@@ -65,6 +80,7 @@ body {
     grid-template-columns: 280px 1fr !important; 
     gap: 50px !important; 
     width: 100% !important;
+    align-items: start !important;
 }
 
 .top-controls-inline { 
@@ -100,11 +116,18 @@ body {
     box-shadow: 0 4px 15px rgba(229, 99, 153, 0.15);
 }
 
-.catalog-sidebar { 
-    border-radius: 20px; 
-    padding: 20px; 
-    height: fit-content;
-    position: sticky; 
+.catalog-sidebar {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    padding: 24px 22px;
+    box-shadow: 0 8px 32px rgba(15, 3, 38, 0.05);
+    position: sticky;
+    top: 130px; 
+    height: fit-content; 
+    z-index: 10; 
 }
 
 .catalog-sidebar, .btn-primary {

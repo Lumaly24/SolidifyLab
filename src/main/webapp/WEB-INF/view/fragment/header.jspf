@@ -70,15 +70,14 @@
  			</a>
 		</div>
         
-       <div class="search-bar">
-		    <form id="searchForm" action="${pageContext.request.contextPath}/Search" method="GET">
-		        <input type="text" id="searchInput" name="q" placeholder="Ricerca..." autocomplete="off">
+       <div class="search-bar" style="position: relative;">
+		    <form id="headerSearchForm" action="#" method="GET">
+		        <input type="text" id="headerSearchInput" name="q" placeholder="Ricerca..." autocomplete="off">
 		        
 		        <button type="submit" class="search-btn">
 		            <i class="fa-solid fa-magnifying-glass"></i>
 		        </button>
-		        <div id="searchSuggestions" class="suggestions-box" style="display: none;">
-		          
+		        <div id="headerSearchSuggestions" class="suggestions-box">
 		        </div>
 		    </form>
 		</div>
@@ -110,18 +109,14 @@
 		        <ul class="dropdown-menu profile-menu">
                     <c:choose>
                         <c:when test="${not empty sessionScope.utenteLoggato}">
-                            
                             <c:if test="${sessionScope.utenteLoggato.ruolo == 'ADMIN'}">
                                 <li><a href="${pageContext.request.contextPath}/AdminDashboard">Area Admin</a></li>
                             </c:if>
-                            
                             <c:if test="${sessionScope.utenteLoggato.ruolo != 'ADMIN'}">
                                 <li><a href="${pageContext.request.contextPath}/UserDashboard">Il mio Profilo</a></li>
                             </c:if>
-                            
                             <li><a href="${pageContext.request.contextPath}/Logout">Log out</a></li>
                         </c:when>
-                        
                         <c:otherwise>
                             <li><a href="${pageContext.request.contextPath}/Login">Log in</a></li>
                             <li><a href="${pageContext.request.contextPath}/Signup">Sign up</a></li>
@@ -137,3 +132,61 @@
 		    </a>	
 		</div>
 	</header>
+
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+	    const hSearchInput = document.getElementById('headerSearchInput');
+	    const hSuggestionsBox = document.getElementById('headerSearchSuggestions');
+	    const hSearchForm = document.getElementById('headerSearchForm');
+	    
+	    if (!hSearchInput) return; 
+
+	    const hContesto = "generale";
+
+	    hSearchInput.addEventListener('keyup', function() {
+	        let query = this.value.trim();
+	        if(query.length >= 2) {
+	            const fetchUrl = '${pageContext.request.contextPath}/Search?q=' + encodeURIComponent(query) + '&contesto=' + hContesto;
+	            
+	            fetch(fetchUrl)
+	                .then(response => response.json())
+	                .then(data => {
+	                    hSuggestionsBox.innerHTML = '';
+	                    if(data.length > 0) {
+	                        data.forEach(item => {
+	                            let div = document.createElement('div');
+	                            div.style.padding = '12px 15px';
+	                            div.style.borderBottom = '1px solid rgba(15, 3, 38, 0.1)';
+	                            div.style.cursor = 'pointer';
+	                            div.style.transition = 'background 0.2s';
+	                            div.style.color = '#0f0326';
+	                            
+	                            div.innerHTML = '<strong>' + item.nome + '</strong> - €' + item.prezzo.toFixed(2);
+	                            div.onclick = function() {
+	                                window.location.href = '${pageContext.request.contextPath}/Prodotto?id=' + item.id;
+	                            };
+	                            div.onmouseover = function() { this.style.backgroundColor = 'rgba(229, 99, 153, 0.15)'; };
+	                            div.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
+	                            hSuggestionsBox.appendChild(div);
+	                        });
+	                        hSuggestionsBox.style.display = 'block';
+	                    } else {
+	                        hSuggestionsBox.innerHTML = '<div style="padding:12px 15px; color:#d1236d; font-style:italic; font-family: \'coolveticarg\', sans-serif;">Nessun risultato...</div>';
+	                        hSuggestionsBox.style.display = 'block';
+	                    }
+	                })
+	                .catch(error => console.error('Errore Fetch AJAX Header:', error));
+	        } else {
+	            hSuggestionsBox.style.display = 'none';
+	        }
+	    });
+
+	    document.addEventListener('click', function(e) {
+	        if(!hSearchForm.contains(e.target)) {
+	            hSuggestionsBox.style.display = 'none';
+	        }
+	    });
+	    
+	    hSearchForm.addEventListener('submit', function(e) { e.preventDefault(); });
+	});
+	</script>

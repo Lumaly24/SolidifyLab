@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <% request.setAttribute("titoloPagina", "Dettaglio Prodotto"); 
 	request.setAttribute("cssPagina", "prodotto.css");
@@ -31,6 +31,8 @@
                 <c:set var="isDigitale" value="${not empty prodotto.formatoFile}"/>
                 <c:set var="giaPosseduto" value="${isDigitale and not empty sessionScope.idAssetPosseduti and sessionScope.idAssetPosseduti.contains(prodotto.id)}" />
                 
+                <c:set var="tagsStr" value="${fn:toLowerCase(prodotto.tagsUniti)}" />
+                
                 <div class="main-product-image" style="position: relative;">
                 
                     <c:if test="${giaPosseduto}">
@@ -45,12 +47,20 @@
                 </div>
 
                 <c:if test="${catCodice == 'MODELLO_3D'}">
+                    <c:set var="isLow" value="${fn:contains(tagsStr, 'low_poly')}" />
+                    <c:set var="isHigh" value="${fn:contains(tagsStr, 'high_poly')}" />
+                    
                     <div class="polycount-indicator">
                         <p><strong>Livello di Dettaglio:</strong></p>
                         <div class="poly-steps">
-                            <div class="step"><span class="dot"></span><label>Low</label></div>
-                            <div class="step"><span class="dot"></span><label>Mid</label></div>
-                            <div class="step active"><span class="dot filled"></span><label>High</label></div>
+                            <div class="step ${isLow ? 'active' : ''}">
+                                <span class="dot ${isLow ? 'filled' : ''}"></span>
+                                <label>Low</label>
+                            </div>
+                            <div class="step ${isHigh ? 'active' : ''}">
+                                <span class="dot ${isHigh ? 'filled' : ''}"></span>
+                                <label>High</label>
+                            </div>
                         </div>
                     </div>
                 </c:if>
@@ -59,9 +69,10 @@
                     <div class="resolution-indicator">
                         <p><strong>Risoluzione disponibile:</strong></p>
                         <div class="resolution-steps">
-                            <span class="res-badge">2K</span>
-                            <span class="res-badge active">4K</span>
-                            <span class="res-badge">8K</span>
+                            <span class="res-badge ${fn:contains(tagsStr, '1k') ? 'active' : ''}">1K</span>
+                            <span class="res-badge ${fn:contains(tagsStr, '2k') ? 'active' : ''}">2K</span>
+                            <span class="res-badge ${fn:contains(tagsStr, '3k') ? 'active' : ''}">3K</span>
+                            <span class="res-badge ${fn:contains(tagsStr, '4k') ? 'active' : ''}">4K</span>
                         </div>
                     </div>
                 </c:if>
@@ -121,7 +132,23 @@
                         <div class="specs-grid">
                             <ul class="specs-list">
                                 <li><strong>Geometria:</strong> Polygon mesh</li>
-                                <li><strong>Textures:</strong> Sì (4K PBR)</li>
+                                <c:if test="${fn:contains(tagsStr, 'ambienti')}"><li><strong>Categoria:</strong> Ambienti</li></c:if>
+                                <c:if test="${fn:contains(tagsStr, 'creature')}"><li><strong>Categoria:</strong> Creature</li></c:if>
+                                <c:if test="${fn:contains(tagsStr, 'personaggi')}"><li><strong>Categoria:</strong> Personaggi</li></c:if>
+                                <c:if test="${fn:contains(tagsStr, 'props')}"><li><strong>Categoria:</strong> Props</li></c:if>
+                                
+                                <c:if test="${fn:contains(tagsStr, 'rigged')}">
+                                    <li><strong>Rigging:</strong> Modello Rigged (Pronto per l'animazione)</li>
+                                </c:if>
+                                <c:if test="${fn:contains(tagsStr, 'game_ready')}">
+                                    <li><strong>Ottimizzazione:</strong> Game Ready</li>
+                                </c:if>
+                                <c:if test="${fn:contains(tagsStr, 'realistico')}">
+                                    <li><strong>Stile:</strong> Realistico</li>
+                                </c:if>
+                                <c:if test="${fn:contains(tagsStr, 'fantasy')}">
+                                    <li><strong>Stile:</strong> Fantasy</li>
+                                </c:if>
                             </ul>
                         </div>
                     </div>
@@ -134,10 +161,6 @@
                                 <li>.FBX</li>
                                 <li>.OBJ</li>
                             </ul>
-                            <div class="software-icons-grid">
-                                <div class="soft-box" title="Blender"><i class="fa-solid fa-cube"></i></div>
-                                <div class="soft-box" title="Unreal Engine"><i class="fa-brands fa-gamepad"></i></div>
-                            </div>
                         </div>
                     </div>
                 </c:if>
@@ -148,10 +171,14 @@
                         <hr class="box-divider">
                         <div class="specs-grid">
                             <ul class="specs-list">
-                                <li><strong>Seamless:</strong> Sì</li>
-                                <li><strong>Workflow:</strong> PBR Metallic/Roughness</li>
+                                <li><strong>Seamless:</strong> ${fn:contains(tagsStr, 'seamless') ? 'Sì' : 'No'}</li>
+                                <c:if test="${fn:contains(tagsStr, 'architettura')}"><li><strong>Categoria:</strong> Architettura</li></c:if>
+                                <c:if test="${fn:contains(tagsStr, 'metalli')}"><li><strong>Categoria:</strong> Metalli</li></c:if>
+                                <c:if test="${fn:contains(tagsStr, 'tessuti')}"><li><strong>Categoria:</strong> Tessuti</li></c:if>
+                                <c:if test="${fn:contains(tagsStr, 'organiche')}"><li><strong>Categoria:</strong> Organiche</li></c:if>
                             </ul>
                             <ul class="specs-list">
+                                <li><strong>Workflow:</strong> PBR Metallic/Roughness</li>
                                 <li><strong>Mappe incluse:</strong> Albedo, Normal, Roughness, AO</li>
                                 <li><strong>Formato File:</strong> .PNG</li>
                             </ul>
@@ -174,6 +201,41 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="product-specs-box" style="margin-top: 12px;">
+                        <h3>Specifiche Tecniche</h3>
+                        <hr class="box-divider">
+                        <div class="specs-grid">
+                            <ul class="specs-list">
+                                <li><strong>Materiale:</strong> 
+                                    <c:choose>
+                                        <c:when test="${fn:contains(tagsStr, 'resina')}">Resina 8K (Alto Dettaglio)</c:when>
+                                        <c:when test="${fn:contains(tagsStr, 'pla')}">PLA (Resistente)</c:when>
+                                        <c:when test="${fn:contains(tagsStr, 'petg')}">PETG (Flessibile/Resistente)</c:when>
+                                        <c:otherwise>Standard</c:otherwise>
+                                    </c:choose>
+                                </li>
+                                <li><strong>Tipologia:</strong> 
+                                    <c:choose>
+                                        <c:when test="${fn:contains(tagsStr, 'miniature')}">Miniatura</c:when>
+                                        <c:when test="${fn:contains(tagsStr, 'props')}">Prop / Replica</c:when>
+                                        <c:when test="${fn:contains(tagsStr, 'accessori')}">Accessorio</c:when>
+                                        <c:otherwise>Oggetto Stampato</c:otherwise>
+                                    </c:choose>
+                                </li>
+                            </ul>
+                            <ul class="specs-list">
+                                <li><strong>Finitura:</strong> 
+                                    <c:choose>
+                                        <c:when test="${fn:contains(tagsStr, 'colore')}">Dipinta</c:when>
+                                        <c:when test="${fn:contains(tagsStr, 'levigatura_primer')}">Levigata + Primer Base</c:when>
+                                        <c:when test="${fn:contains(tagsStr, 'supporti_rimossi')}">Grezza (Supporti rimossi)</c:when>
+                                        <c:otherwise>Standard</c:otherwise>
+                                    </c:choose>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </c:if>
                 
                 <c:choose>
@@ -191,20 +253,6 @@
                             <input type="hidden" name="id_prodotto" value="${prodotto.id}">
                         
                             <c:if test="${catCodice == 'STAMPA_3D'}">
-                                <div class="material-selector">
-                                    <p><strong>Seleziona Materiale:</strong></p>
-                                    <div class="material-options">
-                                        <label class="mat-radio">
-                                            <input type="radio" name="materiale" value="resina_grigia" checked>
-                                            <span>Resina Grigia (Alto Dettaglio)</span>
-                                        </label>
-                                        <label class="mat-radio">
-                                            <input type="radio" name="materiale" value="pla_nero">
-                                            <span>PLA Nero (Resistente)</span>
-                                        </label>
-                                    </div>
-                                </div>
-                        
                                 <div class="quantity-selector-large" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
                                     <p style="margin: 0;"><strong>Quantità:</strong></p>
                                     <div class="quantity-control" style="display: flex; align-items: center; background: rgba(255,255,255,0.4); border: 1px solid rgba(229, 99, 153, 0.3); border-radius: 8px; width: 120px; padding: 5px;">
