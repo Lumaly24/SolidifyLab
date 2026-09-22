@@ -328,17 +328,17 @@
 			            <c:otherwise>
 			            
 			                <c:forEach var="carta" items="${sessionScope.metodiPagamento}">
-			                    <div class="saved-card" style="background: linear-gradient(135deg, #0f0326, #382381); color: white; padding: 20px; border-radius: 15px; position: relative; overflow: hidden;">
+			                    <div class="saved-card" style="background: linear-gradient(135deg, rgb(57, 12, 143), rgb(92, 61, 203)); color: white; padding: 20px; border-radius: 15px; position: relative; overflow: hidden;">
 			                        
 			                        <div style="position: absolute; right: -20px; top: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
 			                        
-			                        <div class="card-number" style="font-family: 'Courier New', Courier, monospace; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 15px;">
+			                        <div class="card-number" style="font-family: 'Courier New', Courier, monospace; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 15px; ">
 			                            ${carta.cartaMascherata}
 			                        </div>
 			                        
 			                        <div class="card-details" style="display: flex; justify-content: space-between; align-items: flex-end;">
 			                            <div class="card-expiry">
-			                                <span style="font-size: 0.7rem; text-transform: uppercase; display: block; opacity: 0.8;">Scadenza</span>
+			                                <span style="font-size: 0.7rem; text-transform: uppercase; display: block; opacity: 1;">Scadenza</span>
 			                                ${carta.scadenza}
 			                            </div>
 			                            <form action="${pageContext.request.contextPath}/DeleteCardServlet" method="POST" style="margin: 0;">

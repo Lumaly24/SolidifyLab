@@ -391,7 +391,8 @@ html, body {
     margin-bottom: 10px;
 }
 
-.discount-input-group input, .checkout-form input {
+.discount-input-group input:not(#usaCartaSalvataCheckbox),
+.checkout-form input:not(#usaCartaSalvataCheckbox) {
     width: 100%;
     padding: 8px 10px;
     border-radius: 6px;
@@ -839,4 +840,7 @@ input[type="checkbox"]:checked {
         margin-right: 0 !important;
         width: 100%;
     }
+    
+
+    
 }

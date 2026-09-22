@@ -54,7 +54,7 @@ public class AddCardServlet extends HttpServlet {
         
         dao.doSave(carta);
         
-        List<MetodoPagamento> listaCarte = dao.getMetodiByUtente(utente.getId());
+        List<MetodoPagamento> listaCarte = dao.getMetodoByUtente(utente.getId());
         session.setAttribute("metodiPagamento", listaCarte);
 
         response.setStatus(HttpServletResponse.SC_OK);
