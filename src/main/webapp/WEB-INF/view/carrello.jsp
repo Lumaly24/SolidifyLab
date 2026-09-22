@@ -130,13 +130,23 @@
 
                     <div class="cart-summary-right">
                         
-                        <form action="${pageContext.request.contextPath}/ApplicaScontoServlet" method="POST" class="discount-form">
-                            <label for="promoCode">Hai un codice Sconto?</label>
-                            <div class="discount-input-group">
-                                <input type="text" id="promoCode" name="codice_sconto" placeholder="Es. SOLIDIFY20">
-                                <button type="submit" class="btn-apply">APPLICA</button>
-                            </div>
-                        </form>
+                        <form id="scontoForm" class="discount-form">
+						    <label for="promoCode">Hai un codice Sconto?</label>
+						    <div class="discount-input-group">
+						        <input type="text" id="promoCode" name="codice_sconto" placeholder="Es. BENVENUTO20" required>
+						        <button type="submit" class="btn-apply">APPLICA</button>
+						    </div>
+						    
+						    <div id="messaggioSconto" style="margin-top: 10px; font-weight: bold; font-size: 0.9rem;"></div>
+						</form>
+						
+						<c:if test="${not empty sessionScope.messaggioSconto}">
+						    <div class="success-msg" style="color: green;">${sessionScope.messaggioSconto}</div>
+						</c:if>
+						
+						<c:if test="${not empty sessionScope.erroreSconto}">
+						    <div class="error-msg" style="color: red;">${sessionScope.erroreSconto}</div>
+						</c:if>
 
                         <div class="summary-details">
                             <p>Subtotale: <span>€ <fmt:formatNumber value="${sessionScope.carrello.subtotale}" pattern="#,##0.00"/></span></p>
@@ -216,7 +226,45 @@
             }
         }
     </script>
+    
+    <script>
+		document.getElementById('scontoForm').addEventListener('submit', function(event) {
+	
+	    event.preventDefault(); 
+	    
+	    let codice = document.getElementById('promoCode').value;
+	    let messaggioDiv = document.getElementById('messaggioSconto');
+	    
+	    fetch('${pageContext.request.contextPath}/ApplicaScontoServlet', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/x-www-form-urlencoded',
+	        },
+	        body: 'codice_sconto=' + encodeURIComponent(codice)
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	    	
+	        if(data.success) {
+	            messaggioDiv.style.color = '#46a24a'; 
+	            messaggioDiv.innerText = data.message;
+	            
+	            setTimeout(() => {
+	                window.location.reload();
+	            }, 1500);
+	            
+	        } else {
+	            messaggioDiv.style.color = '#ba160a'; 
+	            messaggioDiv.innerText = data.message;
+	        }
+	    })
+	    .catch(error => {
+	        messaggioDiv.style.color = '#f44336';
+	        messaggioDiv.innerText = 'Errore di connessione con il server.';
+	    });
+	});
+	</script>
 
-    </main>
+</main>
 
 <%@ include file="fragment/footer.jspf" %>
