@@ -1,6 +1,7 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.solidifylab.dao.MetodoPagamentoDAO;
 import com.solidifylab.model.Carrello;
+import com.solidifylab.model.MetodoPagamento;
 import com.solidifylab.model.User;
 
 @WebServlet("/Checkout")
@@ -30,7 +33,15 @@ public class CheckoutServlet extends HttpServlet {
         	response.sendRedirect(request.getContextPath() + "/Login?redirect=Checkout"); 
             return;
         }
-
+        
+        MetodoPagamentoDAO metodoDAO = new MetodoPagamentoDAO();
+        List<MetodoPagamento> carteUtente = metodoDAO.getMetodoByUtente(utente.getId());
+        
+        if (carteUtente != null && !carteUtente.isEmpty()) {
+        	MetodoPagamento cartaSalvata = carteUtente.get(0);
+            request.setAttribute("cartaSalvata", cartaSalvata);
+        }
+        
         request.getRequestDispatcher("/WEB-INF/view/checkout.jsp").forward(request, response);
     }
 

@@ -70,7 +70,20 @@
                     <input type="hidden" name="spedizione_provincia" value="${param.spedizione_provincia}">
                 </c:if>
 
-                <label for="nomeCarta">Nome sulla Carta</label>
+				<c:if test="${not empty cartaSalvata}">
+				    <div class="form-group mb-4" style="background: rgba(255, 255, 255, 0.25); padding: 10px; border-radius: 8px; border: 1px solid #eff1ed;">
+				        <label style="cursor: pointer; display: flex; align-items: center; gap: 10px; margin: 0; font-weight: 300;">
+				            <input type="checkbox" id="usaCartaSalvataCheckbox" 
+				                   onchange="toggleCartaSalvata()"
+				                   data-numero="${cartaSalvata.cartaMascherata}" 
+				                   data-scadenza="${cartaSalvata.scadenza}" 
+				                   data-intestatario="${cartaSalvata.intestatario}">
+				            <strong>Usa la mia carta salvata:</strong> ${cartaSalvata.cartaMascherata}
+				        </label>
+				    </div>
+				</c:if>
+
+                <label for="nomeCarta">Intestatario</label>
                 <div class="discount-input-group">
                    
                     <input type="text" id="nomeCarta" name="nome_carta" placeholder="Es. Elizabeth Taylor" 
@@ -183,6 +196,47 @@
         divErrore.textContent = messaggio;
         elemento.parentNode.appendChild(divErrore); 
     }
+</script>
+
+<script>
+	function toggleCartaSalvata() {
+    const checkbox = document.getElementById('usaCartaSalvataCheckbox');
+    
+    const inputTitolare = document.getElementById('nomeCarta');
+    const inputNumero = document.getElementById('numeroCarta');
+    const inputScadenza = document.getElementById('scadenza');
+    
+    if (checkbox.checked) {
+    	
+        if (inputTitolare) {
+            inputTitolare.value = checkbox.getAttribute('data-intestatario');
+            inputTitolare.readOnly = true;
+        }
+        if (inputNumero) {
+            inputNumero.value = checkbox.getAttribute('data-numero');
+            inputNumero.readOnly = true;
+        }
+        if (inputScadenza) {
+            inputScadenza.value = checkbox.getAttribute('data-scadenza');
+            inputScadenza.readOnly = true;
+        }
+        
+    } else {
+    	
+        if (inputTitolare) {
+            inputTitolare.value = "";
+            inputTitolare.readOnly = false;
+        }
+        if (inputNumero) {
+            inputNumero.value = "";
+            inputNumero.readOnly = false;
+        }
+        if (inputScadenza) {
+            inputScadenza.value = "";
+            inputScadenza.readOnly = false;
+        }
+    }
+}
 </script>
 
 <%@ include file="fragment/footer.jspf" %>

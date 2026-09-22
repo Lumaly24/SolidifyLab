@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("idAssetPosseduti", libreriaDAO.getIdAssetPosseduti(utente.getId()));
                 
                 MetodoPagamentoDAO pagamentoDAO = new MetodoPagamentoDAO();
-                session.setAttribute("metodiPagamento", pagamentoDAO.getMetodiByUtente(utente.getId()));
+                session.setAttribute("metodiPagamento", pagamentoDAO.getMetodoByUtente(utente.getId()));
                 
                 System.out.println("Wishlist e Carrello caricati al login per l'utente: " + utente.getId());
                 

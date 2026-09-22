@@ -35,7 +35,7 @@ public class DeleteCardServlet extends HttpServlet {
                 MetodoPagamentoDAO dao = new MetodoPagamentoDAO();
                 dao.doDelete(idCarta, utente.getId());
                 
-                List<MetodoPagamento> listaCarte = dao.getMetodiByUtente(utente.getId());
+                List<MetodoPagamento> listaCarte = dao.getMetodoByUtente(utente.getId());
                 session.setAttribute("metodiPagamento", listaCarte);
                 
             } catch (NumberFormatException e) {

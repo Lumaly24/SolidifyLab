@@ -306,7 +306,7 @@
                 </div>
             </section>
 
-            <<!-- TAB 6: METODI DI PAGAMENTO -->
+            <!-- TAB 6: METODI DI PAGAMENTO -->
 			<section id="pagamenti" class="user-tab-content">
 			    <h2>Metodi di Pagamento Salvati</h2>
 			    <p>Qui puoi visualizzare e gestire la tua carta per un checkout più veloce.</p>
@@ -314,7 +314,7 @@
 			    <div class="payment-cards-grid mt-3">
 			        <c:choose>
 			            <c:when test="${empty sessionScope.metodiPagamento}">
-			                <!-- SE NON CI SONO CARTE: Mostra il messaggio E il pulsante per aggiungere -->
+			            
 			                <div style="grid-column: 1 / -1; margin-bottom: 15px; background: rgba(56, 35, 129, 0.05); border: 2px dashed #ccc; padding: 20px; border-radius: 10px; text-align: center;">
 			                    Non hai ancora nessun metodo di pagamento salvato.
 			                </div>
@@ -326,7 +326,7 @@
 			            </c:when>
 			            
 			            <c:otherwise>
-			                <!-- SE C'E' GIA' UNA CARTA: Mostra solo la carta (niente pulsante aggiungi) -->
+			            
 			                <c:forEach var="carta" items="${sessionScope.metodiPagamento}">
 			                    <div class="saved-card" style="background: linear-gradient(135deg, #0f0326, #382381); color: white; padding: 20px; border-radius: 15px; position: relative; overflow: hidden;">
 			                        
@@ -369,10 +369,13 @@
 					        <input type="password" id="oldPwd" name="oldPassword" required>
 					    </div>
 					    <div class="form-group">
-					        <label for="newPwd">Nuova Password</label>
-					        <input type="password" id="newPwd" name="newPassword" required>
-					    </div>
-					    <button type="submit" class="btn-primary">Aggiorna Password</button>
+			                <label for="newPwd">Nuova Password</label>
+			                <input type="password" id="newPwd" name="newPassword" required>
+			                
+			                <span id="err-newPwd" class="error-msg"></span>
+			            </div>
+			            
+						    <button type="submit" class="btn-primary">Aggiorna Password</button>
 					</form>
                 </div>
 
@@ -385,7 +388,6 @@
                             <i class="fa-solid fa-file-export"></i> Esporta i miei dati
                         </button>
                         
-                        <!-- L'azione di eliminazione usa il custom alert invece di un banale confirm -->
                         <form id="deleteAccountForm" action="${pageContext.request.contextPath}/DeleteAccountServlet" method="POST" style="margin: 0;">
                             <button type="button" class="btn-danger" style="background: #ff4d4d; color: white; padding: 8px 15px; border-radius: 50px; border: none; cursor: pointer; font-weight: bold;" onclick="confermaEliminazioneAccount()">
                                 <i class="fa-solid fa-triangle-exclamation"></i> Elimina Account
@@ -435,13 +437,13 @@
             
             <div class="form-group" style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555;">Nome sul titolare</label>
-                <input type="text" name="titolareCarta" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'coolveticarg', sans-serif;" placeholder="Mario Rossi">
+                <input type="text" name="titolareCarta" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: arial; font-weight: 300;" placeholder="Nicole Kidman">
             </div>
             
             <div class="form-group" style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555;">Numero della carta</label>
                 <input type="text" name="numeroCarta" id="inputCardNumber" maxlength="19" required 
-                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Courier New', monospace; letter-spacing: 2px;" 
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: arial; font-family: arial; font-weight: 300; letter-spacing: 2px;" 
                        placeholder="0000 0000 0000 0000"
                        oninput="formattaCarta(this)">
             </div>
@@ -450,19 +452,19 @@
                 <div class="form-group" style="flex: 1;">
                     <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555;">Scadenza</label>
                     <input type="text" name="scadenzaCarta" maxlength="5" required 
-                           style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Courier New', monospace;" 
+                           style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: arial; font-weight: 300;" 
                            placeholder="MM/AA" oninput="formattaScadenza(this)">
                 </div>
                 <div class="form-group" style="flex: 1;">
                     <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555;">CVV</label>
                     <input type="password" name="cvvCarta" maxlength="3" required 
-                           style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Courier New', monospace;" 
+                           style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: arial; font-weight: 300;" 
                            placeholder="***" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
             </div>
             
             <button type="submit" class="btn-primary" style="width: 100%; border-radius: 50px; padding: 12px; font-weight: bold; font-size: 1.05rem;">
-                <i class="fa-solid fa-lock" style="margin-right: 5px;"></i> Salva Carta Sicura
+                <i class="fa-solid fa-lock" style="margin-right: 5px;"></i> Salva Carta
             </button>
         </form>
     </div>
@@ -809,6 +811,22 @@ function aggiornaPassword(event) {
       showCustomAlert("Errore di connessione", "Impossibile contattare il server.", true);
   });
 }
+</script>
+
+<script>
+    function aggiornaPassword(event) {
+        const newPwd = document.getElementById('newPwd').value;
+        const errSpan = document.getElementById('err-newPwd');
+        
+        errSpan.innerText = '';
+
+        const regexPwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
+        
+        if (!regexPwd.test(newPwd)) {
+            event.preventDefault(); 
+            errSpan.innerText = 'La password deve avere almeno 8 caratteri, includendo una maiuscola, una minuscola, un numero e un carattere speciale.';
+        }
+    }
 </script>
 
 <%@ include file="fragment/footer.jspf" %>

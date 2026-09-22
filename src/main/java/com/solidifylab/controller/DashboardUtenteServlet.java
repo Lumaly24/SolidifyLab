@@ -63,7 +63,7 @@ public class DashboardUtenteServlet extends HttpServlet {
 
             MetodoPagamentoDAO pagamentoDAO = new MetodoPagamentoDAO();
             
-            List<MetodoPagamento> carte = pagamentoDAO.getMetodiByUtente(utente.getId());
+            List<MetodoPagamento> carte = pagamentoDAO.getMetodoByUtente(utente.getId());
             session.setAttribute("metodiPagamento", carte);
 
             SpedizioneDAO spedizioneDAO = new SpedizioneDAO();

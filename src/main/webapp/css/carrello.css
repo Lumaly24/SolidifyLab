@@ -380,7 +380,7 @@ html, body {
 .discount-form label, .checkout-form label {
     display: block;
     color: #0f0326;
-    font-weight: bold;
+    font-weight: 300;
     margin-bottom: 4px;
     font-size: 0.85rem;
 }
@@ -616,6 +616,24 @@ html, body {
         color: #e56399;
         font-size: 1.15rem;
     }
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    outline: none;
+    background-image: url('../images/checkbox-empty.png');
+}
+
+input[type="checkbox"]:checked {
+    background-image: url('../images/darkpink-star.png');
 }
 
 @media print {

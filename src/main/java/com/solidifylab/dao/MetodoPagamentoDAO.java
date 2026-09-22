@@ -12,7 +12,7 @@ import com.solidifylab.model.MetodoPagamento;
 
 public class MetodoPagamentoDAO {
 
-    public List<MetodoPagamento> getMetodiByUtente(int utenteId) {
+    public List<MetodoPagamento> getMetodoByUtente(int utenteId) {
         List<MetodoPagamento> carte = new ArrayList<>();
         String query = "SELECT id, intestatario, carta_mascherata, scadenza FROM dati_pagamento WHERE utente_id = ?";
 

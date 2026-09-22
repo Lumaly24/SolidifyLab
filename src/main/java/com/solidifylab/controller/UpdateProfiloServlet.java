@@ -109,6 +109,16 @@ public class UpdateProfiloServlet extends HttpServlet {
             return;
         }
 
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&.])[A-Za-z\\d@$!%*?&.]{8,}$";
+        
+        if (!newPassword.matches(passwordRegex)) {
+        	
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            
+            response.getWriter().write("errore_formato_password"); 
+            return;
+        }
+        
         String hashedOldPassword = SecurityUtils.hashPassword(oldPassword);
 
         if (!hashedOldPassword.equals(utente.getPasswordHash())) {

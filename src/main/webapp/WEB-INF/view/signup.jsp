@@ -113,6 +113,13 @@
             isValid = false;
         }
 
+        const regexPwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
+
+        if (!regexPwd.test(pwd)) {
+            document.getElementById('err-password').innerText = 'La password deve avere almeno 8 caratteri, includendo una maiuscola, una minuscola, un numero e un carattere speciale.';
+            isValid = false;
+        }
+
         const confirmPwd = document.getElementById('regConfirmPassword').value;
         if (confirmPwd !== pwd) {
             document.getElementById('err-confirmpassword').innerText = 'Le password non coincidono.';
