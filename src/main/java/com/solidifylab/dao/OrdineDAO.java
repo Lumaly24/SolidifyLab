@@ -276,4 +276,51 @@ public class OrdineDAO {
         
         return articoli;
     }
+    
+    public List<Ordine> doRetrieveFiltrati(int utenteId, String dataInizio, String dataFine, String stato) {
+        List<Ordine> ordini = new ArrayList<>();
+        
+        StringBuilder query = new StringBuilder("SELECT o.*, u.nome as utente_nome, u.cognome as utente_cognome, u.email as utente_email ");
+        query.append("FROM ordine o JOIN utente u ON o.utente_id = u.id WHERE o.utente_id = ? ");
+        
+        if (dataInizio != null && !dataInizio.isEmpty()) query.append("AND o.data_ordine >= ? ");
+        if (dataFine != null && !dataFine.isEmpty()) query.append("AND o.data_ordine <= ? ");
+        if (stato != null && !stato.isEmpty()) query.append("AND o.stato = ? ");
+        query.append("ORDER BY o.data_ordine DESC");
+
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query.toString())) {
+            
+            int index = 1;
+            ps.setInt(index++, utenteId);
+            
+            if (dataInizio != null && !dataInizio.isEmpty()) ps.setString(index++, dataInizio + " 00:00:00");
+            if (dataFine != null && !dataFine.isEmpty()) ps.setString(index++, dataFine + " 23:59:59");
+            if (stato != null && !stato.isEmpty()) ps.setString(index++, stato);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Ordine ordine = new Ordine();
+                    ordine.setId(rs.getInt("id"));
+                    ordine.setDataOrdine(rs.getTimestamp("data_ordine")); 
+                    ordine.setTotale(rs.getDouble("totale"));
+                    ordine.setStato(rs.getString("stato"));
+
+                    User utente = new User();
+                    utente.setId(rs.getInt("utente_id"));
+                    utente.setNome(rs.getString("utente_nome"));
+                    utente.setCognome(rs.getString("utente_cognome"));
+                    utente.setEmail(rs.getString("utente_email"));
+                    
+                    ordine.setUtente(utente);
+                    ordine.setArticoli(getArticoliPerOrdine(ordine.getId(), con));
+                    ordini.add(ordine);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return ordini;
+    }
 }

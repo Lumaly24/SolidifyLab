@@ -172,6 +172,25 @@ public class CommissioneDAO {
         c.setVisionata(rs.getBoolean("visionata"));
         c.setDataRichiesta(rs.getTimestamp("data_richiesta"));
         
+        c.setLinkProdotto(rs.getString("link_prodotto"));
+        
         return c;
+    }
+    
+    public void impostaComeCompletata(int id, String linkProdotto) {
+        String query = "UPDATE commissione SET stato = 'COMPLETATA', link_prodotto = ? WHERE id = ?";
+        
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setString(1, linkProdotto);
+            ps.setInt(2, id);
+            
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Errore durante il completamento della commissione:");
+            e.printStackTrace();
+        }
     }
 }

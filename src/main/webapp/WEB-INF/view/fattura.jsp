@@ -21,7 +21,7 @@
     <div class="print-only invoice-print-header">
     
         <div class="invoice-meta">
-            <p>Data fattura: <fmt:formatDate value="${ultimoOrdine.dataOrdine}" pattern="dd/MM/yyyy" /><br>
+            <p>Data fattura: <fmt:formatDate value="${ultimoOrdine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Rome" /><br>
                Data di scadenza: Pagato</p>
         </div>
     </div>
@@ -40,7 +40,7 @@
         <hr class="section-divider web-only">
         
         <div class="invoice-details web-only">
-            <p><strong>Data:</strong> <span><fmt:formatDate value="${ultimoOrdine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" /></span></p>
+            <p><strong>Data:</strong> <span><fmt:formatDate value="${ultimoOrdine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Rome" /></span></p>
             <p><strong>Stato Ordine:</strong> <span class="status-success">${ultimoOrdine.stato}</span></p>
         </div>
 

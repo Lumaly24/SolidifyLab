@@ -271,7 +271,7 @@
 						    <tr class="riga-ordine" data-nomecliente="${fn:toLowerCase(ordine.utente.nome)} ${fn:toLowerCase(ordine.utente.cognome)}">
 						        <td>#${ordine.id}</td>
 						        <td>
-						            <fmt:formatDate value="${ordine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" />
+						            <fmt:formatDate value="${ordine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Rome"/>
 						        </td>
 						        <td><strong>${ordine.utente.nome} ${ordine.utente.cognome}</strong><br><small style="color: #666;">${ordine.utente.email}</small></td>
 						        <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>

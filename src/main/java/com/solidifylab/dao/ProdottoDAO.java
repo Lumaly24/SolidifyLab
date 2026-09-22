@@ -15,7 +15,7 @@ public class ProdottoDAO {
 
     public List<Prodotto> doRetrieveAll() {
         List<Prodotto> prodotti = new ArrayList<>();
-        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE";
+        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id != 99";
 
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query);
@@ -84,7 +84,7 @@ public class ProdottoDAO {
 
     public List<Prodotto> doRetrieveInEvidenza(int limit) {
         List<Prodotto> prodotti = new ArrayList<>();
-        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE ORDER BY data_inserimento DESC LIMIT ?";
+        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id != 99 ORDER BY data_inserimento DESC LIMIT ?";
 
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -190,6 +190,12 @@ public class ProdottoDAO {
         
         return generatedId;
     }
+
+    public int doSaveReturnId(Prodotto p) {
+        
+        return doSave(p);
+    }
+   
 
     public void doSaveTags(int prodottoId, String[] tagIds) {
         if (tagIds == null || tagIds.length == 0) return;
@@ -343,7 +349,7 @@ public class ProdottoDAO {
         query.append("SELECT DISTINCT p.* FROM prodotto p ");
         query.append("LEFT JOIN prodotto_tag pt ON p.id = pt.prodotto_id ");
         query.append("LEFT JOIN tag t ON pt.tag_id = t.id ");
-        query.append("WHERE p.cancellato = FALSE ");
+        query.append("WHERE p.cancellato = FALSE AND p.categoria_id != 99 "); // ESCLUSIONE
         
         if ("stampe".equals(contesto)) {
             query.append("AND p.categoria_id = 3 ");
@@ -402,7 +408,7 @@ public class ProdottoDAO {
     }
     
     public boolean esisteProdottoPerNome(String nome) {
-    	String query = "SELECT COUNT(*) FROM prodotto WHERE nome = ? AND cancellato = FALSE";
+        String query = "SELECT COUNT(*) FROM prodotto WHERE nome = ? AND cancellato = FALSE AND categoria_id != 99";
         try (java.sql.Connection con = ConPool.getConnection(); 
              java.sql.PreparedStatement ps = con.prepareStatement(query)) {
              

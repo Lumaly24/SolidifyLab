@@ -149,13 +149,12 @@
 						        <label for="checkoutEmail">Indirizzo Mail (per ricevuta e asset):</label>
 						        <input type="email" id="checkoutEmail" name="email" value="${sessionScope.utenteLoggato.email}" required>
 						    </div>
-						
-                            <c:set var="richiedeSpedizione" value="false" />
-                            <c:forEach var="item" items="${sessionScope.carrello.prodotti}">
-                                <c:if test="${item.prodotto.categoriaId == 3}">
-                                    <c:set var="richiedeSpedizione" value="true" />
-                                </c:if>
-                            </c:forEach>
+							<c:set var="richiedeSpedizione" value="false" />
+							<c:forEach var="item" items="${sessionScope.carrello.prodotti}">
+							    <c:if test="${item.prodotto.categoriaId == 3 || item.prodotto.categoriaId == 98}">
+							        <c:set var="richiedeSpedizione" value="true" />
+							    </c:if>
+							</c:forEach>
 
                             <c:if test="${richiedeSpedizione}">
                                 <div class="form-group" style="margin-top: 15px; margin-bottom: 20px;">

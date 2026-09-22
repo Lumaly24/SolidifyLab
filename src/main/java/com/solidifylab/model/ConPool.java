@@ -14,7 +14,7 @@ public class ConPool {
         if (datasource == null) {
             PoolProperties p = new PoolProperties();
             
-            p.setUrl("jdbc:mysql://gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/solidify_studio?sslMode=VERIFY_IDENTITY&tlsVersions=TLSv1.2,TLSv1.3");
+            p.setUrl("jdbc:mysql://gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/solidify_studio?sslMode=VERIFY_IDENTITY&tlsVersions=TLSv1.2,TLSv1.3&serverTimezone=Europe/Rome");
             p.setDriverClassName("com.mysql.cj.jdbc.Driver");
             
             p.setUsername("2WS95AkGE3JaEFF.root"); 

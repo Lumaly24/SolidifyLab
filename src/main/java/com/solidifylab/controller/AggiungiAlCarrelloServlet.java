@@ -19,7 +19,7 @@ import com.solidifylab.dao.LibreriaDAO;
 
 @WebServlet("/AddtoCart")
 public class AggiungiAlCarrelloServlet extends HttpServlet {
-	
+    
     private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,7 +35,6 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
         Carrello carrello = (Carrello) session.getAttribute("carrello");
         
         if (carrello == null) {
-        	
             carrello = new Carrello();
             session.setAttribute("carrello", carrello);
         }
@@ -44,12 +43,10 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
         CarrelloDAO carrelloDAO = new CarrelloDAO();
 
         if ("svuota_carrello".equals(azione)) {
-        	
             carrello.getProdotti().clear(); 
             session.setAttribute("carrello", carrello); 
             
             if (utenteLoggato != null) {
-            	
                 carrelloDAO.salvaOAggiornaCarrello(utenteLoggato.getId(), carrello);
             }
             
@@ -59,42 +56,46 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
         
         if (idProdottoStr != null && !idProdottoStr.isEmpty()) {
             
-            int idProdotto = Integer.parseInt(idProdottoStr);
+            int idProdotto = -1;
+            try {
+                idProdotto = Integer.parseInt(idProdottoStr);
+            } catch (NumberFormatException e) {
+                if ("true".equals(isAjax)) {
+                    response.setContentType("text/plain");
+                    response.getWriter().write("errore_formato");
+                    return;
+                } else {
+                    session.setAttribute("errorMessage", "Errore: Prodotto non valido.");
+                    response.sendRedirect(request.getContextPath() + "/Carrello");
+                    return;
+                }
+            }
 
             ProdottoDAO prodottoDAO = new ProdottoDAO();
             Prodotto prodottoTrovato = prodottoDAO.doRetrieveById(idProdotto);
             
             if (prodottoTrovato != null) {
                 
-                boolean isDigitale = (prodottoTrovato.getCategoriaId() != 3); 
+            	boolean isDigitale = (prodottoTrovato.getCategoriaId() != 3 && prodottoTrovato.getCategoriaId() != 98);; 
 
                 if (utenteLoggato != null && isDigitale) {
-                	
                     LibreriaDAO libreriaDAO = new LibreriaDAO();
                     
                     if (libreriaDAO.haGiaAcquistato(utenteLoggato.getId(), idProdotto)) {
-                    	
                         
                         if ("true".equals(isAjax)) {
-                        	
                             response.setContentType("text/plain");
                             response.getWriter().write("gia_acquistato");
-                            
                         } else {
-                        	
                             session.setAttribute("errorMessage", "Hai già acquistato questo asset digitale! Lo trovi nella tua Area Personale.");
                             String referer = request.getHeader("referer");
                             
                             if (referer != null) {
-                            	
                                 response.sendRedirect(referer);
-                                
                             } else {
-                            	
                                 response.sendRedirect(request.getContextPath() + "/Carrello");
                             }
                         }
-                        
                         return; 
                     }
                 }
@@ -103,9 +104,7 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
                 ItemCarrello itemTrovato = null;
                 
                 for (ItemCarrello item : carrello.getProdotti()) {
-                	
                     if (item.getProdotto().getId() == idProdotto) {
-                    	
                         giaPresente = true;
                         itemTrovato = item;
                         break;
@@ -115,26 +114,17 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
                 boolean duplicateError = false;
 
                 if ("rimuovi_carrello".equals(azione)) {
-                	
                     if (itemTrovato != null) {
-                    	
                         carrello.getProdotti().remove(itemTrovato);
                     }
                 } else {
-                	
                     if (giaPresente) {
-                    	
                         if (isDigitale) {
-                        	
                             duplicateError = true;
-                            
                         } else {
-                        	
                             itemTrovato.setQuantita(itemTrovato.getQuantita() + quantitaDaAggiungere);
                         }
-                        
                     } else {
-                    	
                         ItemCarrello nuovoItem = new ItemCarrello(prodottoTrovato, quantitaDaAggiungere);
                         carrello.getProdotti().add(nuovoItem);
                     }
@@ -143,56 +133,38 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
                 session.setAttribute("carrello", carrello);
                 
                 if (utenteLoggato != null) {
-                	
                     carrelloDAO.salvaOAggiornaCarrello(utenteLoggato.getId(), carrello);
                 }
                 
                 if ("true".equals(isAjax)) {
-                	
                     response.setContentType("text/plain");
                     
                     if (duplicateError) {
-                    	
                         response.getWriter().write("gia_presente");
-                        
                     } else if (isDigitale) {
-                    	
                         response.getWriter().write("aggiunto_digitale");
-                        
                     } else {
-                    	
                         response.getWriter().write("aggiunto_fisico");
                     }
-                    
                 } else {
-                	
                     if ("rimuovi_carrello".equals(azione)) {
-                    	
                         response.sendRedirect(request.getContextPath() + "/Carrello");
                         return; 
                     }
                     
                     if (duplicateError) {
-                    	
                         session.setAttribute("errorMessage", "Questo elemento è già nel tuo carrello!");
-                        
                     } else {
-                    	
                         session.setAttribute("successMessage", "Aggiunto al carrello con successo!");
                     }
                     
                     String referer = request.getHeader("referer");
-                    
                     if (referer != null) {
-                    	
                         response.sendRedirect(referer);
-                        
                     } else {
-                    	
                         response.sendRedirect(request.getContextPath() + "/Carrello");
                     }
                 }
-                
                 return;
             }
         }

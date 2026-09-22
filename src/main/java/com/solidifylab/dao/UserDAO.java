@@ -112,4 +112,18 @@ public class UserDAO {
             return false;
         }
     }
+    public boolean doDelete(int id) {
+        String query = "DELETE FROM utente WHERE id = ?";
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Impossibile eliminare l'utente: potrebbe avere ordini o chiavi esterne collegate.");
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -11,6 +11,21 @@
 <%@ include file="fragment/header.jspf" %>
 
 <main class="admin-dashboard">
+<!-- Custom Alert Stile Catalogo -->
+<div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
+    <div style="background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 380px; width: 85%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);">
+        <i id="customAlertIcon" class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #e56399; margin-bottom: 15px;"></i>
+        <h3 id="customAlertTitle" style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 10px; color: #e56399;">Attenzione!</h3>
+        <p id="customAlertText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 20px; color: #333;">Messaggio</p>
+        
+        <button type="button" class="btn-primary auth-btn" id="customAlertSingleBtn" onclick="closeCustomAlert()" style="width: 100%; border-radius: 50px;">Okay</button>
+        
+        <div id="customAlertDoubleBtns" style="display: none; gap: 15px; justify-content: center; align-items: center;">
+            <button type="button" class="btn-secondary" onclick="closeCustomAlert()" style="margin: 0; border-radius: 50px; padding: 10px 25px;">Annulla</button>
+            <button type="button" class="auth-btn" id="customAlertConfirmBtn" style="margin: 0; border-radius: 50px; padding: 10px 25px; background: #ff4d4d;">Conferma</button>
+        </div>
+    </div>
+</div>
     <h1>Pannello di Controllo Commissioni</h1>
     <p>Clicca su "Vedi Dettagli" per leggere la richiesta e sbloccare le azioni.</p>
 
@@ -46,7 +61,7 @@
                                 
                                 <div class="card-body">
                                     <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Rome" /></p>
                                 </div>
                                 
                                 <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
@@ -96,15 +111,15 @@
                                 
                                 <div class="card-body">
                                     <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Rome" /></p>
                                 </div>
                                 
                                 <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
                                 
                                 <div class="card-actions" id="actions-${commissione.id}">
-                                    <button type="button" class="btn-action btn-accept prendi-in-lavorazione" onclick="submitAction('${commissione.id}', 'lavorazione')" style="width: 100%;">Prendi in Lavorazione</button>
-                                </div>
-                                
+								    <button type="button" class="btn-action btn-accept prendi-in-lavorazione" onclick="submitAction('${commissione.id}', 'lavorazione')" style="width: 100%;">Prendi in Lavorazione</button>
+								</div>
+								                                
                             </div>
                             
                         </c:forEach>
@@ -145,14 +160,14 @@
                                 
                                 <div class="card-body">
                                     <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Rome" /></p>
                                 </div>
                                 
                                 <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
                                 
                                 <div class="card-actions" id="actions-${commissione.id}">
-                                    <button type="button" class="btn-action btn-accept invia-commissione" onclick="submitAction('${commissione.id}', 'completa')" style="width: 100%;">Invia Commissione</button>
-                                </div>
+								    <button type="button" class="btn-action btn-accept invia-commissione" onclick="mostraInputCompletamento('${commissione.id}')" style="width: 100%;">Invia Commissione</button>
+								</div>
                                 
                             </div>
                             
@@ -194,7 +209,7 @@
                                 
                                 <div class="card-body">
                                     <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Rome" /></p>
                                 </div>
                                 
                                 <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
@@ -238,7 +253,7 @@
                                 
                                 <div class="card-body">
                                     <p><strong>Cliente:</strong> <c:out value="${commissione.email}" /></p>
-                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" /></p>
+                                    <p><strong>Data:</strong> <fmt:formatDate value="${commissione.dataRichiesta}" pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Rome" /></p>
                                 </div>
                                 
                                 <button type="button" class="btn-details" onclick="openDetailsModal('${commissione.id}', '${fn:escapeXml(commissione.email)}', '${fn:escapeXml(commissione.tipi)}', '${fn:escapeXml(commissione.descrizione)}', '${fn:escapeXml(commissione.indirizzoSpedizione)}', '${fn:escapeXml(commissione.fileRiferimentoUrl)}', ${commissione.richiedeStampa3d}, '${fn:escapeXml(commissione.materialeStampa)}', '${fn:escapeXml(commissione.descMateriale)}', '${fn:escapeXml(commissione.tipoPostproduzione)}', '${fn:escapeXml(commissione.descPostproduzione)}', ${commissione.richiedeModello3d}, ${commissione.includeTextureModello}, '${fn:escapeXml(commissione.descrizioneTextureModello)}', ${commissione.includeAnimazione}, '${fn:escapeXml(commissione.descrizioneAnimazione)}', ${commissione.includeRigging}, '${fn:escapeXml(commissione.descrizioneRigging)}', ${commissione.richiedeTexture}, ${commissione.includeUvMapping}, '${fn:escapeXml(commissione.descUvMapping)}', ${commissione.includeMaterialiPbr}, '${fn:escapeXml(commissione.descMaterialiPbr)}')">Vedi Dettagli</button>
@@ -267,7 +282,6 @@
         <h2>Dettagli Commissione #<span id="modId"></span></h2>
         
         <div class="modal-info">
-        
             <p><strong>Cliente:</strong> <span id="modClient"></span></p>
             <p><strong>Tipologia:</strong> <span id="modType"></span></p>
             <p id="modAddressContainer" style="display: none;"><strong>Indirizzo Spedizione:</strong> <span id="modAddress"></span></p>
@@ -275,26 +289,40 @@
                 <strong><i class="fa-solid fa-paperclip"></i> File Allegati:</strong> <br>
                 <span id="modFile" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px;"></span>
             </p>
-            
         </div>
         
         <hr>
         
         <div class="modal-desc">
-        
             <p><strong>Descrizione Progetto:</strong></p>
-            
             <div id="modDesc" style="background: rgba(0,0,0,0.03); padding: 10px; border-radius: 5px; margin-bottom: 10px;"></div>
         </div>
         
         <div id="dynamicSectionsContainer"></div>
         
+		<div id="completamentoContainer" style="display: none; margin-top: 20px; padding: 15px; background: rgba(56, 35, 129, 0.05); border: 2px dashed #382381; border-radius: 8px;">
+		    <h4 style="color: #382381; font-family: 'elephant', sans-serif; margin-bottom: 10px;">Genera Prodotto Finale</h4>
+		    
+		    <label style="display:block; font-size: 0.9em; margin-bottom: 5px;">Nome Prodotto:</label>
+		    <input type="text" id="prodNome" readonly style="width: 100%; padding: 8px; margin-bottom: 10px; background: #eee; border: 1px solid #ccc; border-radius: 4px;">
+		    
+		    <label style="display:block; font-size: 0.9em; margin-bottom: 5px;">Descrizione per il cliente:</label>
+		    <textarea id="prodDesc" rows="3" style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+		    
+		    <label style="display:block; font-size: 0.9em; margin-bottom: 5px;">Prezzo Concordato (€):</label>
+		    <input type="number" id="prodPrezzo" step="0.01" min="0" required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+		  
+		    <label style="display:block; font-size: 0.9em; margin-bottom: 5px;">Immagine del Progetto (Copertina e Download):</label>
+		    <input type="file" id="inputFileProdotto" accept="image/*" required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+		    
+		    <button type="button" class="btn-action btn-accept" onclick="confermaCompletamento()" style="width: 100%;">Conferma e Genera</button>
+		</div>
+
         <div class="modal-actions-container" style="margin-top: 20px;">
             <button type="button" class="btn-action btn-close" onclick="closeDetailsModal()">Chiudi</button>
         </div>
         
     </div>
-    
 </div>
 
 <div class="admin-modal" id="confirmModal" style="display: none;">
@@ -317,7 +345,6 @@
     const contextPath = "${pageContext.request.contextPath}";
 
     function switchTab(tabId, btnElement) {
-    	
         document.querySelectorAll('.tab-content').forEach(tab => {
             tab.style.display = 'none';
         });
@@ -333,9 +360,13 @@
         
         if(btnElement) {
             btnElement.classList.add('active');
+        } else {
+            const btn = document.querySelector('button[onclick*="switchTab(\'' + tabId + '\'"]');
+            if (btn) btn.classList.add('active');
         }
-    }
 
+        sessionStorage.setItem('activeAdminTab', tabId);
+    }
     function openDetailsModal(
         id, client, type, desc, address, fileUrl, 
         richiedeStampa, matStampa, descMat, tipoPost, descPost,
@@ -434,6 +465,7 @@
 
     function closeDetailsModal() {
         document.getElementById('detailsModal').style.display = 'none';
+        document.getElementById('completamentoContainer').style.display = 'none'; 
     }
 
     function showConfirm(id, actionType) {
@@ -462,19 +494,98 @@
         document.getElementById('confirmModal').style.display = 'none';
     }
 
-    function submitAction(id, actionType) {
+    function mostraInputCompletamento(id) {
+        currentCommissionId = id;
+        
+        const btnDettagli = document.querySelector('#card-' + id + ' .btn-details');
+        if (btnDettagli) {
+            btnDettagli.click();
+        } else {
+            document.getElementById('detailsModal').style.display = 'flex';
+        }
+        
+        document.getElementById('completamentoContainer').style.display = 'block';
+        
+        document.getElementById('prodNome').value = "Commissione#" + id;
+        const descOriginale = document.getElementById('modDesc').innerText;
+        document.getElementById('prodDesc').value = "Prodotto generato in base alla richiesta:\n" + descOriginale;
+        
+        document.getElementById('prodPrezzo').value = '';
+        document.getElementById('inputFileProdotto').value = ''; 
+    }
+
+    function confermaCompletamento() {
+        if (!currentCommissionId) return;
+        
+        const fileProdotto = document.getElementById('inputFileProdotto');
+        const prezzo = document.getElementById('prodPrezzo').value;
+        
+        if (!fileProdotto.files.length || !prezzo) {
+            alert("Devi inserire il prezzo e caricare l'immagine del progetto!");
+            return;
+        }
+        
+        const btnConferma = document.querySelector('#completamentoContainer button');
+        if (btnConferma) {
+            btnConferma.disabled = true;
+            btnConferma.innerText = "Generazione in corso...";
+        }
+        
+        const formData = new FormData();
+        formData.append("action", "completa");
+        formData.append("id", currentCommissionId);
+        formData.append("nome", document.getElementById('prodNome').value);
+        formData.append("descrizione", document.getElementById('prodDesc').value);
+        formData.append("prezzo", prezzo);
+        formData.append("file_prodotto", fileProdotto.files[0]);
+        
+        fetch(contextPath + "/GestioneCommissioni", {
+            method: "POST",
+            body: formData 
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload(); 
+            } else {
+                alert("Si è verificato un errore durante la generazione del prodotto.");
+                if (btnConferma) {
+                    btnConferma.disabled = false;
+                    btnConferma.innerText = "Conferma e Genera";
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+            alert("Errore di connessione al server.");
+            if (btnConferma) {
+                btnConferma.disabled = false;
+                btnConferma.innerText = "Conferma e Genera";
+            }
+        });
+    }
+
+    function submitAction(id, actionType, linkProdotto = '') {
         const confirmYesBtn = document.getElementById('confirmYesBtn');
-        confirmYesBtn.disabled = true;
-        confirmYesBtn.innerText = "Attendere...";
+        if (confirmYesBtn) {
+            confirmYesBtn.disabled = true;
+            confirmYesBtn.innerText = "Attendere...";
+        }
+        
+        const params = new URLSearchParams({ action: actionType, id: id });
+        if (linkProdotto !== '') {
+            params.append("link_prodotto", linkProdotto);
+        }
         
         fetch(contextPath + "/GestioneCommissioni", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ action: actionType, id: id })
+            body: params
         })
         .then(response => {
             if (response.ok) {
-                closeConfirmModal();
+                if (document.getElementById('confirmModal') && document.getElementById('confirmModal').style.display === 'flex') {
+                    closeConfirmModal();
+                }
                 window.location.reload(); 
             } else {
                 alert("Si è verificato un errore durante l'operazione.");
@@ -485,12 +596,56 @@
             alert("Errore di connessione al server.");
         })
         .finally(() => {
-            confirmYesBtn.disabled = false;
-            confirmYesBtn.innerText = "Sì, Conferma";
+            if (confirmYesBtn) {
+                confirmYesBtn.disabled = false;
+                confirmYesBtn.innerText = "Sì, Conferma";
+            }
         });
     }
-    
+    document.addEventListener("DOMContentLoaded", function() {
+        const savedTab = sessionStorage.getItem('activeAdminTab');
+        
+        if (savedTab) {
+            const tabButton = document.querySelector('button[onclick*="switchTab(\'' + savedTab + '\'"]');
+            if (tabButton) {
+                switchTab(savedTab, tabButton);
+            }
+        }
+    });
+    function showCustomAlert(title, message, isError = true) {
+        const alertModal = document.getElementById('customAlert');
+        const alertTitle = document.getElementById('customAlertTitle');
+        const alertText = document.getElementById('customAlertText');
+        const alertIcon = document.getElementById('customAlertIcon');
+        const singleBtn = document.getElementById('customAlertSingleBtn');
+        const doubleBtns = document.getElementById('customAlertDoubleBtns');
+        
+        alertTitle.innerText = title;
+        alertText.innerText = message;
+        
+        singleBtn.style.display = 'block';
+        doubleBtns.style.display = 'none';
+
+        if (isError) {
+            alertTitle.style.color = '#e56399';
+            alertIcon.style.color = '#e56399';
+            alertIcon.className = 'fa-solid fa-circle-exclamation';
+            singleBtn.style.background = '#e56399';
+        } else {
+            alertTitle.style.color = '#00c853';
+            alertIcon.style.color = '#00c853';
+            alertIcon.className = 'fa-solid fa-circle-check';
+            singleBtn.style.background = '#00c853';
+        }
+
+        alertModal.style.display = 'flex';
+    }
+
+    function closeCustomAlert() {
+        document.getElementById('customAlert').style.display = 'none';
+    }
 </script>
+
 <c:if test="${not empty requestScope.openCommissione}">
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -502,8 +657,11 @@
             else if (stato === 'COMPLETATA') tabId = 'completate';
             else if (stato === 'RIFIUTATA') tabId = 'rifiutate';
 
-            const tabButton = document.querySelector(`.admin-tab.\${tabId}`) || document.querySelector('.admin-tab');
-            switchTab(tabId, tabButton);
+            const tabButton = document.querySelector('button[onclick*="switchTab(\'' + tabId + '\'"]');
+            
+            if(tabButton) {
+                switchTab(tabId, tabButton);
+            }
 
             openDetailsModal(
                 '${openCommissione.id}', 

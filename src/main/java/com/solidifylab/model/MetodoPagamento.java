@@ -1,41 +1,59 @@
 package com.solidifylab.model;
 
 public class MetodoPagamento {
-	
+    
     private int id;
     private int utenteId;
+    private String intestatario;
     private String cartaMascherata;
     private String scadenza;
+    private String brand; 
 
-    public int getId() {
-    	return id; 
+    public int getId() { 
+        return id; 
     }
     
     public void setId(int id) { 
-    	this.id = id; 
+        this.id = id; 
     }
     
     public int getUtenteId() { 
-    	return utenteId; 
+        return utenteId; 
     }
     
     public void setUtenteId(int utenteId) { 
-    	this.utenteId = utenteId; 
+        this.utenteId = utenteId; 
     }
     
+    public String getIntestatario() {
+        return intestatario;
+    }
+
+    public void setIntestatario(String intestatario) {
+        this.intestatario = intestatario;
+    }
+
     public String getCartaMascherata() { 
-    	return cartaMascherata; 
+        return cartaMascherata; 
     }
     
     public void setCartaMascherata(String cartaMascherata) { 
-    	this.cartaMascherata = cartaMascherata; 
+        this.cartaMascherata = cartaMascherata; 
     }
     
     public String getScadenza() { 
-    	return scadenza; 
+        return scadenza; 
     }
     
     public void setScadenza(String scadenza) { 
-    	this.scadenza = scadenza; 
+        this.scadenza = scadenza; 
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }

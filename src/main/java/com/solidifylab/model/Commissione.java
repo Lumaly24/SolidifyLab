@@ -40,6 +40,8 @@ public class Commissione {
     private String stato;
     private boolean visionata;
     private Timestamp dataRichiesta;
+    
+    private String linkProdotto;
 
     public Commissione() {}
 
@@ -132,4 +134,7 @@ public class Commissione {
 
     public Timestamp getDataRichiesta() { return dataRichiesta; }
     public void setDataRichiesta(Timestamp dataRichiesta) { this.dataRichiesta = dataRichiesta; }
+
+    public String getLinkProdotto() { return linkProdotto; }
+    public void setLinkProdotto(String linkProdotto) { this.linkProdotto = linkProdotto; }
 }
