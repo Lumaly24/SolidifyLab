@@ -41,6 +41,8 @@ public class SpedizioneDAO {
                         psInsert.setString(4, citta);
                         psInsert.setString(5, cap);
                         psInsert.setString(6, provincia);
+                        
+                        psInsert.executeUpdate();
                     }
                 }
             }

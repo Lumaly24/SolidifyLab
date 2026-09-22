@@ -39,7 +39,7 @@ public class UserDAO {
     }
 
     public boolean doSave(User user) {
-        String query = "INSERT INTO utente (email, password_hash, username, ruolo) VALUES (?, ?, ?, 'CLIENTE')";
+        String query = "INSERT INTO utente (email, password_hash, username, nome, cognome, ruolo) VALUES (?, ?, ?, ?, ?, 'CLIENTE')";
         
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -47,6 +47,8 @@ public class UserDAO {
             ps.setString(1, user.getEmail());
             ps.setString(2, user.getPasswordHash());
             ps.setString(3, user.getUsername()); 
+            ps.setString(4, user.getNome());
+            ps.setString(5, user.getCognome());
             
             int righeInserite = ps.executeUpdate();
             return righeInserite > 0; 
@@ -58,21 +60,20 @@ public class UserDAO {
     }
     
     public void updateProfilo(User user) {
-        String query = "UPDATE utente SET nome = ?, cognome = ?, indirizzo = ?, citta = ?, cap = ? WHERE id = ?";
+    	
+        String query = "UPDATE utente SET nome = ?, cognome = ? WHERE id = ?";
         
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
             
             ps.setString(1, user.getNome());
             ps.setString(2, user.getCognome());
-            ps.setString(3, user.getIndirizzo());
-            ps.setString(4, user.getCitta());
-            ps.setString(5, user.getCap());
-            ps.setInt(6, user.getId());
             
             ps.executeUpdate();
             
         } catch (SQLException e) {
+        	
+        	System.err.println("Errore SQL in UpdateProfilo: " + e.getMessage());
             e.printStackTrace();
         }
     }

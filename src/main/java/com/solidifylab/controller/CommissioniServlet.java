@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.solidifylab.dao.SpedizioneDAO;
+import com.solidifylab.model.Spedizione;
 import com.solidifylab.model.User;
 
 @WebServlet("/Commissioni")
@@ -35,6 +37,23 @@ public class CommissioniServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         User utenteLoggato = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
+        
+        String viaComm = request.getParameter("indirizzo_via");
+        
+        if (utenteLoggato != null && viaComm != null && !viaComm.trim().isEmpty()) {
+            
+            String civicoComm = request.getParameter("indirizzo_civico");
+            String cittaComm = request.getParameter("indirizzo_citta");
+            String capComm = request.getParameter("indirizzo_cap");
+            String provComm = request.getParameter("indirizzo_provincia");
+
+            SpedizioneDAO spedizioneDAO = new SpedizioneDAO();
+            
+            spedizioneDAO.salvaIndirizzoPrincipale(utenteLoggato.getId(), viaComm, civicoComm, cittaComm, capComm, provComm);
+            
+            Spedizione indirizzoAggiornato = spedizioneDAO.getIndirizzoPrincipale(utenteLoggato.getId());
+            session.setAttribute("indirizzoPrincipale", indirizzoAggiornato);
+        }
 
         if (utenteLoggato == null) {
             response.sendRedirect(request.getContextPath() + "/Login?redirect=Stampe");

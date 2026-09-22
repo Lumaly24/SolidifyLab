@@ -144,7 +144,7 @@
 					            <input type="text" id="provincia" name="provincia" 
 					                   maxlength="2" minlength="2"
 					                   value="${sessionScope.indirizzoPrincipale.provincia}" 
-					                   placeholder="RM"
+					                   placeholder="SA"
 					                   style="text-transform: uppercase;"
 					                   pattern="[a-zA-Za-zA-Z]{2}"
 					                   oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '')"

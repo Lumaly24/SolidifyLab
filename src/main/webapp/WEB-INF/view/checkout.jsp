@@ -30,6 +30,15 @@
             <div class="summary-details">
                 <p><strong>Articoli nel carrello:</strong> <span>${sessionScope.carrello.prodotti.size()}</span></p>
                 <p><strong>Email ricevuta:</strong> <span>${param.email}</span></p>
+                
+                <c:if test="${not empty param.spedizione_via}">
+                    <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;">
+                    <p style="margin-bottom: 5px;"><strong>Spedizione a:</strong></p>
+                    <p style="font-size: 0.9rem; line-height: 1.4; color: #555;">
+                        ${param.spedizione_via} ${param.spedizione_civico} <br>
+                        ${param.spedizione_citta}, ${param.spedizione_provincia} - ${param.spedizione_cap}
+                    </p>
+                </c:if>
             </div>
             
             <div class="payment-methods-box checkout-methods-box">
@@ -52,6 +61,14 @@
             <form action="${pageContext.request.contextPath}/ElaboraPagamentoServlet" method="POST" class="checkout-form" onsubmit="return validaScadenza(event)">
                 
                 <input type="hidden" name="email_ordine" value="${param.email}">
+                
+                <c:if test="${not empty param.spedizione_via}">
+                    <input type="hidden" name="spedizione_via" value="${param.spedizione_via}">
+                    <input type="hidden" name="spedizione_civico" value="${param.spedizione_civico}">
+                    <input type="hidden" name="spedizione_citta" value="${param.spedizione_citta}">
+                    <input type="hidden" name="spedizione_cap" value="${param.spedizione_cap}">
+                    <input type="hidden" name="spedizione_provincia" value="${param.spedizione_provincia}">
+                </c:if>
 
                 <label for="nomeCarta">Nome sulla Carta</label>
                 <div class="discount-input-group">

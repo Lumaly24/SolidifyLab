@@ -14,8 +14,10 @@ import com.solidifylab.dao.UserDAO;
 import com.solidifylab.dao.WishlistDAO;
 import com.solidifylab.dao.CarrelloDAO;
 import com.solidifylab.dao.LibreriaDAO;
+import com.solidifylab.dao.SpedizioneDAO;
 import com.solidifylab.model.User;
-import com.solidifylab.model.Carrello; 
+import com.solidifylab.model.Carrello;
+import com.solidifylab.model.Spedizione; 
 
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
@@ -35,6 +37,13 @@ public class LoginServlet extends HttpServlet {
             
             HttpSession session = request.getSession();
             session.setAttribute("utenteLoggato", utente);
+            
+            SpedizioneDAO spedizioneDAO = new SpedizioneDAO();
+            Spedizione indirizzo = spedizioneDAO.getIndirizzoPrincipale(utente.getId());
+            
+            if (indirizzo != null) {
+                session.setAttribute("indirizzoPrincipale", indirizzo);
+            }
             
             try {
                 WishlistDAO wishlistDAO = new WishlistDAO();

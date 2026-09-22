@@ -11,6 +11,11 @@
     background-position: center;
 }
 
+.error-msg {
+	font-family: 'coolveticaitalic', serif;
+	font-weight: 300;
+}
+
 .bg-video-overlay {
     position: absolute;
     top: 0;

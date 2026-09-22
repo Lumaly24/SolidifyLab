@@ -57,28 +57,23 @@ public class UpdateProfiloServlet extends HttpServlet {
             datiValidi = false;
         }
 
-        if (civico != null && !civico.isBlank() && !civico.matches("\\d+")) {
-        	
+        if (civico != null && !civico.isBlank() && !civico.matches("^[0-9a-zA-Z/]+$")) { 
             datiValidi = false;
         }
 
-        if (citta != null && !citta.isBlank() && !citta.matches("[a-zA-Za-zA-ZàèéìòùÀÈÉÌÒÙ\\s']+")) {
-        	
+        if (citta != null && !citta.isBlank() && !citta.matches("^[a-zA-Za-zA-ZàèéìòùÀÈÉÌÒÙ\\s']+$")) {
             datiValidi = false; 
         }
 
-        if (cap != null && !cap.isBlank() && !cap.matches("\\d{5}")) {
-        	
+        if (cap != null && !cap.isBlank() && !cap.matches("^\\d{5}$")) {
             datiValidi = false; 
         }
 
         if (provincia != null && !provincia.isBlank() && !PROVINCE_VALIDE.contains(provincia)) {
-        	
             datiValidi = false; 
         }
 
         if (!datiValidi) {
-        	
             session.setAttribute("erroreProfilo", "Formato dei dati non valido. Controlla i campi inseriti.");
             response.sendRedirect(request.getContextPath() + "/UserDashboard#anagrafica");
             return;
@@ -92,6 +87,9 @@ public class UpdateProfiloServlet extends HttpServlet {
 
         SpedizioneDAO spedizioneDAO = new SpedizioneDAO();
         spedizioneDAO.salvaIndirizzoPrincipale(utente.getId(), via, civico, citta, cap, provincia);
+        
+        Object indirizzoAggiornato = spedizioneDAO.getIndirizzoPrincipale(utente.getId());
+        session.setAttribute("indirizzoPrincipale", indirizzoAggiornato);
 
         session.setAttribute("utenteLoggato", utente);
         session.removeAttribute("erroreProfilo");

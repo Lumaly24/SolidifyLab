@@ -150,6 +150,29 @@
 						        <input type="email" id="checkoutEmail" name="email" value="${sessionScope.utenteLoggato.email}" required>
 						    </div>
 						
+                            <c:set var="richiedeSpedizione" value="false" />
+                            <c:forEach var="item" items="${sessionScope.carrello.prodotti}">
+                                <c:if test="${item.prodotto.categoriaId == 3}">
+                                    <c:set var="richiedeSpedizione" value="true" />
+                                </c:if>
+                            </c:forEach>
+
+                            <c:if test="${richiedeSpedizione}">
+                                <div class="form-group" style="margin-top: 15px; margin-bottom: 20px;">
+                                    <label style="margin-bottom: 8px; display: block; font-weight: bold;">Indirizzo di Spedizione:</label>
+                                    
+                                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                        <input type="text" name="spedizione_via" value="${not empty param.spedizione_via ? param.spedizione_via : sessionScope.indirizzoPrincipale.via}" placeholder="Via/Piazza" required style="flex: 2; padding: 10px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1);">
+                                        <input type="text" name="spedizione_civico" value="${not empty param.spedizione_civico ? param.spedizione_civico : sessionScope.indirizzoPrincipale.civico}" placeholder="Civico" pattern="[0-9]+" required style="flex: 1; padding: 10px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1);">
+                                    </div>
+                                    <div style="display: flex; gap: 8px;">
+                                        <input type="text" name="spedizione_citta" value="${not empty param.spedizione_citta ? param.spedizione_citta : sessionScope.indirizzoPrincipale.citta}" placeholder="Città" required style="flex: 2; padding: 10px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1);">
+                                        <input type="text" name="spedizione_cap" value="${not empty param.spedizione_cap ? param.spedizione_cap : sessionScope.indirizzoPrincipale.cap}" placeholder="CAP" pattern="[0-9]{5}" required style="flex: 1; padding: 10px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1);">
+                                        <input type="text" name="spedizione_provincia" value="${not empty param.spedizione_provincia ? param.spedizione_provincia : sessionScope.indirizzoPrincipale.provincia}" placeholder="PR" maxlength="2" required style="flex: 1; padding: 10px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1); text-transform: uppercase;">
+                                    </div>
+                                </div>
+                            </c:if>
+
 						    <button type="submit" class="btn-primary btn-checkout">CONFERMA ORDINE <i class="fa-solid fa-arrow-right"></i></button>
 						</form>
 

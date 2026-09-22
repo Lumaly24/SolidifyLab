@@ -188,16 +188,33 @@
                                 </div>
                                 
                                 <div class="form-group address-group" id="addressGroup" style="display: none; margin-top: 15px;">
-                                    <label>Indirizzo di Spedizione (per Stampa 3D): </label>
-                                    <input type="text" id="indVia" name="indirizzo_via" value="<c:out value='${param.indirizzo_via}' />" placeholder="Via/Piazza e Civico" maxlength="150">
-                                    <span class="error-msg" id="err-via" style="color: #e56399; font-weight: bold;"></span>
+                                    <label style="margin-bottom: 10px; display: block; font-weight: bold;">Indirizzo di Spedizione (per Stampa 3D):</label>
                                     
-                                    <div class="address-row" style="margin-top: 10px;">
-                                        <input type="text" id="indCitta" name="indirizzo_citta" value="<c:out value='${param.indirizzo_citta}' />" placeholder="Città" maxlength="100">
-                                        <input type="text" id="indCap" name="indirizzo_cap" value="<c:out value='${param.indirizzo_cap}' />" placeholder="CAP" maxlength="5" pattern="[0-9]{5}">
+                                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                        <div style="flex: 2;">
+                                            <input type="text" id="indVia" name="indirizzo_via" value="<c:out value='${not empty param.indirizzo_via ? param.indirizzo_via : sessionScope.indirizzoPrincipale.via}' />" placeholder="Via/Piazza" maxlength="150">
+                                            <span class="error-msg" id="err-via" style="color: #e56399; font-weight: bold; font-size: 0.8rem; margin-top: 4px; display: block;"></span>
+                                        </div>
+                                        <div style="flex: 1; max-width: 100px;">
+                                            <input type="text" id="indCivico" name="indirizzo_civico" value="<c:out value='${not empty param.indirizzo_civico ? param.indirizzo_civico : sessionScope.indirizzoPrincipale.civico}' />" placeholder="Civico" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                            <span class="error-msg" id="err-civico" style="color: #e56399; font-weight: bold; font-size: 0.8rem; margin-top: 4px; display: block;"></span>
+                                        </div>
                                     </div>
-                                    <span class="error-msg" id="err-citta" style="color: #e56399; font-weight: bold; display:block;"></span>
-                                    <span class="error-msg" id="err-cap" style="color: #e56399; font-weight: bold; display:block;"></span>
+                                    
+                                    <div style="display: flex; gap: 10px;">
+                                        <div style="flex: 2;">
+                                            <input type="text" id="indCitta" name="indirizzo_citta" value="<c:out value='${not empty param.indirizzo_citta ? param.indirizzo_citta : sessionScope.indirizzoPrincipale.citta}' />" placeholder="Città" maxlength="100" oninput="this.value = this.value.replace(/[^a-zA-Za-zA-ZàèéìòùÀÈÉÌÒÙ\s']/g, '')">
+                                            <span class="error-msg" id="err-citta" style="color: #e56399; font-weight: bold; font-size: 0.8rem; margin-top: 4px; display: block;"></span>
+                                        </div>
+                                        <div style="flex: 1; max-width: 110px;">
+                                            <input type="text" id="indCap" name="indirizzo_cap" value="<c:out value='${not empty param.indirizzo_cap ? param.indirizzo_cap : sessionScope.indirizzoPrincipale.cap}' />" placeholder="CAP" maxlength="5" pattern="[0-9]{5}" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                            <span class="error-msg" id="err-cap" style="color: #e56399; font-weight: bold; font-size: 0.8rem; margin-top: 4px; display: block;"></span>
+                                        </div>
+                                        <div style="flex: 1; max-width: 90px;">
+                                            <input type="text" id="indProvincia" name="indirizzo_provincia" value="<c:out value='${not empty param.indirizzo_provincia ? param.indirizzo_provincia : sessionScope.indirizzoPrincipale.provincia}' />" placeholder="Prov." maxlength="2" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '')">
+                                            <span class="error-msg" id="err-provincia" style="color: #e56399; font-weight: bold; font-size: 0.8rem; margin-top: 4px; display: block;"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -411,23 +428,37 @@
 
         if(checkStampa) {
             const viaInput = document.getElementById('indVia');
+            const civicoInput = document.getElementById('indCivico');
             const cittaInput = document.getElementById('indCitta');
             const capInput = document.getElementById('indCap');
+            const provInput = document.getElementById('indProvincia');
+            
             const regexCap = /^[0-9]{5}$/;
+            const regexProv = /^[a-zA-Z]{2}$/;
 
             if(viaInput.value.trim() === '') { 
-                document.getElementById('err-via').innerText = 'La via è obbligatoria per le stampe fisiche.'; 
+                document.getElementById('err-via').innerText = 'Obbligatorio'; 
                 viaInput.classList.add('input-error');
                 isValid = false; 
             }
+            if(civicoInput.value.trim() === '') { 
+                document.getElementById('err-civico').innerText = 'Obbligatorio'; 
+                civicoInput.classList.add('input-error');
+                isValid = false; 
+            }
             if(cittaInput.value.trim() === '') { 
-                document.getElementById('err-citta').innerText = 'La città è obbligatoria.'; 
+                document.getElementById('err-citta').innerText = 'Obbligatorio'; 
                 cittaInput.classList.add('input-error');
                 isValid = false; 
             }
             if(!regexCap.test(capInput.value.trim())) { 
-                document.getElementById('err-cap').innerText = 'Inserisci un CAP valido (5 cifre).'; 
+                document.getElementById('err-cap').innerText = 'Esattamente 5 cifre'; 
                 capInput.classList.add('input-error');
+                isValid = false; 
+            }
+            if(!regexProv.test(provInput.value.trim())) { 
+                document.getElementById('err-provincia').innerText = 'Due lettere (es. RM)'; 
+                provInput.classList.add('input-error');
                 isValid = false; 
             }
         }
@@ -499,6 +530,7 @@
     });
     
 </script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const inputCap = document.getElementById('indCap');
