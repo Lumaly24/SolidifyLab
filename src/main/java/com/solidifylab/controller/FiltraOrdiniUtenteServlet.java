@@ -1,6 +1,7 @@
 package com.solidifylab.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,18 +34,29 @@ public class FiltraOrdiniUtenteServlet extends HttpServlet {
         OrdineDAO dao = new OrdineDAO();
         List<Ordine> ordiniFiltrati;
 
+        StringBuilder redirectUrl = new StringBuilder(request.getContextPath() + "/UserDashboard?");
+
         if ((dataInizio == null || dataInizio.isEmpty()) && 
             (dataFine == null || dataFine.isEmpty()) && 
             (stato == null || stato.isEmpty())) {
             
             ordiniFiltrati = dao.doRetrieveByUtente(utente.getId()); 
-            
         } else {
             ordiniFiltrati = dao.doRetrieveFiltrati(utente.getId(), dataInizio, dataFine, stato);
+            
+            if (dataInizio != null && !dataInizio.isEmpty()) {
+                redirectUrl.append("data_inizio=").append(dataInizio).append("&");
+            }
+            if (dataFine != null && !dataFine.isEmpty()) {
+                redirectUrl.append("data_fine=").append(dataFine).append("&");
+            }
+            
         }
 
         session.setAttribute("storicoOrdini", ordiniFiltrati);
 
-        response.sendRedirect(request.getContextPath() + "/area-utente.jsp#ordini");
+        redirectUrl.append("#ordini");
+
+        response.sendRedirect(redirectUrl.toString());
     }
 }

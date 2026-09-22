@@ -29,6 +29,7 @@ public class MetodoPagamentoDAO {
                     carta.setCartaMascherata(rs.getString("carta_mascherata")); 
                     carta.setScadenza(rs.getString("scadenza"));
                     
+                    
                     carte.add(carta); 
                 }
             }
@@ -50,6 +51,7 @@ public class MetodoPagamentoDAO {
             ps.setString(2, carta.getIntestatario());
             ps.setString(3, carta.getCartaMascherata());
             ps.setString(4, carta.getScadenza());
+           
             
             return ps.executeUpdate() > 0;
             
@@ -72,6 +74,21 @@ public class MetodoPagamentoDAO {
             
         } catch (SQLException e) {
             System.err.println("Errore nell'eliminazione del metodo di pagamento:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean eliminaCarteByUtente(int utenteId) {
+        String query = "DELETE FROM dati_pagamento WHERE utente_id = ?";
+        
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setInt(1, utenteId);
+            return ps.executeUpdate() >= 0; 
+            
+        } catch (SQLException e) {
+            System.err.println("Errore nell'eliminazione dello storico carte dell'utente:");
             e.printStackTrace();
             return false;
         }

@@ -7,7 +7,7 @@ public class MetodoPagamento {
     private String intestatario;
     private String cartaMascherata;
     private String scadenza;
-    private String brand; 
+
 
     public int getId() { 
         return id; 
@@ -49,11 +49,4 @@ public class MetodoPagamento {
         this.scadenza = scadenza; 
     }
 
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
 }

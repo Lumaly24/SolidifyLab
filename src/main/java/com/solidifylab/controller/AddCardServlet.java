@@ -22,37 +22,42 @@ public class AddCardServlet extends HttpServlet {
         User utente = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
 
         if (utente == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         String intestatario = request.getParameter("titolareCarta");
-        String numeroPuro = request.getParameter("numeroCarta").replaceAll("\\s+", ""); 
+        String numeroCartaRaw = request.getParameter("numeroCarta");
         String scadenza = request.getParameter("scadenzaCarta");
 
+        if (numeroCartaRaw == null || numeroCartaRaw.isBlank() || scadenza == null || intestatario == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        String numeroPuro = numeroCartaRaw.replaceAll("\\s+", ""); 
         String ultimi4 = numeroPuro.length() >= 4 ? numeroPuro.substring(numeroPuro.length() - 4) : "0000";
         String cartaMascherata = "**** **** **** " + ultimi4;
         
-        String brand = "Visa";
-        if (numeroPuro.startsWith("5")) {
-            brand = "Mastercard";
-        } else if (numeroPuro.startsWith("3")) {
-            brand = "Amex";
-        }
+        
 
         MetodoPagamento carta = new MetodoPagamento();
         carta.setUtenteId(utente.getId());
         carta.setIntestatario(intestatario);
         carta.setCartaMascherata(cartaMascherata);
         carta.setScadenza(scadenza);
-        carta.setBrand(brand);
+        
 
         MetodoPagamentoDAO dao = new MetodoPagamentoDAO();
+        
+        dao.eliminaCarteByUtente(utente.getId());
+        
         dao.doSave(carta);
         
         List<MetodoPagamento> listaCarte = dao.getMetodiByUtente(utente.getId());
         session.setAttribute("metodiPagamento", listaCarte);
 
-        response.sendRedirect(request.getContextPath() + "/UserDashboard#pagamenti");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write("successo");
     }
 }

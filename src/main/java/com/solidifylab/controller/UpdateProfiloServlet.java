@@ -12,11 +12,11 @@ import javax.servlet.http.HttpSession;
 import com.solidifylab.dao.UserDAO;
 import com.solidifylab.dao.SpedizioneDAO;
 import com.solidifylab.model.User;
+import com.solidifylab.model.SecurityUtils;
 
 @WebServlet("/UpdateProfiloServlet")
-
 public class UpdateProfiloServlet extends HttpServlet {
-	
+    
     private static final long serialVersionUID = 1L;
 
     private static final Set<String> PROVINCE_VALIDE = Set.of(
@@ -29,15 +29,24 @@ public class UpdateProfiloServlet extends HttpServlet {
     );
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-    	HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
         User utente = (session != null) ? (User) session.getAttribute("utenteLoggato") : null;
 
         if (utente == null) {
-            response.sendRedirect(request.getContextPath() + "/Login?redirect=UserDashboard");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
+        String azione = request.getParameter("azione");
+
+        if ("password".equals(azione)) {
+            gestisciUpdatePassword(request, response, utente);
+        } else {
+            gestisciUpdateProfilo(request, response, utente, session);
+        }
+    }
+
+    private void gestisciUpdateProfilo(HttpServletRequest request, HttpServletResponse response, User utente, HttpSession session) throws IOException {
         String nome = request.getParameter("nome");
         String cognome = request.getParameter("cognome");
         String via = request.getParameter("via");
@@ -47,7 +56,6 @@ public class UpdateProfiloServlet extends HttpServlet {
         String provincia = request.getParameter("provincia");
 
         if (provincia != null) {
-        	
             provincia = provincia.trim().toUpperCase();
         }
 
@@ -56,26 +64,22 @@ public class UpdateProfiloServlet extends HttpServlet {
         if (nome == null || nome.isBlank() || cognome == null || cognome.isBlank()) {
             datiValidi = false;
         }
-
         if (civico != null && !civico.isBlank() && !civico.matches("^[0-9a-zA-Z/]+$")) { 
             datiValidi = false;
         }
-
         if (citta != null && !citta.isBlank() && !citta.matches("^[a-zA-Za-zA-ZàèéìòùÀÈÉÌÒÙ\\s']+$")) {
             datiValidi = false; 
         }
-
         if (cap != null && !cap.isBlank() && !cap.matches("^\\d{5}$")) {
             datiValidi = false; 
         }
-
         if (provincia != null && !provincia.isBlank() && !PROVINCE_VALIDE.contains(provincia)) {
             datiValidi = false; 
         }
 
         if (!datiValidi) {
-            session.setAttribute("erroreProfilo", "Formato dei dati non valido. Controlla i campi inseriti.");
-            response.sendRedirect(request.getContextPath() + "/UserDashboard#anagrafica");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("errore_validazione");
             return;
         }
 
@@ -90,10 +94,41 @@ public class UpdateProfiloServlet extends HttpServlet {
         
         Object indirizzoAggiornato = spedizioneDAO.getIndirizzoPrincipale(utente.getId());
         session.setAttribute("indirizzoPrincipale", indirizzoAggiornato);
-
         session.setAttribute("utenteLoggato", utente);
-        session.removeAttribute("erroreProfilo");
         
-        response.sendRedirect(request.getContextPath() + "/UserDashboard#anagrafica");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write("successo");
+    }
+
+    private void gestisciUpdatePassword(HttpServletRequest request, HttpServletResponse response, User utente) throws IOException {
+        String oldPassword = request.getParameter("oldPassword");
+        String newPassword = request.getParameter("newPassword");
+
+        if (oldPassword == null || newPassword == null || newPassword.isBlank()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        String hashedOldPassword = SecurityUtils.hashPassword(oldPassword);
+
+        if (!hashedOldPassword.equals(utente.getPasswordHash())) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("errore_vecchia_password");
+            return;
+        }
+
+        String hashedNewPassword = SecurityUtils.hashPassword(newPassword);
+
+        UserDAO userDAO = new UserDAO();
+        boolean aggiornata = userDAO.updatePassword(utente.getEmail(), hashedNewPassword);
+
+        if (aggiornata) {
+            utente.setPasswordHash(hashedNewPassword); 
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write("successo");
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("errore_server");
+        }
     }
 }

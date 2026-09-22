@@ -78,10 +78,12 @@
             <section id="anagrafica" class="user-tab-content">
                 <h2>Anagrafica e Indirizzi di Spedizione</h2>
                 
-                <form action="${pageContext.request.contextPath}/UpdateProfiloServlet" method="POST" class="user-form">
-                    
-                    <fieldset class="form-section">
-                        <legend>Dati Personali</legend>
+               <form id="updateProfiloForm" action="${pageContext.request.contextPath}/UpdateProfiloServlet" method="POST" class="user-form" onsubmit="aggiornaAnagrafica(event)">
+    
+				    <input type="hidden" name="azione" value="profilo">
+				    
+				    <fieldset class="form-section">
+				        <legend>Dati Personali</legend>
                         <div class="form-row">
                             <div class="form-group half-width">
                                 <label for="nome">Nome</label>
@@ -273,7 +275,6 @@
 				</table>
             </section>
 
-            <!-- TAB 5: TRACKER COMMISSIONI -->
             <section id="commissioni" class="user-tab-content">
                 <h2>Tracker Commissioni</h2>
                 <p>Segui l'avanzamento dei tuoi progetti 3D su misura.</p>
@@ -305,87 +306,74 @@
                 </div>
             </section>
 
-            <!-- TAB 6: METODI DI PAGAMENTO -->
-            <section id="pagamenti" class="user-tab-content">
-                <h2>Metodi di Pagamento Salvati</h2>
-                <p>Qui puoi visualizzare e aggiungere le tue carte per un checkout più veloce.</p>
-                
-                <div class="payment-cards-grid mt-3">
-                    <c:choose>
-                        <c:when test="${empty sessionScope.metodiPagamento}">
-                            <!-- Se l'utente non ha carte salvate, mostriamo un messaggio amichevole all'interno della griglia -->
-                            <div style="grid-column: 1 / -1; margin-bottom: 15px; background: rgba(56, 35, 129, 0.05); border: 2px dashed #ccc; padding: 20px; border-radius: 10px; text-align: center;">
-                                Non hai ancora nessun metodo di pagamento salvato.
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <c:forEach var="carta" items="${sessionScope.metodiPagamento}">
-                                <div class="saved-card" style="background: linear-gradient(135deg, #0f0326, #382381); color: white; padding: 20px; border-radius: 15px; position: relative; overflow: hidden;">
-                                    <!-- Aggiungiamo un effetto di sfondo alla carta -->
-                                    <div style="position: absolute; right: -20px; top: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
-                                    
-                                    <div class="card-brand" style="font-size: 2rem; margin-bottom: 20px;">
-                                        <!-- Logica base per mostrare un'icona adatta a seconda del circuito (se gestito nel backend) -->
-                                        <c:choose>
-                                            <c:when test="${fn:containsIgnoreCase(carta.brand, 'Mastercard')}">
-                                                <i class="fa-brands fa-cc-mastercard"></i>
-                                            </c:when>
-                                            <c:when test="${fn:containsIgnoreCase(carta.brand, 'Amex')}">
-                                                <i class="fa-brands fa-cc-amex"></i>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <i class="fa-brands fa-cc-visa"></i>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                    
-                                    <div class="card-number" style="font-family: 'Courier New', Courier, monospace; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 15px;">
-                                        ${carta.cartaMascherata} <!-- Mostrerà tipo **** **** **** 1234 -->
-                                    </div>
-                                    
-                                    <div class="card-details" style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                        <div class="card-expiry">
-                                            <span style="font-size: 0.7rem; text-transform: uppercase; display: block; opacity: 0.8;">Scadenza</span>
-                                            ${carta.scadenza}
-                                        </div>
-                                        <form action="${pageContext.request.contextPath}/DeleteCardServlet" method="POST" style="margin: 0;">
-                                            <input type="hidden" name="idCarta" value="${carta.id}">
-                                            <button type="submit" class="btn-icon" style="color: #ff4d4d; border: none; background: transparent; cursor: pointer; padding: 5px; font-size: 1.1rem;" onclick="return confirm('Sicuro di voler rimuovere questa carta?')">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </c:forEach>
-                        </c:otherwise>
-                    </c:choose>
+            <<!-- TAB 6: METODI DI PAGAMENTO -->
+			<section id="pagamenti" class="user-tab-content">
+			    <h2>Metodi di Pagamento Salvati</h2>
+			    <p>Qui puoi visualizzare e gestire la tua carta per un checkout più veloce.</p>
+			    
+			    <div class="payment-cards-grid mt-3">
+			        <c:choose>
+			            <c:when test="${empty sessionScope.metodiPagamento}">
+			                <!-- SE NON CI SONO CARTE: Mostra il messaggio E il pulsante per aggiungere -->
+			                <div style="grid-column: 1 / -1; margin-bottom: 15px; background: rgba(56, 35, 129, 0.05); border: 2px dashed #ccc; padding: 20px; border-radius: 10px; text-align: center;">
+			                    Non hai ancora nessun metodo di pagamento salvato.
+			                </div>
+			                
+			                <div class="saved-card add-new-card" onclick="apriModalAggiungiCarta()">
+			                    <i class="fa-solid fa-plus"></i>
+			                    <p class="text-blue mt-2">Aggiungi Carta</p>
+			                </div>
+			            </c:when>
+			            
+			            <c:otherwise>
+			                <!-- SE C'E' GIA' UNA CARTA: Mostra solo la carta (niente pulsante aggiungi) -->
+			                <c:forEach var="carta" items="${sessionScope.metodiPagamento}">
+			                    <div class="saved-card" style="background: linear-gradient(135deg, #0f0326, #382381); color: white; padding: 20px; border-radius: 15px; position: relative; overflow: hidden;">
+			                        
+			                        <div style="position: absolute; right: -20px; top: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+			                        
+			                        <div class="card-number" style="font-family: 'Courier New', Courier, monospace; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 15px;">
+			                            ${carta.cartaMascherata}
+			                        </div>
+			                        
+			                        <div class="card-details" style="display: flex; justify-content: space-between; align-items: flex-end;">
+			                            <div class="card-expiry">
+			                                <span style="font-size: 0.7rem; text-transform: uppercase; display: block; opacity: 0.8;">Scadenza</span>
+			                                ${carta.scadenza}
+			                            </div>
+			                            <form action="${pageContext.request.contextPath}/DeleteCardServlet" method="POST" style="margin: 0;">
+			                                <input type="hidden" name="idCarta" value="${carta.id}">
+			                                <button type="submit" class="btn-icon" style="color: #ff4d4d; border: none; background: transparent; cursor: pointer; padding: 5px; font-size: 1.1rem;" onclick="return confirm('Sicuro di voler rimuovere questa carta?')">
+			                                    <i class="fa-solid fa-trash"></i>
+			                                </button>
+			                            </form>
+			                        </div>
+			                    </div>
+			                </c:forEach>
+			            </c:otherwise>
+			        </c:choose>
+			    </div>
+			</section>
 
-                    <!-- Pulsante Aggiungi Nuova Carta -->
-                    <div class="saved-card add-new-card" onclick="apriModalAggiungiCarta()" >
-                        <i class="fa-solid fa-plus"></i>
-                        <p class="text-blue mt-2" >Aggiungi Carta</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TAB 7: SICUREZZA E PRIVACY -->
             <section id="sicurezza" class="user-tab-content">
                 <h2>Sicurezza e Privacy (GDPR)</h2>
                 
                 <div class="security-card mt-3">
                     <h3>Cambia Password</h3>
-                    <form action="${pageContext.request.contextPath}/ChangePasswordServlet" method="POST" class="mt-2" onsubmit="return validaPassword()">
-                        <div class="form-group">
-                            <label for="oldPwd">Password Attuale</label>
-                            <input type="password" id="oldPwd" name="oldPassword" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="newPwd">Nuova Password</label>
-                            <input type="password" id="newPwd" name="newPassword">
-                            <span class="error-msg" id="err-newpwd"></span>
-                        </div>
-                        <button type="submit" class="btn-primary">Aggiorna Password</button>
-                    </form>
+                    <form id="updatePasswordForm" action="${pageContext.request.contextPath}/UpdateProfiloServlet" method="POST" class="mt-2" onsubmit="aggiornaPassword(event)">
+    
+					    <input type="hidden" name="azione" value="password">
+					    
+					    <div class="form-group">
+					        <label for="oldPwd">Password Attuale</label>
+					        <input type="password" id="oldPwd" name="oldPassword" required>
+					    </div>
+					    <div class="form-group">
+					        <label for="newPwd">Nuova Password</label>
+					        <input type="password" id="newPwd" name="newPassword" required>
+					    </div>
+					    <button type="submit" class="btn-primary">Aggiorna Password</button>
+					</form>
                 </div>
 
                 <div class="security-card mt-4" style="border-left: 4px solid #ff4d4d; background: rgba(255,77,77,0.05); padding: 20px; border-radius: 8px;">
@@ -412,11 +400,6 @@
    
 </main>
 
-
-<!-- ================= MODALI E ALERT ================= -->
-
-
-<!-- 1. MODALE DINAMICO COMMISSIONE UTENTE -->
 <div id="userCommissionModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
     <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
         
@@ -440,7 +423,6 @@
 </div>
 
 
-<!-- 2. MODALE AGGIUNGI CARTA -->
 <div id="addCardModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999998; justify-content: center; align-items: center;">
     <div style="background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 30px; max-width: 400px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
         
@@ -487,17 +469,14 @@
 </div>
 
 
-<!-- 3. CUSTOM ALERT STILE CATALOGO (Per tutto: Successi, Errori, Avvisi, Conferme Delete) -->
 <div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center;">
     <div style="background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; max-width: 380px; width: 85%; text-align: center; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);">
-        <i id="customAlertIcon" class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #e56399; margin-bottom: 15px;"></i>
-        <h3 id="customAlertTitle" style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 10px; color: #e56399;">Attenzione!</h3>
+        <i id="customAlertIcon" class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #46a24a; margin-bottom: 15px;"></i>
+        <h3 id="customAlertTitle" style="font-family: 'elephant', sans-serif; font-weight: bold; margin-bottom: 10px; color: #46a24a;">Attenzione!</h3>
         <p id="customAlertText" style="font-family: 'coolveticarg', sans-serif; margin-bottom: 20px; color: #333;">Messaggio</p>
         
-        <!-- Bottone singolo (Okay/Chiudi) -->
         <button type="button" class="btn-primary auth-btn" id="customAlertSingleBtn" onclick="closeCustomAlert()" style="width: 100%; border-radius: 50px;">Okay</button>
         
-        <!-- Bottoni doppi (Conferma/Annulla per azioni pericolose) -->
         <div id="customAlertDoubleBtns" style="display: none; gap: 15px; justify-content: center; align-items: center;">
             <button type="button" class="btn-secondary" onclick="closeCustomAlert()" style="margin: 0; border-radius: 50px; padding: 10px 25px; border: none; background: #ddd; color: #333; font-weight: bold; cursor: pointer;">Annulla</button>
             <button type="button" class="auth-btn" id="customAlertConfirmBtn" style="margin: 0; border-radius: 50px; padding: 10px 25px; background: #ff4d4d; color: white; border: none; font-weight: bold; cursor: pointer;">Conferma</button>
@@ -520,7 +499,6 @@
                 sidebar.classList.remove('open');
             });
 
-            // Opzionale: chiude la sidebar se clicchi un link al suo interno
             var links = sidebar.querySelectorAll('a');
             links.forEach(function(link) {
                 link.addEventListener('click', function() {
@@ -530,7 +508,7 @@
         }
     });
 </script>
-<!-- ================= SCRIPT ================= -->
+
 <script>
     /* =========================================================
        1. NAVIGAZIONE TABS
@@ -549,7 +527,6 @@
     
         window.scrollTo({ top: 0, behavior: 'smooth' });
         
-        // Salvataggio nel sessionStorage per mantenere il tab al ricaricamento
         sessionStorage.setItem('activeUserTab', tabId);
     }
 
@@ -642,20 +619,17 @@
         alertText.innerText = message;
         
         if (onConfirm) {
-            // Modalità "Confirm" (due bottoni)
             singleBtn.style.display = 'none';
             doubleBtns.style.display = 'flex';
             confirmBtn.onclick = function() {
                 closeCustomAlert();
-                onConfirm(); // Esegue l'azione (es. submit form)
+                onConfirm(); 
             };
         } else {
-            // Modalità "Alert" normale (un bottone)
             singleBtn.style.display = 'block';
             doubleBtns.style.display = 'none';
         }
 
-        // Stile dinamicizzato
         if (isError) {
             alertTitle.style.color = '#e56399';
             alertIcon.style.color = '#e56399';
@@ -693,7 +667,6 @@
             "Sei sicuro? Questa azione è IRREVERSIBILE. Perderai l'accesso alla libreria digitale e a tutto lo storico.", 
             true, 
             function() {
-                // Se l'utente clicca su "Conferma" nel modal, facciamo il submit vero
                 document.getElementById('deleteAccountForm').submit();
             }
         );
@@ -701,51 +674,141 @@
 
 
     /* =========================================================
-       5. GESTIONE CARTE DI CREDITO
-       ========================================================= */
-    function apriModalAggiungiCarta() {
-        document.getElementById('addCardModal').style.display = 'flex';
-    }
+    5. GESTIONE CARTE DI CREDITO (AJAX)
+    ========================================================= */
+ function apriModalAggiungiCarta() {
+     document.getElementById('addCardModal').style.display = 'flex';
+ }
 
-    function chiudiModalAggiungiCarta() {
-        document.getElementById('addCardModal').style.display = 'none';
-    }
+ function chiudiModalAggiungiCarta() {
+     document.getElementById('addCardModal').style.display = 'none';
+ }
 
-    function formattaCarta(input) {
-        let v = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-        let matches = v.match(/\d{4,16}/g);
-        let match = matches && matches[0] || '';
-        let parts = [];
+ function formattaCarta(input) {
+     let v = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+     let matches = v.match(/\d{4,16}/g);
+     let match = matches && matches[0] || '';
+     let parts = [];
+     for (i=0, len=match.length; i<len; i+=4) {
+         parts.push(match.substring(i, i+4));
+     }
+     if (parts.length) {
+         input.value = parts.join(' ');
+     } else {
+         input.value = v;
+     }
+ }
 
-        for (i=0, len=match.length; i<len; i+=4) {
-            parts.push(match.substring(i, i+4));
-        }
+ function formattaScadenza(input) {
+     let v = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+     if (v.length >= 2) {
+         input.value = v.substring(0, 2) + '/' + v.substring(2, 4);
+     } else {
+         input.value = v;
+     }
+ }
 
-        if (parts.length) {
-            input.value = parts.join(' ');
-        } else {
-            input.value = v;
-        }
-    }
+ // NUOVA FUNZIONE AJAX PER LA CARTA
+ function mostraSuccessoCarta(event) {
+     event.preventDefault(); 
+     
+     const form = event.target;
+     const formData = new URLSearchParams(new FormData(form));
 
-    function formattaScadenza(input) {
-        // MM/AA
-        let v = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-        if (v.length >= 2) {
-            input.value = v.substring(0, 2) + '/' + v.substring(2, 4);
-        } else {
-            input.value = v;
-        }
-    }
+     fetch(form.action, {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+         body: formData
+     })
+     .then(response => {
+         chiudiModalAggiungiCarta(); 
+         
+         if (response.ok) {
+             showCustomAlert("Carta Aggiunta!", "Il nuovo metodo di pagamento è stato salvato con successo. La pagina si aggiornerà a breve.", false);
+             
+             setTimeout(() => { 
+                 window.location.reload(); 
+             }, 2000);
+         } else {
+             showCustomAlert("Errore", "Si è verificato un problema nel salvataggio della carta.", true);
+         }
+     })
+     .catch(error => {
+         chiudiModalAggiungiCarta();
+         showCustomAlert("Errore di connessione", "Impossibile contattare il server.", true);
+     });
+ }
 
-    function mostraSuccessoCarta(event) {
-        // Dato che ci serve il backend, non facciamo preventDefault, lasciamo che il form parta.
-        // Ma prima chiudiamo il modale per pulizia visiva (Il backend farà il redirect).
-        // Se si implementerà via AJAX, qui andrà inserito un preventDefault() e un fetch come nel carrello.
-        
-        // Per ora facciamo fare il submit naturale al form. Se la servlet non c'è, darà 404, ma è il comportamento standard.
-    }
-    
+ /* =========================================================
+ 6. GESTIONE ANAGRAFICA (AJAX)
+ ========================================================= */
+function aggiornaAnagrafica(event) {
+  event.preventDefault(); // Blocca il caricamento della pagina
+  
+  const form = event.target;
+  const formData = new URLSearchParams(new FormData(form));
+
+  fetch(form.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+  })
+  .then(async response => {
+      if (response.ok) {
+          showCustomAlert("Dati Aggiornati!", "La tua anagrafica e l'indirizzo di spedizione sono stati salvati correttamente.", false);
+      } else {
+          const errorText = await response.text();
+          if(errorText === "errore_validazione") {
+              showCustomAlert("Errore Dati", "Alcuni dati inseriti non sono nel formato corretto.", true);
+          } else {
+              showCustomAlert("Errore", "Si è verificato un problema durante l'aggiornamento.", true);
+          }
+      }
+  })
+  .catch(error => {
+      showCustomAlert("Errore di connessione", "Impossibile contattare il server.", true);
+  });
+}
+
+/* =========================================================
+ 7. GESTIONE PASSWORD (AJAX)
+ ========================================================= */
+function aggiornaPassword(event) {
+  event.preventDefault(); // Blocca il caricamento della pagina
+  
+  const form = event.target;
+  const newPwd = document.getElementById('newPwd').value;
+  
+  // Controllo veloce lato client
+  if (newPwd.length < 6) {
+      showCustomAlert("Attenzione", "La nuova password deve contenere almeno 6 caratteri.", true);
+      return;
+  }
+
+  const formData = new URLSearchParams(new FormData(form));
+
+  fetch(form.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+  })
+  .then(async response => {
+      if (response.ok) {
+          showCustomAlert("Successo!", "La tua password è stata aggiornata con successo.", false);
+          form.reset(); // Svuota i campi del form così l'utente non vede più la password scritta
+      } else {
+          const errorText = await response.text();
+          if (errorText === "errore_vecchia_password") {
+              showCustomAlert("Errore", "La password attuale che hai inserito non è corretta.", true);
+          } else {
+              showCustomAlert("Errore", "Non è stato possibile aggiornare la password.", true);
+          }
+      }
+  })
+  .catch(error => {
+      showCustomAlert("Errore di connessione", "Impossibile contattare il server.", true);
+  });
+}
 </script>
 
 <%@ include file="fragment/footer.jspf" %>
