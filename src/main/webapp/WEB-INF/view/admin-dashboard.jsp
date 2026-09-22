@@ -105,6 +105,11 @@
 
     <!-- ================= HEADER ADMIN ================= -->
     <header class="admin-header">
+    
+    	<button id="mobileMenuBtn" class="mobile-menu-toggle">
+		    ☰ Apri Menu Dashboard
+		</button>
+		
         <div class="logo"><strong>SolidifyLab ADMIN</strong></div>
         <div class="admin-user">
             <span>Benvenuto, ${sessionScope.utenteLoggato.nome}</span>

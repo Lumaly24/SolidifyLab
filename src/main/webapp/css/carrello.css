@@ -2,7 +2,7 @@ html, body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     z-index: -1; 
     background-color: #0f0326;
     background-image: url('../images/background3.avif');
@@ -14,7 +14,7 @@ html, body {
     padding: 0;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
+    height: auto;
 }
 
 .btn-primary {
@@ -580,7 +580,6 @@ html, body {
 	color: #0f0326;
 }
 
-/* --- STILE TABELLA FATTURA (Visualizzazione Web) --- */
 .print-only {
     display: none;
 }
@@ -619,7 +618,6 @@ html, body {
     }
 }
 
-/* --- 2. VISUALIZZAZIONE STAMPA (PDF STILE PROFESSIONALE) --- */
 @media print {
     
     @page {
@@ -736,5 +734,91 @@ html, body {
         padding-top: 12px !important;
         font-size: 9pt;
         line-height: 1.3;
+    }
+}
+
+@media (max-width: 992px) {
+	
+    .cart-summary-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cart-summary-left, .cart-summary-right {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    
+    .cart-header-actions {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .cart-items-container {
+        flex-direction: column;
+        overflow-x: hidden;
+        padding: 5px 0 15px 0;
+        gap: 10px;
+    }
+
+    .cart-item-card {
+        width: 100%;
+        flex: 0 0 auto;
+        flex-direction: row; 
+        height: 130px; 
+    }
+
+    .cart-item-image {
+        width: 120px;
+        height: 100%;
+        border-bottom: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .cart-item-details {
+        width: calc(100% - 120px);
+        height: 100%;
+        padding: 10px 15px;
+    }
+
+    .remove-form-container {
+        top: 10px;
+        right: 10px;
+    }
+
+    .card-details-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .checkout-total-box .total-amount {
+        font-size: 2rem; 
+    }
+
+    .invoice-page {
+        padding: 30px 10px;
+    }
+
+    .invoice-title {
+        font-size: 1.8rem;
+    }
+
+    .invoice-glass-box {
+        padding: 20px 15px;
+        overflow-x: auto;
+    }
+
+    .invoice-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .invoice-actions .btn-primary {
+        margin-right: 0 !important;
+        width: 100%;
     }
 }

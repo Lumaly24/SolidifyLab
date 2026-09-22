@@ -98,7 +98,7 @@
         <div class="invoice-details web-only">
         
             <p><strong>Subtotale (senza IVA):</strong> <span>€ <fmt:formatNumber value="${ultimoOrdine.totale - totaleIva}" pattern="#,##0.00"/></span></p>
-            <p><strong>Di cui IVA:</strong> <span>€ <fmt:formatNumber value="${totaleIva}" pattern="#,##0.00"/></span></p>
+            <p><strong>IVA:</strong> <span>€ <fmt:formatNumber value="${totaleIva}" pattern="#,##0.00"/></span></p>
             <p><strong>Totale Pagato:</strong> <span>€ <fmt:formatNumber value="${ultimoOrdine.totale}" pattern="#,##0.00"/></span></p>
         
         </div>
@@ -106,7 +106,7 @@
         <div class="print-only print-totals">
         
             <p>Subtotale (senza IVA): <fmt:formatNumber value="${ultimoOrdine.totale - totaleIva}" pattern="#,##0.00"/> €</p>
-            <p>Di cui IVA: <fmt:formatNumber value="${totaleIva}" pattern="#,##0.00"/> €</p>
+            <p>IVA: <fmt:formatNumber value="${totaleIva}" pattern="#,##0.00"/> €</p>
             <p style="font-weight: bold; font-size: 12pt;">Totale: <fmt:formatNumber value="${ultimoOrdine.totale}" pattern="#,##0.00"/> €</p>
         
         </div>

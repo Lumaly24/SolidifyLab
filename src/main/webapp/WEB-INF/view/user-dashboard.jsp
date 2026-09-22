@@ -12,14 +12,24 @@
 	request.setAttribute("cssPagina", "areautente.css");
 %>
 
+
 <%@ include file="fragment/header.jspf" %>
 
 <main class="user-dashboard-container">
+
+	<button id="mobileMenuBtn" class="mobile-menu-toggle">
+        ☰ Apri Menu Utente
+    </button>
 
     <div class="user-layout">
         
         <!-- ================= SIDEBAR NAVIGAZIONE ================= -->
         <aside class="user-sidebar">
+        
+        	<button id="closeMenuBtn" class="close-menu-btn">
+			    ✖ Chiudi
+			</button>
+			
             <div class="user-profile-summary">
 			    <div class="user-pfp">
 			        <i class="fa-solid fa-user"></i>
