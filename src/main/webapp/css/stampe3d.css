@@ -560,3 +560,68 @@
 	color: #ffffff;
 	text-shadow: 2px 2px 3px #000000;
 }
+
+/* ==============================
+   RESPONSIVE DESIGN - STAMPE 3D
+   ==============================*/
+   
+@media (max-width: 768px) {
+    
+    .catalog-page {
+        padding: 80px 15px 40px 15px !important;
+        margin: 0 !important; 
+        min-height: auto !important;
+        height: auto !important;
+    }
+
+    .catalog-sidebar, .ajax-search-container, .filter-group {
+        display: none !important;
+    }
+
+    .catalog-layout {
+        display: block !important; 
+        width: 100% !important;
+    }
+
+    .catalog-main-content {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .top-controls-inline, .top-nav-row {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+
+    .catalog-tabs {
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+    }
+
+    .catalog-products-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        width: 100% !important;
+    }
+    
+    .hero-section, .hero-card {
+        width: 100% !important;
+        padding: 20px 15px !important;
+        box-sizing: border-box !important;
+    }
+
+    .hero-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero-buttons a {
+        justify-content: center;
+    }
+}}

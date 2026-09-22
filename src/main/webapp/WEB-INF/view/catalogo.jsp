@@ -534,7 +534,7 @@
             .catch(err => console.error('Errore Wishlist:', err));
         });
     });
-    });
+
 </script>
 
 <c:if test="${not empty sessionScope.successMessage}">

@@ -667,3 +667,149 @@ main > section.final-section footer, main > section.final-section .main-footer {
     z-index: 10;
     display: block;
 }
+
+/* =========================================
+   RESPONSIVE DESIGN - TABLET & MOBILE
+   ========================================= */
+@media (max-width: 768px) {
+    
+
+    html, body {
+        overflow-x: hidden !important;
+        width: 100vw;
+    }
+    
+    main, body.snap-page main {
+        overflow-x: hidden !important;
+        width: 100vw;
+    }
+
+    main > section.hero-section, main > section:nth-of-type(1) {
+        padding-right: 1rem !important; 
+        padding-left: 1rem !important;
+        align-items: center !important; 
+        justify-content: center !important;
+    }
+
+    .hero-content {
+        text-align: center !important;
+        align-items: center !important;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .hero-content h1 {
+        font-size: 2.8rem !important;
+        line-height: 1.1;
+        word-wrap: break-word;
+    }
+
+    .hero-buttons {
+        justify-content: center !important;
+        flex-direction: column !important;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .hero-buttons .btn {
+        width: 100%; 
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .categories-section h2 {
+        font-size: 1.8rem !important;
+        margin-bottom: 15px !important;
+    }
+
+    .categories-grid {
+        flex-direction: column !important;
+        align-items: center;
+        width: 100%;
+        padding: 0;
+        gap: 12px !important;
+    }
+
+    .category-card {
+        display: flex !important;
+        flex-direction: row !important; 
+        align-items: center;
+        width: 90%;
+        max-width: 350px;
+        padding: 10px 15px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .card-img-container {
+        height: 65px !important;
+        width: 65px !important;
+        margin-bottom: 0 !important;
+        margin-right: 15px !important;
+        flex-shrink: 0;
+    }
+
+    .card-info {
+        text-align: left !important;
+    }
+    
+    .card-info h3 {
+        margin: 0 !important;
+        font-size: 1.2rem !important;
+    }
+
+    .card-img-container {
+        height: 140px; 
+    }
+
+    .scroll-progress-nav, .btn-back-to-top, .carousel-arrow {
+        display: none !important;
+    }
+
+    .featured-products-section {
+        padding: 0 10px;
+    }
+
+    .featured-products-section h2 {
+        font-size: 1.8rem !important; 
+        margin-bottom: 10px !important;
+    }
+
+    .products-carousel {
+        padding: 10px 5px !important;
+    }
+
+    .product-card {
+        flex: 0 0 160px !important; 
+    }
+
+    .product-image {
+        height: 130px !important; 
+    }
+
+    .product-title {
+        font-size: 0.9rem !important; 
+    }
+
+    .product-price {
+        font-size: 0.85rem !important;
+    }
+    
+    .new-button-img {
+        max-width: 60px !important; 
+    }
+
+    .cta-content {
+        padding: 0 15px;
+    }
+    
+    .cta-buttons {
+        flex-direction: column !important;
+        width: 100%;
+    }
+
+    .btn-login, .btn-signup {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+}
