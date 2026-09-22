@@ -243,17 +243,17 @@
                 <h2>Gestione Ordini</h2>
                 
                 <div class="filter-bar">
-                    <form action="${pageContext.request.contextPath}/FiltraOrdiniAdminServlet" method="GET">
-                        <div class="form-group">
-                            <label for="filtroCliente">Filtra per Email Cliente:</label>
-                            <input type="text" id="filtroCliente" name="email_cliente" value="${param.email_cliente}" placeholder="Es. tom@holland.it">
-                        </div>
-                        <button type="submit" class="btn-primary"><i class="fa-solid fa-search"></i> Cerca</button>
-                        <c:if test="${not empty param.email_cliente}">
-                            <a href="${pageContext.request.contextPath}/admin.jsp#gestione-ordini" class="btn-outline-small">Reset</a>
-                        </c:if>
-                    </form>
-                </div>
+				    <form action="${pageContext.request.contextPath}/FiltraOrdiniAdminServlet" method="GET">
+				        <div class="form-group">
+				            <label for="filtroCliente">Filtra per Nome e Cognome:</label>
+				            <input type="text" id="filtroCliente" name="nome_cliente" value="${param.nome_cliente}" placeholder="Es. Tom Holland">
+				        </div>
+				        <button type="submit" class="btn-primary"><i class="fa-solid fa-search"></i> Cerca</button>
+				        <c:if test="${not empty param.nome_cliente}">
+				            <a href="${pageContext.request.contextPath}/AdminDashboard#gestione-ordini" class="btn-outline-small">Reset</a>
+				        </c:if>
+				    </form>
+				</div>
 
                 <table class="admin-table">
                     <thead>
@@ -268,21 +268,21 @@
                     </thead>
                     <tbody>
                         <c:forEach var="ordine" items="${listaOrdiniCompleta}">
-                            <tr>
-                                <td>#${ordine.id}</td>
-                                <td>
-								    <fmt:formatDate value="${ordine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" />
-								</td>
-                                <td><strong>${ordine.utente.nome} ${ordine.utente.cognome}</strong></td>
-                                <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
-                                <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
-                                <td class="table-actions">
-                                    <a href="${pageContext.request.contextPath}/FatturaServlet?id=${ordine.id}" target="_blank" class="btn-icon text-blue" title="Vedi e Stampa Fattura">
-								        <i class="fa-solid fa-file-pdf"></i>
-								    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+						    <tr class="riga-ordine" data-nomecliente="${fn:toLowerCase(ordine.utente.nome)} ${fn:toLowerCase(ordine.utente.cognome)}">
+						        <td>#${ordine.id}</td>
+						        <td>
+						            <fmt:formatDate value="${ordine.dataOrdine}" pattern="dd/MM/yyyy HH:mm" />
+						        </td>
+						        <td><strong>${ordine.utente.nome} ${ordine.utente.cognome}</strong><br><small style="color: #666;">${ordine.utente.email}</small></td>
+						        <td>€ <fmt:formatNumber value="${ordine.totale}" pattern="#,##0.00"/></td>
+						        <td><span class="status-badge status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
+						        <td class="table-actions">
+						            <a href="${pageContext.request.contextPath}/FatturaServlet?id=${ordine.id}" target="_blank" class="btn-icon text-blue" title="Vedi e Stampa Fattura">
+						                <i class="fa-solid fa-file-pdf"></i>
+						            </a>
+						        </td>
+						    </tr>
+						</c:forEach>
                     </tbody>
                 </table>
             </section>
@@ -556,7 +556,9 @@
         document.querySelectorAll('.error-msg').forEach(el => el.innerText = '');
         document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
     }
-function showCustomAlert(message) {
+    
+    // --- MODIFICA INNERTEXT -> INNERHTML QUI ---
+    function showCustomAlert(message) {
         const modal = document.getElementById('customAlert');
         const modalText = document.getElementById('customAlertText');
         const okayBtn = document.getElementById('customAlertSingleBtn');
@@ -565,7 +567,7 @@ function showCustomAlert(message) {
             document.getElementById('customAlertSingleBtn').style.display = 'block';
             document.getElementById('customAlertDoubleBtns').style.display = 'none';
             
-            modalText.innerText = message;
+            modalText.innerHTML = message; // CAMBIATO DA innerText A innerHTML
             modal.style.display = 'flex';
             okayBtn.onclick = closeCustomAlert;
         }
@@ -580,7 +582,7 @@ function showCustomAlert(message) {
             document.getElementById('customAlertSingleBtn').style.display = 'none';
             document.getElementById('customAlertDoubleBtns').style.display = 'flex';
             
-            modalText.innerText = message;
+            modalText.innerHTML = message; // CAMBIATO DA innerText A innerHTML
             modal.style.display = 'flex';
             
             confirmBtn.onclick = function() {
@@ -596,12 +598,13 @@ function showCustomAlert(message) {
         }
     }
 
+    // --- MODIFICA INNERTEXT -> INNERHTML QUI ---
     function showSuccessModal(customMessage) {
         const modal = document.getElementById('successModal');
         const modalText = document.getElementById('successModalText');
         if (modal) {
             if(customMessage && customMessage.trim() !== '') {
-                modalText.innerText = customMessage;
+                modalText.innerHTML = customMessage; // CAMBIATO DA innerText A innerHTML
             }
             modal.style.display = 'flex';
         }
@@ -683,7 +686,51 @@ function showCustomAlert(message) {
             }, 300);
         }
     });
+    
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputRicerca = document.getElementById('filtroCliente');
+        const formRicerca = inputRicerca ? inputRicerca.closest('form') : null;
+
+        if (inputRicerca && formRicerca) {
+            formRicerca.addEventListener('submit', function(e) {
+                e.preventDefault(); 
+            });
+
+            inputRicerca.addEventListener('keyup', function() {
+                const termine = this.value.toLowerCase().trim();
+                const righeOrdini = document.querySelectorAll('.riga-ordine');
+
+                righeOrdini.forEach(riga => {
+                    const nomeCliente = riga.getAttribute('data-nomecliente') || "";
+                    
+                    if (nomeCliente.includes(termine)) {
+                        riga.style.display = ''; 
+                    } else {
+                        riga.style.display = 'none'; 
+                    }
+                });
+            });
+        }
+    });
 </script>
 </div> 
+<c:if test="${not empty sessionScope.successMessage}">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            showSuccessModal("${fn:escapeXml(sessionScope.successMessage)}");
+        });
+    </script>
+    <c:remove var="successMessage" scope="session" />
+</c:if>
 
+<c:if test="${not empty sessionScope.errorMessage}">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            showCustomAlert("${fn:escapeXml(sessionScope.errorMessage)}");
+        });
+    </script>
+    <c:remove var="errorMessage" scope="session" />
+</c:if>
 <%@ include file="fragment/footer.jspf" %>

@@ -537,12 +537,22 @@
     });
 </script>
 
-<c:if test="${not empty requestScope.successMessage}">
+<c:if test="${not empty sessionScope.successMessage}">
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            showSuccessModal("${requestScope.successMessage}");
+            showSuccessModal("${fn:escapeXml(sessionScope.successMessage)}");
         });
     </script>
+    <c:remove var="successMessage" scope="session" />
+</c:if>
+
+<c:if test="${not empty sessionScope.errorMessage}">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            showCustomAlert("${fn:escapeXml(sessionScope.errorMessage)}");
+        });
+    </script>
+    <c:remove var="errorMessage" scope="session" />
 </c:if>
 
 <%@ include file="fragment/footer.jspf" %>

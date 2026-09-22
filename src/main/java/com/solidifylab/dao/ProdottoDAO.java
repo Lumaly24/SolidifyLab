@@ -400,4 +400,21 @@ public class ProdottoDAO {
         
         return prodotti;
     }
+    
+    public boolean esisteProdottoPerNome(String nome) {
+    	String query = "SELECT COUNT(*) FROM prodotto WHERE nome = ? AND cancellato = FALSE";
+        try (java.sql.Connection con = ConPool.getConnection(); 
+             java.sql.PreparedStatement ps = con.prepareStatement(query)) {
+             
+            ps.setString(1, nome);
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; 
+                }
+            }
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

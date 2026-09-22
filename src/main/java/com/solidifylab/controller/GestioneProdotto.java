@@ -75,11 +75,18 @@ public class GestioneProdotto extends HttpServlet {
         String descrizione = request.getParameter("descrizione");
         String prezzoStr = request.getParameter("prezzo");
         String categoriaStr = request.getParameter("categoria");
+        String[] tagScelti = request.getParameterValues("tags");
         
-        String[] tagScelti = request.getParameterValues("tags"); 
-
         if (nome != null && !nome.trim().isEmpty() && prezzoStr != null && categoriaStr != null) {
             try {
+                ProdottoDAO prodottoDAO = new ProdottoDAO();
+                
+                if (prodottoDAO.esisteProdottoPerNome(nome.trim())) {
+                    request.getSession().setAttribute("errorMessage", "Attenzione: Esiste già un prodotto chiamato '" + nome + "'.");
+                    response.sendRedirect(request.getContextPath() + "/AdminDashboard#aggiunta-prodotti");
+                    return;
+                }
+                
                 double prezzo = Double.parseDouble(prezzoStr);
                 
                 int categoriaId = 1; 
@@ -115,8 +122,6 @@ public class GestioneProdotto extends HttpServlet {
                 p.setQuantitaDisponibile(categoriaId == 3 ? 10 : 0); 
                 p.setFormatoFile(categoriaId == 3 ? null : ".zip"); 
                 
-                ProdottoDAO prodottoDAO = new ProdottoDAO();
-                
                 int nuovoProdottoId = prodottoDAO.doSave(p);
                 
                 if (nuovoProdottoId > 0 && tagScelti != null && tagScelti.length > 0) {
@@ -133,9 +138,9 @@ public class GestioneProdotto extends HttpServlet {
 
         response.sendRedirect(request.getContextPath() + "/AdminDashboard#aggiunta-prodotti");
     }
-
     private void rimuoviProdotto(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String idStr = request.getParameter("id");
+        String referer = request.getHeader("Referer"); 
         
         if (idStr != null && !idStr.isEmpty()) {
             try {
@@ -150,6 +155,10 @@ public class GestioneProdotto extends HttpServlet {
             }
         }
 
-        response.sendRedirect(request.getContextPath() + "/Catalogo");
+        if (referer != null && !referer.isEmpty()) {
+            response.sendRedirect(referer);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/AdminDashboard");
+        }
     }
 }

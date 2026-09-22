@@ -353,7 +353,7 @@
             document.getElementById('customAlertSingleBtn').style.display = 'block';
             document.getElementById('customAlertDoubleBtns').style.display = 'none';
             
-            modalText.innerText = 'Devi effettuare il login per usare la Wishlist!';
+            modalText.innerHTML = 'Devi effettuare il login per usare la Wishlist!'; 
             modal.style.display = 'flex';
             
             okayBtn.onclick = function() {
@@ -371,7 +371,7 @@
             document.getElementById('customAlertSingleBtn').style.display = 'block';
             document.getElementById('customAlertDoubleBtns').style.display = 'none';
             
-            modalText.innerText = message;
+            modalText.innerHTML = message; 
             modal.style.display = 'flex';
             okayBtn.onclick = closeCustomAlert;
         }
@@ -386,7 +386,7 @@
             document.getElementById('customAlertSingleBtn').style.display = 'none';
             document.getElementById('customAlertDoubleBtns').style.display = 'flex';
             
-            modalText.innerText = message;
+            modalText.innerHTML = message; 
             modal.style.display = 'flex';
             
             confirmBtn.onclick = function() {
@@ -407,7 +407,7 @@
         const modalText = document.getElementById('successModalText');
         if (modal) {
             if(customMessage && customMessage.trim() !== '') {
-                modalText.innerText = customMessage;
+                modalText.innerHTML = customMessage; 
             }
             modal.style.display = 'flex';
         }
@@ -417,11 +417,9 @@
         const modal = document.getElementById('successModal');
         if (modal) {
             modal.style.display = 'none';
-            window.location.href = "${pageContext.request.contextPath}/Home";
+            window.location.href = "${pageContext.request.contextPath}/Stampe";
         }
     }
-    
-    const wishlistForms = document.querySelectorAll('.wishlist-form');
     
     const wishlistForms = document.querySelectorAll('.wishlist-form');
     wishlistForms.forEach(form => {
@@ -450,16 +448,24 @@
             .catch(err => console.error('Errore Wishlist:', err));
         });
     });
-    });
 </script>
 
-
-<c:if test="${not empty requestScope.successMessage}">
+<c:if test="${not empty sessionScope.successMessage}">
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            showSuccessModal("${requestScope.successMessage}");
+            showSuccessModal("${fn:escapeXml(sessionScope.successMessage)}");
         });
     </script>
+    <c:remove var="successMessage" scope="session" />
+</c:if>
+
+<c:if test="${not empty sessionScope.errorMessage}">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            showCustomAlert("${fn:escapeXml(sessionScope.errorMessage)}");
+        });
+    </script>
+    <c:remove var="errorMessage" scope="session" />
 </c:if>
 
 <%@ include file="fragment/footer.jspf" %>
