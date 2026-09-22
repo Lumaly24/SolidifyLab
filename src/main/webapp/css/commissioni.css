@@ -8,6 +8,15 @@ body {
     padding: 0;
 }
 
+.commission-page-container,
+.commission-form-wrapper,
+.commission-form-scroll-area,
+.file-dropzone,
+.form-group textarea,
+.form-group input {
+    box-sizing: border-box;
+}
+
 #step-2 legend, #step-3 legend {
 	font-family: 'elephant', serif;
 	font-weight: lighter;
@@ -33,8 +42,9 @@ textarea, input[type="text"], input[type="email"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 40px 20px;
-    min-height: calc(100vh - 40px);
+    padding: 100px 20px;
+    padding-bottom: 30px;
+    min-height: calc(100vh - 100px);
     position: relative;
     z-index: 1;
 }
@@ -821,4 +831,203 @@ body {
 
 .confirm-box .modal-actions-container {
     justify-content: center;
+}
+
+/* =========================================================
+   REGOLE DI BASE E FIX PER FLESSIBILITÀ RESPONSIVE
+   ========================================================= */
+
+.commission-form-wrapper, 
+.admin-dashboard-wrapper, 
+.modal-box {
+    box-sizing: border-box;
+}
+
+/* Evita che i tab della dashboard admin andassero a capo in modo disordinato */
+.admin-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Assicura la corretta visualizzazione delle card scrollabili */
+.card-horizontal-scroll {
+    scroll-snap-type: x mandatory;
+}
+
+.commission-card {
+    scroll-snap-align: start;
+}
+
+
+/* =========================================================
+   MEDIA QUERIES PER TUTTI I DISPOSITIVI
+   ========================================================= */
+
+@media (max-width: 1024px) {
+    .commission-page-container {
+        padding-top: 105px;
+        padding-bottom: 40px;
+    }
+
+    .admin-dashboard {
+        height: auto;
+        min-height: calc(100vh - 80px);
+        padding-top: 100px;
+        padding-bottom: 40px;
+    }
+
+    .admin-dashboard h1 {
+        margin-top: 15px;
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+	
+    .commission-page-container {
+        padding-top: 85px !important;
+        padding-left: 12px;
+        padding-right: 12px;
+        align-items: flex-start; 
+    }
+
+    .commission-form-wrapper {
+        padding: 22px 18px !important;
+        max-height: 80vh !important;
+        border-radius: 18px;
+    }
+
+    .commission-form-wrapper h1 {
+        font-size: 1.35rem !important;
+        line-height: 1.25;
+        margin-bottom: 4px;
+    }
+
+    .commission-form-wrapper > p {
+        font-size: 0.82rem !important;
+        margin-bottom: 14px;
+    }
+
+    .step-indicator {
+        margin-bottom: 16px !important;
+    }
+
+    .step-dot {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.75rem !important;
+    }
+
+    .step-line {
+        width: 25px !important;
+    }
+
+    .file-dropzone {
+        padding: 14px 10px !important;
+        margin-top: 8px !important;
+    }
+
+    .file-dropzone i {
+        font-size: 1.3rem !important;
+        margin-bottom: 4px !important;
+    }
+
+    .file-dropzone span {
+        font-size: 0.85rem !important;
+    }
+
+    .file-dropzone small {
+        font-size: 0.72rem !important;
+    }
+
+    .form-group textarea, .form-group input, .option-box textarea, .option-box select, .custom-select {
+        font-size: 0.88rem !important;
+        padding: 8px 12px !important;
+    }
+
+    .form-footer-actions {
+        padding-top: 12px !important;
+    }
+
+    .btn-secondary, .auth-btn {
+        padding: 10px 16px !important;
+        font-size: 0.88rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .commission-page-container {
+        padding-top: 85px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .step-indicator {
+        margin-bottom: 18px;
+    }
+
+    .step-dot {
+        width: 26px;
+        height: 26px;
+        font-size: 0.75rem;
+    }
+
+    .step-line {
+        width: 25px;
+    }
+
+    .commission-form-wrapper {
+        padding: 18px 14px !important;
+        max-height: 78vh !important;
+        margin-top: 100px;
+    }
+
+    .commission-form-wrapper h1 {
+        font-size: 1.3rem;
+    }
+
+    .file-dropzone {
+        padding: 18px 10px;
+    }
+
+    .file-dropzone span {
+        font-size: 0.9rem;
+    }
+
+    .commission-card {
+        min-width: 250px;
+        max-width: 270px;
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 1.05rem;
+    }
+
+    .card-actions {
+        flex-direction: column; 
+        gap: 8px;
+    }
+
+    .btn-action {
+        width: 100%;
+    }
+
+    .modal-actions-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-actions-container .btn-secondary, .modal-actions-container .auth-btn {
+        width: 100%;
+    }
+    
+    .checkbox-group label, .option-box label {
+        font-size: 0.85rem;
+    }
+    
+    .header-nav, .nav-links {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
 }

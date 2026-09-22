@@ -105,6 +105,11 @@
 
     <!-- ================= HEADER ADMIN ================= -->
     <header class="admin-header">
+    
+    	<button id="mobileMenuBtn" class="mobile-menu-toggle">
+		    ☰ Apri Menu Dashboard
+		</button>
+		
         <div class="logo"><strong>SolidifyLab ADMIN</strong></div>
         <div class="admin-user">
             <span>Benvenuto, ${sessionScope.utenteLoggato.nome}</span>
@@ -116,6 +121,11 @@
         
         <!-- ================= SIDEBAR ================= -->
         <aside class="admin-sidebar">
+        
+        	<button id="closeMenuBtn" class="close-menu-btn">
+			    ✖ Chiudi
+			</button>
+			
             <nav>
                 <ul>
                 	<li><a href="#aggiunta-prodotti" class="active"><i class="fa-solid fa-plus"></i> Aggiungi Prodotti</a></li>
@@ -733,4 +743,30 @@
     </script>
     <c:remove var="errorMessage" scope="session" />
 </c:if>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var openBtn = document.getElementById('mobileMenuBtn');
+        var closeBtn = document.getElementById('closeMenuBtn');
+        var sidebar = document.querySelector('.user-sidebar, .admin-sidebar');
+
+        if(openBtn && closeBtn && sidebar) {
+            openBtn.addEventListener('click', function() {
+                sidebar.classList.add('open');
+            });
+
+            closeBtn.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+            });
+            
+            // Opzionale: chiude la sidebar se clicchi un link al suo interno
+            var links = sidebar.querySelectorAll('a');
+            links.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    sidebar.classList.remove('open');
+                });
+            });
+        }
+    });
+</script>
 <%@ include file="fragment/footer.jspf" %>

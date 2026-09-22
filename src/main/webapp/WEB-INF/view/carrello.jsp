@@ -141,7 +141,7 @@
                         <div class="summary-details">
                             <p>Subtotale: <span>€ <fmt:formatNumber value="${sessionScope.carrello.subtotale}" pattern="#,##0.00"/></span></p>
                             <p>Sconto applicato: <span>- € <fmt:formatNumber value="${sessionScope.carrello.sconto}" pattern="#,##0.00"/></span></p>
-                            <p>Tasse (IVA 22% incl.): <span>€ <fmt:formatNumber value="${sessionScope.carrello.tasse}" pattern="#,##0.00"/></span></p>
+                            <p>Imposte (IVA 22% incl.): <span>€ <fmt:formatNumber value="${sessionScope.carrello.tasse}" pattern="#,##0.00"/></span></p>
                         </div>
 
 						<form action="${pageContext.request.contextPath}/Checkout" method="POST" class="checkout-form" onsubmit="return checkCheckoutLogin(event)">
@@ -168,7 +168,7 @@
                                     <div style="display: flex; gap: 8px;">
                                         <input type="text" name="spedizione_citta" value="${not empty param.spedizione_citta ? param.spedizione_citta : sessionScope.indirizzoPrincipale.citta}" placeholder="Città" required style="flex: 2; padding: 10px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1);">
                                         <input type="text" name="spedizione_cap" value="${not empty param.spedizione_cap ? param.spedizione_cap : sessionScope.indirizzoPrincipale.cap}" placeholder="CAP" pattern="[0-9]{5}" required style="flex: 1; padding: 10px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1);">
-                                        <input type="text" name="spedizione_provincia" value="${not empty param.spedizione_provincia ? param.spedizione_provincia : sessionScope.indirizzoPrincipale.provincia}" placeholder="PR" maxlength="2" required style="flex: 1; padding: 10px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1); text-transform: uppercase;">
+                                        <input type="text" name="spedizione_provincia" value="${not empty param.spedizione_provincia ? param.spedizione_provincia : sessionScope.indirizzoPrincipale.provincia}" placeholder="SA" maxlength="2" required style="flex: 1; padding: 10px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1); text-transform: uppercase;">
                                     </div>
                                 </div>
                             </c:if>

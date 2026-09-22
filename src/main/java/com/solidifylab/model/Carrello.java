@@ -25,11 +25,11 @@ public class Carrello {
     }
 
     public double getTasse() {
-        return getSubtotale() * 0.22;
+        return getSubtotale() - (getSubtotale() / 1.22);
     }
 
     public double getTotaleFinale() {
-        return getSubtotale() + getTasse() - sconto;
+        return getSubtotale() - sconto;
     }
 
 	public double getSconto() {
