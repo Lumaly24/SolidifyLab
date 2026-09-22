@@ -126,4 +126,51 @@ public class UserDAO {
             return false;
         }
     }
+    
+    public boolean salvaUtente(String email, String passwordHash, String username, String nome, String cognome) {
+        String sql = "INSERT INTO utente (email, password_hash, username, nome, cognome) VALUES (?, ?, ?, ?, ?)";
+        
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, email);
+            ps.setString(2, passwordHash); 
+            ps.setString(3, username);
+            ps.setString(4, nome);
+            ps.setString(5, cognome);
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public User getUtenteByEmail(String email) {
+        String sql = "SELECT * FROM utente WHERE email = ?";
+        User u = null;
+        
+        try (Connection con = ConPool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                u = new User();
+                u.setId(rs.getInt("id"));
+                u.setEmail(rs.getString("email"));
+                u.setPasswordHash(rs.getString("password_hash")); 
+                u.setUsername(rs.getString("username"));
+                u.setNome(rs.getString("nome"));
+                u.setCognome(rs.getString("cognome"));
+                u.setRuolo(rs.getString("ruolo"));
+            }
+            
+        } catch (SQLException e) {
+        	
+            e.printStackTrace();
+        }
+        return u;
+    }
 }
