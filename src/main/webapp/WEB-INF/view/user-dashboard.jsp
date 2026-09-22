@@ -12,12 +12,11 @@
 	request.setAttribute("cssPagina", "areautente.css");
 %>
 
-
 <%@ include file="fragment/header.jspf" %>
 
 <main class="user-dashboard-container">
 
-	<button id="mobileMenuBtn" class="mobile-menu-toggle">
+    <button id="mobileMenuBtn" class="mobile-menu-toggle">
         ☰ Apri Menu Utente
     </button>
 
@@ -25,11 +24,11 @@
         
         <!-- ================= SIDEBAR NAVIGAZIONE ================= -->
         <aside class="user-sidebar">
-        
-        	<button id="closeMenuBtn" class="close-menu-btn">
-			    ✖ Chiudi
-			</button>
-			
+
+            <button id="closeMenuBtn" class="close-menu-btn">
+                ✖ Chiudi
+            </button>
+
             <div class="user-profile-summary">
 			    <div class="user-pfp">
 			        <i class="fa-solid fa-user"></i>
@@ -506,7 +505,31 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var openBtn = document.getElementById('mobileMenuBtn');
+        var closeBtn = document.getElementById('closeMenuBtn');
+        var sidebar = document.querySelector('.user-sidebar, .admin-sidebar');
 
+        if(openBtn && closeBtn && sidebar) {
+            openBtn.addEventListener('click', function() {
+                sidebar.classList.add('open');
+            });
+
+            closeBtn.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+            });
+
+            // Opzionale: chiude la sidebar se clicchi un link al suo interno
+            var links = sidebar.querySelectorAll('a');
+            links.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    sidebar.classList.remove('open');
+                });
+            });
+        }
+    });
+</script>
 <!-- ================= SCRIPT ================= -->
 <script>
     /* =========================================================
@@ -689,7 +712,6 @@
     }
 
     function formattaCarta(input) {
-        // Rimuove tutto ciò che non è un numero e aggiunge uno spazio ogni 4 cifre
         let v = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
         let matches = v.match(/\d{4,16}/g);
         let match = matches && matches[0] || '';
