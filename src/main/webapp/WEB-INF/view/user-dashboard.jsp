@@ -341,12 +341,12 @@
 			                                <span style="font-size: 0.7rem; text-transform: uppercase; display: block; opacity: 1;">Scadenza</span>
 			                                ${carta.scadenza}
 			                            </div>
-			                            <form action="${pageContext.request.contextPath}/DeleteCardServlet" method="POST" style="margin: 0;">
-			                                <input type="hidden" name="idCarta" value="${carta.id}">
-			                                <button type="submit" class="btn-icon" style="color: #ff4d4d; border: none; background: transparent; cursor: pointer; padding: 5px; font-size: 1.1rem;" onclick="return confirm('Sicuro di voler rimuovere questa carta?')">
-			                                    <i class="fa-solid fa-trash"></i>
-			                                </button>
-			                            </form>
+			                            <form id="deleteCardForm_${carta.id}" action="${pageContext.request.contextPath}/DeleteCardServlet" method="POST" style="margin: 0;">
+										    <input type="hidden" name="idCarta" value="${carta.id}">
+										    <button type="button" class="btn-icon" style="color: #ff4d4d; border: none; background: transparent; cursor: pointer; padding: 5px; font-size: 1.1rem;" onclick="confermaEliminazioneCarta(${carta.id})">
+										        <i class="fa-solid fa-trash"></i>
+										    </button>
+										</form>
 			                        </div>
 			                    </div>
 			                </c:forEach>
@@ -512,10 +512,9 @@
 </script>
 
 <script>
-    /* =========================================================
-       1. NAVIGAZIONE TABS
-       ========================================================= */
+
     function switchTab(tabId, clickedElement, event) {
+    	
         if (event) event.preventDefault();
     
         let tabs = document.querySelectorAll('.user-tab-content');
@@ -543,9 +542,6 @@
     });
 
 
-    /* =========================================================
-       2. GESTIONE COMMISSIONI E CARRELLO
-       ========================================================= */
     function mostraDettagliCommissione(id, stato, linkProdotto) {
         document.getElementById('ucModId').innerText = id;
         
@@ -605,9 +601,6 @@
         });
     }
 
-    /* =========================================================
-       3. GESTIONE CUSTOM ALERT
-       ========================================================= */
     function showCustomAlert(title, message, isError = true, onConfirm = null) {
         const alertModal = document.getElementById('customAlert');
         const alertTitle = document.getElementById('customAlertTitle');
@@ -651,10 +644,6 @@
         document.getElementById('customAlert').style.display = 'none';
     }
 
-
-    /* =========================================================
-       4. SICUREZZA (Export Dati & Elimina Account)
-       ========================================================= */
     function esportaDatiFinto() {
         showCustomAlert(
             "Richiesta Ricevuta", 
@@ -673,11 +662,43 @@
             }
         );
     }
+    
+    function confermaEliminazioneCarta(idCarta) {
+        showCustomAlert(
+            "Rimuovere la carta?", 
+            "Sei sicuro di voler rimuovere questo metodo di pagamento salvato?", 
+            true, 
+            function() {
+            	
+                eliminaCartaViaAjax(idCarta);
+            }
+        );
+    }
 
+    function eliminaCartaViaAjax(idCarta) {
+        const form = document.getElementById('deleteCardForm_' + idCarta);
+        const formData = new URLSearchParams(new FormData(form));
 
-    /* =========================================================
-    5. GESTIONE CARTE DI CREDITO (AJAX)
-    ========================================================= */
+        fetch(form.action, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                showCustomAlert("Carta Rimossa!", "Il metodo di pagamento è stato eliminato con successo. La pagina si aggiornerà a breve.", false);
+                setTimeout(() => { 
+                    window.location.reload(); 
+                }, 1500);
+            } else {
+                showCustomAlert("Errore", "Si è verificato un problema nella rimozione della carta.", true);
+            }
+        })
+        .catch(error => {
+            showCustomAlert("Errore di connessione", "Impossibile contattare il server.", true);
+        });
+    }
+
  function apriModalAggiungiCarta() {
      document.getElementById('addCardModal').style.display = 'flex';
  }
@@ -710,7 +731,6 @@
      }
  }
 
- // NUOVA FUNZIONE AJAX PER LA CARTA
  function mostraSuccessoCarta(event) {
      event.preventDefault(); 
      
@@ -741,11 +761,8 @@
      });
  }
 
- /* =========================================================
- 6. GESTIONE ANAGRAFICA (AJAX)
- ========================================================= */
 function aggiornaAnagrafica(event) {
-  event.preventDefault(); // Blocca il caricamento della pagina
+  event.preventDefault(); 
   
   const form = event.target;
   const formData = new URLSearchParams(new FormData(form));
@@ -772,16 +789,12 @@ function aggiornaAnagrafica(event) {
   });
 }
 
-/* =========================================================
- 7. GESTIONE PASSWORD (AJAX)
- ========================================================= */
 function aggiornaPassword(event) {
-  event.preventDefault(); // Blocca il caricamento della pagina
+  event.preventDefault(); 
   
   const form = event.target;
   const newPwd = document.getElementById('newPwd').value;
   
-  // Controllo veloce lato client
   if (newPwd.length < 6) {
       showCustomAlert("Attenzione", "La nuova password deve contenere almeno 6 caratteri.", true);
       return;
@@ -797,7 +810,7 @@ function aggiornaPassword(event) {
   .then(async response => {
       if (response.ok) {
           showCustomAlert("Successo!", "La tua password è stata aggiornata con successo.", false);
-          form.reset(); // Svuota i campi del form così l'utente non vede più la password scritta
+          form.reset();
       } else {
           const errorText = await response.text();
           if (errorText === "errore_vecchia_password") {

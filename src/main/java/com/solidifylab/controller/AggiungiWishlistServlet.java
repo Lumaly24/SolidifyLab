@@ -54,7 +54,15 @@ public class AggiungiWishlistServlet extends HttpServlet {
             System.out.println("ERRORE: La Servlet non ha ricevuto l'id_prodotto dalla JSP!");
         }
 
-        response.setStatus(HttpServletResponse.SC_OK);
+        String referer = request.getHeader("referer");
+        
+        if (referer != null) {
+        	
+            response.sendRedirect(referer);
+        } else {
+        	
+            response.sendRedirect(request.getContextPath() + "/UserDashboard");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

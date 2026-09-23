@@ -76,7 +76,7 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
             
             if (prodottoTrovato != null) {
                 
-            	boolean isDigitale = (prodottoTrovato.getCategoriaId() != 3 && prodottoTrovato.getCategoriaId() != 98);; 
+                boolean isDigitale = (prodottoTrovato.getCategoriaId() != 3 && prodottoTrovato.getCategoriaId() != 98); 
 
                 if (utenteLoggato != null && isDigitale) {
                     LibreriaDAO libreriaDAO = new LibreriaDAO();
@@ -139,29 +139,47 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
                 if ("true".equals(isAjax)) {
                     response.setContentType("text/plain");
                     
-                    if (duplicateError) {
+                    if ("rimuovi_carrello".equals(azione)) {
+                    	
+                        response.getWriter().write("rimosso");
+                        
+                    } else if (duplicateError) {
+                    	
                         response.getWriter().write("gia_presente");
+                        
                     } else if (isDigitale) {
+                    	
                         response.getWriter().write("aggiunto_digitale");
+                        
                     } else {
+                    	
                         response.getWriter().write("aggiunto_fisico");
                     }
                 } else {
+                	
                     if ("rimuovi_carrello".equals(azione)) {
+                    	
                         response.sendRedirect(request.getContextPath() + "/Carrello");
                         return; 
                     }
                     
                     if (duplicateError) {
+                    	
                         session.setAttribute("errorMessage", "Questo elemento è già nel tuo carrello!");
+                        
                     } else {
+                    	
                         session.setAttribute("successMessage", "Aggiunto al carrello con successo!");
                     }
                     
                     String referer = request.getHeader("referer");
+                    
                     if (referer != null) {
+                    	
                         response.sendRedirect(referer);
+                        
                     } else {
+                    	
                         response.sendRedirect(request.getContextPath() + "/Carrello");
                     }
                 }

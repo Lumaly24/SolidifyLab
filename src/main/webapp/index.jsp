@@ -12,9 +12,9 @@
         <!-- HERO SECTION -->
         <section class="hero-section">
             <div class="hero-content">
-                <h1>ESPLORA<br>LA LIBRERIA</h1>
+                <h1>ESPLORA<br>IL CATALOGO</h1>
                 <div class="hero-buttons">
-                    <a href="${pageContext.request.contextPath}/Catalogo" class="btn"> ESPLORA LA LIBRERIA <i class="fa-solid fa-arrow-right"></i> </a> 
+                    <a href="${pageContext.request.contextPath}/Catalogo" class="btn"> ESPLORA IL CATALOGO <i class="fa-solid fa-arrow-right"></i> </a> 
                     <a href="${pageContext.request.contextPath}/ScopriDiPiu" class="btn"> SCOPRI DI PIÙ <i class="fa-solid fa-arrow-right"></i></a> 
                 </div>
             </div>

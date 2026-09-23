@@ -296,12 +296,13 @@
     </main>
 
 <script>
-
     const formCarrello = document.querySelector('.add-to-cart-form');
     const btnCarrello = formCarrello.querySelector('button[type="submit"]');
     const modalOverlay = document.getElementById('custom-alert-overlay');
     
     const testoOriginale = btnCarrello.innerHTML;
+    
+    let isModalitaRimozione = false; 
 
     function mostraModal(titolo, messaggio, icona, coloreIcona) {
         document.getElementById('modal-title').innerText = titolo;
@@ -318,8 +319,14 @@
 
     formCarrello.addEventListener('submit', function(event) {
         event.preventDefault(); 
+        
         const datiForm = new URLSearchParams(new FormData(this));
         datiForm.append('isAjax', 'true');
+        
+        if (isModalitaRimozione) {
+            datiForm.append('azione', 'rimuovi_carrello');
+        }
+
         const testoAttuale = btnCarrello.innerHTML;
         btnCarrello.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> CARICAMENTO...';
 
@@ -332,24 +339,27 @@
         .then(esito => {
             
             if(esito === 'aggiunto_fisico') {
-            	
                 btnCarrello.innerHTML = testoOriginale; 
                 mostraModal("Evviva!", "Aggiunto al carrello.", "fa-solid fa-cart-plus", "#e56399"); 
             } 
             else if(esito === 'aggiunto_digitale') {
-
                 btnCarrello.innerHTML = '<i class="fa-solid fa-trash-can"></i> RIMUOVI DAL CARRELLO';
                 btnCarrello.style.backgroundColor = '#e74c3c'; 
                 btnCarrello.style.borderColor = '#c0392b';
+                isModalitaRimozione = true; 
                 mostraModal("Evviva!", "Licenza digitale aggiunta al carrello.", "fa-solid fa-cart-plus", "#e56399"); 
             } 
-            else if(esito === 'rimosso_digitale') {
-
+            else if(esito === 'rimosso') { 
                 btnCarrello.innerHTML = testoOriginale;
                 btnCarrello.style.backgroundColor = ''; 
                 btnCarrello.style.borderColor = '';
+                isModalitaRimozione = false; 
                 mostraModal("Rimosso", "Il prodotto è stato rimosso dal carrello.", "fa-solid fa-trash-can", "#2c3e50"); 
             } 
+            else if (esito === 'gia_presente') {
+                btnCarrello.innerHTML = testoAttuale; 
+                mostraModal("Attenzione", "Questo prodotto è già nel carrello.", "fa-solid fa-triangle-exclamation", "#f39c12");
+            }
             else {
                 btnCarrello.innerHTML = testoAttuale; 
                 mostraModal("Errore", "Si è verificato un problema tecnico.", "fa-solid fa-circle-xmark", "#e74c3c");
