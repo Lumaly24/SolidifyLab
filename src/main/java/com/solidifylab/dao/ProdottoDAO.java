@@ -15,8 +15,8 @@ public class ProdottoDAO {
 
     public List<Prodotto> doRetrieveAll() {
         List<Prodotto> prodotti = new ArrayList<>();
-        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id != 99";
-
+        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id NOT IN (98, 99)";
+        
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
@@ -84,8 +84,8 @@ public class ProdottoDAO {
 
     public List<Prodotto> doRetrieveInEvidenza(int limit) {
         List<Prodotto> prodotti = new ArrayList<>();
-        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id != 99 ORDER BY data_inserimento DESC LIMIT ?";
-
+        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id NOT IN (98, 99) ORDER BY data_inserimento DESC LIMIT ?";        
+        
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
             
@@ -271,7 +271,7 @@ public class ProdottoDAO {
     public void doSaveTagsByNames(int prodottoId, String[] tagNomi) {
         if (tagNomi == null || tagNomi.length == 0) return;
         
-        String query = "INSERT INTO prodotto_tag (prodotto_id, tag_id) SELECT ?, id FROM tag WHERE nome = ?";
+        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id NOT IN (98, 99)";        
         
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
