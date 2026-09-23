@@ -18,7 +18,6 @@ public class LibreriaDAO {
     public List<Asset> getLibreriaByUtente(int utenteId) {
         List<Asset> libreria = new ArrayList<>();
         
-        // MODIFICA: Escludiamo le Stampe 3D (3) e le Commissioni Fisiche (98) dalla libreria
         String query = "SELECT DISTINCT p.* FROM prodotto p " +
                        "JOIN riga_ordine ro ON p.id = ro.prodotto_id " +
                        "JOIN ordine o ON ro.ordine_id = o.id " +
@@ -81,7 +80,6 @@ public class LibreriaDAO {
     public Set<Integer> getIdAssetPosseduti(int utenteId) {
         Set<Integer> idPosseduti = new HashSet<>();
         
-        // MODIFICA: Escludiamo anche qui le categorie fisiche (3 e 98)
         String query = "SELECT DISTINCT ro.prodotto_id FROM riga_ordine ro " +
                        "JOIN ordine o ON ro.ordine_id = o.id " +
                        "JOIN prodotto p ON ro.prodotto_id = p.id " +

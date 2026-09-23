@@ -219,7 +219,9 @@ public class ProdottoDAO {
     }
 
     public void doDelete(int id) {
+    	
         String queryProdotto = "UPDATE prodotto SET cancellato = TRUE WHERE id = ?";
+        
         String queryCarrello = "DELETE FROM carrello WHERE prodotto_id = ?";
         String queryWishlist = "DELETE FROM wishlist WHERE prodotto_id = ?";
 
@@ -242,10 +244,10 @@ public class ProdottoDAO {
                 con.commit();
             } catch (SQLException e) {
                 con.rollback();
-                throw e;
+                throw e; 
             }
         } catch (SQLException e) {
-            System.out.println("Errore durante l'eliminazione del prodotto e la pulizia dei carrelli:");
+            System.out.println("Errore durante l'eliminazione (Soft Delete) del prodotto:");
             e.printStackTrace();
         }
     }
