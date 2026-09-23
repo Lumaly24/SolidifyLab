@@ -271,7 +271,7 @@ public class ProdottoDAO {
     public void doSaveTagsByNames(int prodottoId, String[] tagNomi) {
         if (tagNomi == null || tagNomi.length == 0) return;
         
-        String query = "SELECT * FROM prodotto WHERE cancellato = FALSE AND categoria_id NOT IN (98, 99)";        
+        String query = "INSERT INTO prodotto_tag (prodotto_id, tag_id) SELECT ?, id FROM tag WHERE nome = ?";        
         
         try (Connection con = ConPool.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -351,7 +351,7 @@ public class ProdottoDAO {
         query.append("SELECT DISTINCT p.* FROM prodotto p ");
         query.append("LEFT JOIN prodotto_tag pt ON p.id = pt.prodotto_id ");
         query.append("LEFT JOIN tag t ON pt.tag_id = t.id ");
-        query.append("WHERE p.cancellato = FALSE AND p.categoria_id != 99 "); // ESCLUSIONE
+        query.append("WHERE p.cancellato = FALSE AND p.categoria_id NOT IN (98, 99) "); // ESCLUSIONE
         
         if ("stampe".equals(contesto)) {
             query.append("AND p.categoria_id = 3 ");
@@ -410,7 +410,7 @@ public class ProdottoDAO {
     }
     
     public boolean esisteProdottoPerNome(String nome) {
-        String query = "SELECT COUNT(*) FROM prodotto WHERE nome = ? AND cancellato = FALSE AND categoria_id != 99";
+        String query = "SELECT COUNT(*) FROM prodotto WHERE nome = ? AND cancellato = FALSE AND categoria_id NOT IN (98, 99)";
         try (java.sql.Connection con = ConPool.getConnection(); 
              java.sql.PreparedStatement ps = con.prepareStatement(query)) {
              
