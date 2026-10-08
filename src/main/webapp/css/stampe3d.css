@@ -81,7 +81,7 @@
     padding-right: 20px;
     max-width: 95%;
     margin: 0 auto;
-    margin-bottom: 350px;
+    margin-bottom: 150px;
     min-height: 100vh; 
     display: flex;
     flex-direction: column;
@@ -624,4 +624,4 @@
     .hero-buttons a {
         justify-content: center;
     }
-}}
+}

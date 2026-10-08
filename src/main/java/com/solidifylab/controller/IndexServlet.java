@@ -36,7 +36,7 @@ public class IndexServlet extends HttpServlet {
             request.setAttribute("prodottiInEvidenza", new ArrayList<>());
         }
         
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/home.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
